@@ -18,11 +18,17 @@ COMMANDS = {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
                 'root':    'docker exec -it -u root jenkins /bin/bash'
             },
-            'logs': 'docker logs jenkins --tail 200'            
+            'logs': 'docker logs jenkins --tail 200'
         },
         'ansible': {
-            'noob':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
-            'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh'
+            'run': {
+                'noob':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
+                'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh'
+            },
+            'cli':  'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible'
+        },
+        'robot': {
+            'cli':  'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach robot'
         },
         'webapp': {
             'logs': 'docker logs webapp --tail 200',
