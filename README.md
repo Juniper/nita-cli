@@ -87,37 +87,66 @@ It is composed of two different python scripts:
 
  - *nita* (It is the smart part of the NITA cli. Its name is not really important. You can name it as you want as long as it makes sense to you! (e.g. j-edi, jnpr, my_script, etc...). It was decided to be named `nita` as it is part of the NITA CLI and makes sense that any command related to NITA starts with that word.
 
- - *commands.py* (It is used by `nita` script to hold some variables/constants. The most important one is the `COMMANDS tree`. This tree is implemented as a python dictorionary and represents the hierarchycal command tree and all its variations).
+ - *commands.py* (It is used by `nita` script to hold some variables/constants. 
+ 
+    The most important one is the `COMMANDS tree`. This tree is implemented as a python dictorionary and represents the hierarchycal command tree and all its variations). 
+    
+    There is another tree which is also important and it is related to the help and usage of NITA CLI. It is called `HELP tree` and deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script!
 
 See both files on the repo for a deeper understanding.
 
 There is a `help` implemented on the script which basically shows the commands already mapped. Here it is the `nita help` command output:
 
-NITA CLI command | Mapped command 
----------|----------
-   nita ntp logs | docker logs ntp --tail 200
-   nita ntp cli | docker exec -it ntp /bin/sh
-   nita ansible run build | docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh
-   nita ansible run noob | docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh
-   nita ansible cli | docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible
-   nita radius logs | docker logs radius --tail 200
-   nita radius cli | docker exec -it radius /bin/bash
-   nita images | docker images --filter "label=net.juniper.framework=NITA"
-   nita webapp logs | docker logs webapp --tail 200
-   nita webapp cli | docker exec -it webapp /bin/bash
-   nita stats | docker stats webapp jenkins tacacs radius ntp dns --no-stream
-   nita tacacs logs | docker run -it tacacs tail -200 /var/log/tacacs.log
-   nita tacacs cli | docker exec -it tacacs /bin/bash
-   nita robot cli | docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach robot
-   nita dns logs | docker logs dns --tail 200
-   nita dns cli | docker exec -it dns /bin/sh
-   nita jenkins jobs ls | docker exec -it jenkins list_jenkins_jobs.py
-   nita jenkins jobs remove | docker exec -it jenkins remove_from_jenkins.py -y --regex REGEX
-   nita jenkins cli jenkins | docker exec -it -u jenkins jenkins /bin/bash
-   nita jenkins cli root | docker exec -it -u root jenkins /bin/bash
-   nita jenkins logs | docker logs jenkins --tail 200
-   nita containers | docker ps --filter "label=net.juniper.framework=NITA"
+NITA CLI command | Description 
+-----------------|-------------------
+   nita ntp ip | Returns IPs information on ntp container.
+   nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
+   nita ntp logs | Fetches the logs of ntp container.
+   nita ntp volumes | Returns shared volumes information on ntp container.
+   nita ntp ports | Returns mapped ports information on ntp container.
+   nita ansible ip | Returns IPs information on ansible container.
+   nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
+   nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
+   nita ansible ports | Returns mapped ports information on ansible container.
+   nita ansible volumes | Returns shared volumes information on ansible container.
+   nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
+   nita radius ip | Returns IPs information on radius container.
+   nita radius cli | Attaches local standard input, output, and error streams to radius running container.
+   nita radius logs | Fetches the logs of radius container.
+   nita radius volumes | Returns shared volumes information on radius container.
+   nita radius ports | Returns mapped ports information on radius container.
+   nita images | Lists all NITA images.
+   nita webapp ip | Returns IPs information on webapp container.
+   nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
+   nita webapp logs | Fetches the logs of webapp container.
+   nita webapp volumes | Returns shared volumes information on webapp container.
+   nita webapp ports | Returns mapped ports information on webapp container.
+   nita stats | Displays the NITA containers resource usage statistics.
+   nita tacacs ip | Returns IPs information on tacacs container.
+   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
+   nita tacacs logs | Fetches the logs of tacacs container.
+   nita tacacs volumes | Returns shared volumes information on tacacs container.
+   nita tacacs ports | Returns mapped ports information on tacacs container.
+   nita robot ip | Returns IPs information on robot container.
+   nita robot ports | Returns mapped ports information on robot container.
+   nita robot volumes | Returns shared volumes information on robot container.
+   nita robot cli | Attaches local standard input, output, and error streams to robot running container.
+   nita dns ip | Returns IPs information on dns container.
+   nita dns cli | Attaches local standard input, output, and error streams to dns running container.
+   nita dns logs | Fetches the logs of dns container.
+   nita dns volumes | Returns shared volumes information on dns container.
+   nita dns ports | Returns mapped ports information on dns container.
+   nita jenkins jobs ls | Lists all Jenkins jobs.
+   nita jenkins jobs remove | Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.
+   nita jenkins logs | Fetches the logs of jenkins container.
+   nita jenkins ip | Returns IPs information on jenkins container.
+   nita jenkins volumes | Returns shared volumes information on jenkins container.
+   nita jenkins ports | Returns mapped ports information on jenkins container.
+   nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
+   nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
+   nita containers | Lists all NITA containers.
  | 
+
 ## Customisation
 
 See below example to understand how it works and how to customise it to fit your needs. Imagine this is your COMMANDS tree. It has a hello world example:
@@ -126,6 +155,14 @@ See below example to understand how it works and how to customise it to fit your
         'nita': {
             'hello': {
                 'world': 'docker run hello-world'
+            }
+        }
+    }
+
+    HELP = {
+        'nita': {
+            'hello': {
+                'world': 'runs a NITA hello-world example'
             }
         }
     }
@@ -168,6 +205,14 @@ Such output is the output of the execution of a `docker run hello-world`. If you
         }
     }
 
+    HELP = {
+        'nita': {
+            '${ARG_1}': {
+                '${ARG_2}': '${DESCRIPTION}'
+            }
+        }
+    }
+
 The leaf will be the value of your mapped command (e.g. `${COMMAND}`). As shown in previous example, this is the mapping taking place:
 
     nita hello world  >>>>  docker run hello-world
@@ -183,6 +228,17 @@ Here it is another example of how to grow it:
             },
             'example': {
                 'command': 'docker run alpine:latest cat /etc/alpine-release'
+            }
+        }
+    }
+
+    HELP = {
+        'nita': {
+            'hello': {
+                'world': 'runs a NITA hello-world example'
+            },
+            'example': {
+                'command': 'shows Linux Alpine release in an Alpine docker container'
             }
         }
     }
