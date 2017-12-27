@@ -34,6 +34,7 @@ COMMANDS = {
             },
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' jenkins',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs': 'docker logs jenkins --tail 200'
         },
         'ansible': {
@@ -43,41 +44,48 @@ COMMANDS = {
             },
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ansible',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' ansible',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
             'cli':  'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible'
         },
         'robot': {
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' robot',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' robot',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' robot | jq',
             'cli':  'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest /bin/sh ; docker attach robot'
         },
         'webapp': {
             'logs': 'docker logs webapp --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' webapp',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
             'cli':  'docker exec -it webapp /bin/bash'
         },
         'tacacs': {
             'logs': 'docker run -it tacacs tail -200 /var/log/tacacs.log',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' tacacs',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
             'cli':  'docker exec -it tacacs /bin/bash'
         },
         'radius': {
             'logs': 'docker logs radius --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' radius',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
             'cli':  'docker exec -it radius /bin/bash'
         },
         'ntp': {
             'logs': 'docker logs ntp --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' ntp',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
             'cli':  'docker exec -it ntp /bin/sh'
         },
         'dns': {
             'logs': 'docker logs dns --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' dns',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
             'cli':  'docker exec -it dns /bin/sh'
         },
         # 'project': {
