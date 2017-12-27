@@ -16,28 +16,28 @@ NITA CLI project adds a command line interface to NITA.
 
 NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
 
-Imagine trying to type the following command to get Jenkins IP:
+Imagine trying to type the following command to get jenkins container IPs:
 
     $ docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins
 
     172.19.0.3   172.18.0.7
 
-Is not easier and more intuitive the run the following one to get the same output? See below:
+Is not easier and more intuitive to run the following command to get the same output? See below:
 
     $ nita jenkins ip
 
     172.19.0.3   172.18.0.7
 
 
-Or this one:
+Or this one to list all NITA containers:
 
     $ docker ps --filter "label=net.juniper.framework=NITA"
 
-and
+Compare it with this one in order to get the same output:
 
     $ nita containers
 
-  >>>> command:  docker ps --filter "label=net.juniper.framework=NITA"
+    command:  docker ps --filter "label=net.juniper.framework=NITA"
 
     CONTAINER ID        IMAGE                                     COMMAND             CREATED             STATUS              PORTS                     NAMES
     8a36d29b6b1f        registry.juniper.net/nita/jenkins:latest   "/bin/tini -- /usr..."   5 hours ago         Up 5 hours (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
@@ -171,7 +171,7 @@ Should you install the NITA CLI project (i.e. copy `nita` with +x permissions an
 
     jizquierdo-mbp:bin jizquierdo$ nita hello world
 
-    >>>> command:  docker run hello-world
+    command:  docker run hello-world
 
 
     Hello from Docker!
@@ -248,7 +248,7 @@ Here it is another example of how to grow it:
 
     jizquierdo-mbp:bin jizquierdo$ nita example command
 
-        >>>> command:  docker run alpine:latest cat /etc/alpine-release
+    command:  docker run alpine:latest cat /etc/alpine-release
 
     3.6.2
 
