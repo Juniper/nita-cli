@@ -4,7 +4,7 @@ NITA CLI project adds a command line interface to NITA.
 
 ## Goal
 
-NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any other command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
+NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
 
 ## Reusability
 
