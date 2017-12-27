@@ -6,6 +6,38 @@ NITA CLI project adds a command line interface to NITA.
 
 NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
 
+Imagine trying to type the following command to get Jenkins IP:
+
+    $ docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins
+
+    172.19.0.3   172.18.0.7
+
+Is not easier and more intuitive the run the following one to get the same output? See below:
+
+    $ nita jenkins ip
+
+    172.19.0.3   172.18.0.7
+
+
+Or this one:
+
+    $ docker ps --filter "label=net.juniper.framework=NITA"
+
+and
+
+    $ nita containers
+
+  >>>> command:  docker ps --filter "label=net.juniper.framework=NITA"
+
+CONTAINER ID        IMAGE                                     COMMAND             CREATED             STATUS              PORTS                     NAMES
+8a36d29b6b1f        registry.juniper.net/nita/jenkins:latest   "/bin/tini -- /usr..."   5 hours ago         Up 5 hours (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+9f04684e6f82        registry.juniper.net/nita/tacacs:latest    "tacacs-runner"          5 hours ago         Up 5 hours             0.0.0.0:10049->49/tcp                              tacacs
+6a11f837b797        registry.juniper.net/nita/dns:latest       "dns-runner"             5 hours ago         Up 5 hours             0.0.0.0:53->53/udp                                 dns
+93b54c5d7a8f        registry.juniper.net/nita/radius:latest    "radius-runner"          5 hours ago         Up 5 hours             0.0.0.0:11812->1812/udp                            radius
+d224c2bdf0f5        registry.juniper.net/nita/webapp:latest    "webapp-runner"          5 hours ago         Up 5 hours             0.0.0.0:8090->8060/tcp                             webapp
+90c5c7afcace        registry.juniper.net/nita/ntp:latest       "ntp-runner"             5 hours ago         Up 5 hours             0.0.0.0:123->123/tcp                               ntp
+
+
 ## Reusability
 
 These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed is so easy to add them that anybody will be able to play with it and get it customised.
