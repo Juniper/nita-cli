@@ -50,7 +50,7 @@ def main():
     # print 'Argument List:', str(sys.argv)
     if 'help' in sys.argv:
         print ''
-        print_nested_keys(commands.COMMANDS)
+        print_nested_keys(commands.HELP)
         print ''
         sys.exit()
 

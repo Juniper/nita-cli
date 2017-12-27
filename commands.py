@@ -106,6 +106,84 @@ COMMANDS = {
     }
 }
 
+# HELP TREE
+HELP = {
+    'nita': {
+        'containers': 'Lists all NITA containers.',
+        'images':     'Lists all NITA images.',
+        'stats':      'Displays the NITA containers resource usage statistics.',
+        'jenkins': {
+            'jobs': {
+                'ls':     'Lists all Jenkins jobs.',
+                'remove': 'Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.'
+            },
+            'cli': {
+                'jenkins': 'Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.',
+                'root':    'Attaches local standard input, output, and error streams to jenkins running container with "root" user.'
+            },
+            'ip':      'Returns IPs information on jenkins container.',
+            'ports':   'Returns mapped ports information on jenkins container.',
+            'volumes': 'Returns shared volumes information on jenkins container.',
+            'logs':    'Fetches the logs of jenkins container.'
+        },
+        'ansible': {
+            'run': {
+                'noob':  'Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.',
+                'build': 'Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.'
+            },
+            'ip':      'Returns IPs information on ansible container.',
+            'ports':   'Returns mapped ports information on ansible container.',
+            'volumes': 'Returns shared volumes information on ansible container.',
+            'cli':     'Attaches local standard input, output, and error streams to ansible running container.'
+        },
+        'robot': {
+            'ip':      'Returns IPs information on robot container.',
+            'ports':   'Returns mapped ports information on robot container.',
+            'volumes': 'Returns shared volumes information on robot container.',
+            'cli':     'Attaches local standard input, output, and error streams to robot running container.'
+        },
+        'webapp': {
+            'logs':    'Fetches the logs of webapp container.',
+            'ip':      'Returns IPs information on webapp container.',
+            'ports':   'Returns mapped ports information on webapp container.',
+            'volumes': 'Returns shared volumes information on webapp container.',
+            'cli':     'Attaches local standard input, output, and error streams to webapp running container.'
+        },
+        'tacacs': {
+            'logs':    'Fetches the logs of tacacs container.',
+            'ip':      'Returns IPs information on tacacs container.',
+            'ports':   'Returns mapped ports information on tacacs container.',
+            'volumes': 'Returns shared volumes information on tacacs container.',
+            'cli':     'Attaches local standard input, output, and error streams to tacacs running container.'
+        },
+        'radius': {
+            'logs':    'Fetches the logs of radius container.',
+            'ip':      'Returns IPs information on radius container.',
+            'ports':   'Returns mapped ports information on radius container.',
+            'volumes': 'Returns shared volumes information on radius container.',
+            'cli':     'Attaches local standard input, output, and error streams to radius running container.'
+        },
+        'ntp': {
+            'logs':    'Fetches the logs of ntp container.',
+            'ip':      'Returns IPs information on ntp container.',
+            'ports':   'Returns mapped ports information on ntp container.',
+            'volumes': 'Returns shared volumes information on ntp container.',
+            'cli':     'Attaches local standard input, output, and error streams to ntp running container.'
+        },
+        'dns': {
+            'logs':    'Fetches the logs of dns container.',
+            'ip':      'Returns IPs information on dns container.',
+            'ports':   'Returns mapped ports information on dns container.',
+            'volumes': 'Returns shared volumes information on dns container.',
+            'cli':     'Attaches local standard input, output, and error streams to dns running container.'
+        },
+        # 'project': {
+        #     'new': 'mkdir -p %s/build %s/doc %s/group_vars %s/host_vars %s/jenkins %s/noob %s/roles %s/test/configs %s/test/libraries %s/test/outputs %s/test/resource_files %s/test/scripts %s/test/suites %s/test/templates %s/test/variables_file'
+        # },
+        'license': 'Displays the NITA License.'
+    }
+}
+
 # docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project registry.juniper.net/nita/ansible:latest ./noob.sh
 # docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project registry.juniper.net/nita/ansible:latest ./build.sh
 # mkdir -p ${PWD}/output/${BUILD_NUMBER} ; docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project -e ROBOT_OPTIONS=&quot;-d ${PWD}/output/${BUILD_NUMBER}&quot; registry.juniper.net/nita/robot:latest ./test.sh
