@@ -7,6 +7,7 @@ NITA CLI project adds a command line interface to NITA.
 - [NITA CLI](#nita-cli)
     - [Goal](#goal)
     - [Reusability](#reusability)
+    - [Prerequisites](#prerequisites)
     - [About NITA CLI](#about-nita-cli)
     - [Customisation](#customisation)
     - [Contacts](#contacts)
@@ -52,6 +53,33 @@ and
 These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed is so easy to add them that anybody will be able to play with it and get it customised.
 
 Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `commands.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
+
+## Prerequisites
+
+`jq` is a lightweight and flexible command-line JSON processor.
+
+It is not really a prerequisite since NITA CLI runs without `jq`, but it really improves readability when using it! Here is the evidence:
+
+It is not the same this:
+
+    mbp$ docker inspect --format '{{json .Mounts}}' webapp
+    [{"Type":"bind","Source":"/Users/jizquierdo/Documents/Juniper/Projects/NITA/webapp_and_jenkins_shared","Destination":"/project","Mode":"rw","RW":true,"Propagation":"rprivate"}]
+
+than this:
+
+    mbp$ docker inspect --format '{{json .Mounts}}' webapp | jq
+    [
+    {
+    "Type": "bind",
+    "Source": "/Users/jizquierdo/Documents/Juniper/Projects/NITA/webapp_and_jenkins_shared",
+    "Destination": "/project",
+    "Mode": "rw",
+    "RW": true,
+    "Propagation": "rprivate"
+    }
+    ]
+
+It can be installed from [github](https://stedolan.github.io/jq/) or running `brew install jq` on OS X.
 
 ## About NITA CLI
 
