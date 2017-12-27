@@ -33,6 +33,7 @@ COMMANDS = {
                 'root':    'docker exec -it -u root jenkins /bin/bash'
             },
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' jenkins',
             'logs': 'docker logs jenkins --tail 200'
         },
         'ansible': {
@@ -41,35 +42,42 @@ COMMANDS = {
                 'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh'
             },
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ansible',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' ansible',
             'cli':  'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible'
         },
         'robot': {
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' robot',
-            'cli':  'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach robot'
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' robot',
+            'cli':  'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest /bin/sh ; docker attach robot'
         },
         'webapp': {
             'logs': 'docker logs webapp --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' webapp',
             'cli':  'docker exec -it webapp /bin/bash'
         },
         'tacacs': {
             'logs': 'docker run -it tacacs tail -200 /var/log/tacacs.log',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' tacacs',
             'cli':  'docker exec -it tacacs /bin/bash'
         },
         'radius': {
             'logs': 'docker logs radius --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' radius',
             'cli':  'docker exec -it radius /bin/bash'
         },
         'ntp': {
             'logs': 'docker logs ntp --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' ntp',
             'cli':  'docker exec -it ntp /bin/sh'
         },
         'dns': {
             'logs': 'docker logs dns --tail 200',
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
+            'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' dns',
             'cli':  'docker exec -it dns /bin/sh'
         },
         # 'project': {
