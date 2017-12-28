@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # <*******************
-# 
+#
 # Copyright 2018 Juniper Networks, Inc. All rights reserved.
 # Licensed under the Juniper Networks Script Software License (the "License").
 # You may not use this script file except in compliance with the License, which is located at
 # http://www.juniper.net/support/legal/scriptlicense/
 # Unless required by applicable law or otherwise agreed to in writing by the parties, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# 
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
 # *******************>
 """
     Wrapper script for all NITA commands
@@ -17,20 +18,19 @@ import os
 
 KEY_SEPARATOR = ' '
 
-
 def nested_keys(dictionary, path=None):
     """
     Function that returns all nested keys in a dictionary.
     """
     if path is None:
         path = []
-    for k, v in dictionary.items():
-        newpath = path + [k]
-        if isinstance(v, dict):
-            for u in nested_keys(v, newpath):
-                yield u
+    for key, value in dictionary.items():
+        newpath = path + [key]
+        if isinstance(value, dict):
+            for result in nested_keys(value, newpath):
+                yield result
         else:
-            yield newpath, v
+            yield newpath, value
 
 def print_nested_keys(dictionary):
     """
@@ -56,14 +56,22 @@ def cli2command(cli, translator):
 
     return translator
 
-def main(commands, help):
-    # print 'Number of arguments:', len(sys.argv), 'arguments.'
-    # print 'Argument List:', str(sys.argv)
+def print_help(documentation):
+    """
+    Print usage info
+    """
+    print ''
+    print_nested_keys(documentation)
+    print ''
+    sys.exit()
+
+
+def main(commands, documentation):
+    """
+    Process commmand line and execute resultant command
+    """
     if 'help' in sys.argv:
-        print ''
-        print_nested_keys(help)
-        print ''
-        sys.exit()
+        print_help(documentation)
 
     # Remove /usr/local/bin/ from first argument (/usr/local/bin/nita)
     root = sys.argv[0].split('/')[-1]
@@ -73,14 +81,12 @@ def main(commands, help):
     command = cli2command(cli, commands)
     # If % vars in command
     if '%' in command:
-            
         print ''
         print '  >>>> command: ', command % commands.PROJECT_PATH
         print ''
         os.system(command % commands.PROJECT_PATH)
 
     else:
-
         print ''
         print '  >>>> command: ', command
         print ''
