@@ -48,6 +48,9 @@ COMMANDS = {
             'cli':  'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible'
         },
         'robot': {
+            'run': {
+                'test':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh'
+            },
             'ip': 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' robot',
             'ports': 'docker inspect --format=\'{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}\' robot',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' robot | jq',
@@ -137,6 +140,9 @@ HELP = {
             'cli':     'Attaches local standard input, output, and error streams to ansible running container.'
         },
         'robot': {
+            'run': {
+                'test':  'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.'
+            },
             'ip':      'Returns IPs information on robot container.',
             'ports':   'Returns mapped ports information on robot container.',
             'volumes': 'Returns shared volumes information on robot container.',
