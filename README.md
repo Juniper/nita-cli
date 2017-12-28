@@ -34,7 +34,7 @@ Is not easier and more intuitive to run the following command to get the same ou
 
 Or this one to list all NITA containers:
 
-    docker ps --filter "label=net.juniper.framework=NITA"
+    $ docker ps --filter "label=net.juniper.framework=NITA"
 
 Compare it with this one in order to get the same output:
 
@@ -264,7 +264,7 @@ Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
 `cli.py` library has a function that checks if the nested keys of both dictionaries from `nita` (or any other file that imports the library) are the same. If not, it will show a message explaining which commands are missing like the one below:
 
-    mbp $ nita robot run test
+    $ nita robot run test
 
     The following command: "nita robot run test" is missing its description!
 
