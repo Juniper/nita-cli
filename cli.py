@@ -68,11 +68,65 @@ def print_help(documentation):
     print ''
     sys.exit()
 
+def print_command_with_keys(dictionary, keys):
+    """
+    Function that prints the command as a string containing all keys passed
+    as a list from the dictionary.
+    """
+    for root2leaf, _ in nested_keys(dictionary):
+        command_keys = ' '.join(root2leaf)
+        match = {key in command_keys for key in keys}
+        if match == set([True]):
+            return command_keys
+
+def commands_vs_help_trees(commands, documentation):
+    """
+    Function that checks if commands & documentation trees
+    have the same nested keys (i.e. tries to avoid missing documentation
+    and or a mapped value of a newly added command!).
+    """
+
+    finish = False
+    commands_set = {frozenset(root2leaf)
+                    for root2leaf, value in nested_keys(commands)}
+    help_set = {frozenset(root2leaf)
+                for root2leaf, value in nested_keys(documentation)}
+
+    help_diff = commands_set - help_set
+    help_missing = help_diff != set([])
+    commands_diff = help_set - commands_set
+    commands_missing = commands_diff != set([])
+
+    if help_missing:
+        command_keys_list = [list(command) for command in list(help_diff)]
+        for item in command_keys_list:
+            missing = print_command_with_keys(commands, item)
+            print ''
+            print '     The following command: "' + missing + '" is missing its description!'
+            finish = True
+        print ''
+        print ' >>> Please add it to the HELP tree!'
+        print ''
+
+    if commands_missing:
+        command_keys_list = [list(command) for command in list(commands_diff)]
+        for item in command_keys_list:
+            missing = print_command_with_keys(documentation, item)
+            print ''
+            print '     The following command: "' + missing + '" is missing its mapped command!'
+            finish = True
+        print ''
+        print ' >>> Please add it to the COMMANDS tree!'
+        print ''
+
+    if finish:
+        sys.exit()
 
 def main(commands, documentation):
     """
     Process commmand line and execute resultant command
     """
+    commands_vs_help_trees(commands, documentation)
     if 'help' in sys.argv:
         print_help(documentation)
 
