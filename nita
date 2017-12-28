@@ -16,7 +16,6 @@
 import cli as cli
 
 # CONSTANTS
-KEY_SEPARATOR = ' '
 PROJECT_PATH = '/Users/jizquierdo/Documents/Juniper/Projects/NITA/virtualdc'
 
 # COMMANDS TREE
