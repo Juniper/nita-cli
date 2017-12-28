@@ -259,18 +259,19 @@ Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
 `nita` script has a function that checks if the nested keys of both dictionaries from `commands.py` are the same. If not, it will show a message explaining which commands are missing like the one below:
 
-    jizquierdo-mbp:nita-cli jizquierdo$ nita jenkins ip
+    mbp $ nita robot run test
 
-    The following command(s):
+    The following command: "nita robot run test" is missing its description!
 
-    nita test
-    nita delete
-    nita remove
+    >>> Please add it to the HELP tree!
 
-    is/are missing either a description or a mapped command!
-    Please review HELP and/or COMMANDS trees!
 
-As the output says, check both dictionaries for the keys shown and add the missing part (description or mapped command).
+    The following command: "nita robot volumes" is missing its mapped command!
+    The following command: "nita robot ip" is missing its mapped command!
+
+    >>> Please add it to the COMMANDS tree!
+
+As the output says, check the dictionaries for the keys shown and add the missing part (description or mapped command) as told by the script output.
 
 ## Contacts
 

@@ -40,6 +40,16 @@ def print_nested_keys(dictionary):
         if 'license' not in root2leaf:
             print '   ' + commands.KEY_SEPARATOR.join(root2leaf) + ' => ' + value
 
+def print_command_with_keys(dictionary, keys):
+    """
+    Function that prints the command as a string containing all keys passed as a list from the dictionary.
+    """
+    for root2leaf, value in nested_keys(dictionary):
+        command_keys = commands.KEY_SEPARATOR.join(root2leaf)
+        match = { key in command_keys for key in keys }
+        if match == set([True]):
+            return command_keys
+
 def cli2command(cli, translator):    
     for k in cli: 
         translator = translator[str(k)]
@@ -52,19 +62,42 @@ def commands_vs_help_trees():
     and or a mapped value of a newly added command!).
     """
 
+    finish = False
     commands_set = {frozenset(root2leaf) for root2leaf, value in nested_keys(commands.COMMANDS)}
-    help_set = {frozenset(root2leaf) for root2leaf, value in nested_keys(commands.HELP)}
+    help_set =     {frozenset(root2leaf) for root2leaf, value in nested_keys(commands.HELP)}
 
-    symetric_diff = commands_set ^ help_set
-    if symetric_diff != set([]):
+    help_diff = commands_set - help_set
+    help_missing = help_diff != set([])
+    commands_diff = help_set - commands_set
+    commands_missing = commands_diff != set([])
+
+    if help_missing:
+        
+        command_keys_list = [list(command) for command in list(help_diff)]
+        for item in command_keys_list:
+            missing = print_command_with_keys(commands.COMMANDS, item)
+            print ''
+            print '     The following command: "' + missing + '" is missing its description!'
+            finish = True
         print ''
-        print ' The following command(s):'
+        print ' >>> Please add it to the HELP tree!'
         print ''
-        print ' ' + commands.KEY_SEPARATOR.join(str(commands.KEY_SEPARATOR.join(command)) + '\n' for command in symetric_diff)
-        print ' is/are missing either a description or a mapped command!'
-        print ' Please review HELP and/or COMMANDS trees!'
+
+    if commands_missing:
+        
+        command_keys_list = [list(command) for command in list(commands_diff)]
+        for item in command_keys_list:
+            missing = print_command_with_keys(commands.HELP, item)
+            print ''
+            print '     The following command: "' + missing + '" is missing its mapped command!'
+            finish = True
         print ''
+        print ' >>> Please add it to the COMMANDS tree!'
+        print ''
+    
+    if finish:
         sys.exit()
+
 
 def main():
     
@@ -86,14 +119,13 @@ def main():
         command = cli2command(cli, commands.COMMANDS)
         # If % vars in command
         if '%' in command:
-                
+
             print ''
             print '  >>>> command: ', command % commands.PROJECT_PATH
             print ''
             os.system(command % commands.PROJECT_PATH)
 
         else:
-
             print ''
             print '  >>>> command: ', command
             print ''
