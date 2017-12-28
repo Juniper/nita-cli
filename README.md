@@ -5,13 +5,16 @@ NITA CLI project adds a command line interface to NITA.
 ## TOC
 
 - [NITA CLI](#nita-cli)
-    - [Goal](#goal)
-    - [Reusability](#reusability)
-    - [Prerequisites](#prerequisites)
-    - [About NITA CLI](#about-nita-cli)
-    - [Customisation](#customisation)
-    - [Troubleshooting](#troubleshooting)
-    - [Contacts](#contacts)
+  - [Goal](#goal)
+  - [Reusability](#reusability)
+  - [Prerequisites](#prerequisites)
+  - [About NITA CLI](#about-nita-cli)
+    - [cli.py](#clipy)
+    - [nita](#nita)
+  - [Customisation](#customisation)
+  - [Troubleshooting](#troubleshooting)
+  - [Contacts](#contacts)
+
 
 ## Goal
 
@@ -29,10 +32,9 @@ Is not easier and more intuitive to run the following command to get the same ou
 
     172.19.0.3   172.18.0.7
 
-
 Or this one to list all NITA containers:
 
-    $ docker ps --filter "label=net.juniper.framework=NITA"
+    docker ps --filter "label=net.juniper.framework=NITA"
 
 Compare it with this one in order to get the same output:
 
@@ -48,12 +50,11 @@ Compare it with this one in order to get the same output:
     d224c2bdf0f5        registry.juniper.net/nita/webapp:latest    "webapp-runner"          5 hours ago         Up 5 hours             0.0.0.0:8090->8060/tcp                             webapp
     90c5c7afcace        registry.juniper.net/nita/ntp:latest       "ntp-runner"             5 hours ago         Up 5 hours             0.0.0.0:123->123/tcp                               ntp
 
-
 ## Reusability
 
 These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed is so easy to add them that anybody will be able to play with it and get it customised.
 
-Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `commands.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
+Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `cli.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
 
 ## Prerequisites
 
@@ -63,12 +64,12 @@ It is not really a prerequisite since NITA CLI runs without `jq`, but it really 
 
 It is not the same this:
 
-    mbp$ docker inspect --format '{{json .Mounts}}' webapp
+    $ docker inspect --format '{{json .Mounts}}' webapp
     [{"Type":"bind","Source":"/Users/jizquierdo/Documents/Juniper/Projects/NITA/webapp_and_jenkins_shared","Destination":"/project","Mode":"rw","RW":true,"Propagation":"rprivate"}]
 
 than this:
 
-    mbp$ docker inspect --format '{{json .Mounts}}' webapp | jq
+    $ docker inspect --format '{{json .Mounts}}' webapp | jq
     [
     {
     "Type": "bind",
@@ -86,19 +87,23 @@ It can be installed from [github](https://stedolan.github.io/jq/) or running `br
 
 It is composed of two different python scripts:
 
- - *nita* (It is the smart part of the NITA cli. Its name is not really important. You can name it as you want as long as it makes sense to you! (e.g. j-edi, jnpr, my_script, etc...). It was decided to be named `nita` as it is part of the NITA CLI and makes sense that any command related to NITA starts with that word.
+### `cli.py`
 
- - *commands.py* (It is used by `nita` script to hold some variables/constants. 
- 
-    The most important one is the `COMMANDS tree`. This tree is implemented as a python dictorionary and represents the hierarchycal command tree and all its variations). 
-    
-    There is another tree which is also important and it is related to the help and usage of NITA CLI. It is called `HELP tree` and deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script!
+It is the smart part of the cli. It is the library that converts the dictionary structures (defined below) into executable commands. This is a generic library that can be used to produce cli program to execute any terminal command.
+
+### `nita`
+
+This python script contains the cli commands, what those commands execute and the documentation for the commands. There are two dictionary trees that contain all this data. For it to run it imports the *cli* library and then calls `cli.main()` to do the work.
+
+The *COMMANDS* tree is a python dictorionary and represents the hierarchycal command structure.
+
+The *HELP* tree deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script. Moreover the script will error complaining the *COMMANDS* and *HELP* structures are not in sync! An undocumented command is no command at all...
 
 See both files on the repo for a deeper understanding.
 
 There is a `help` implemented on the script which basically shows the commands already mapped. Here it is the `nita help` command output:
 
-NITA CLI command | Description 
+NITA CLI command | Description
 -----------------|-------------------
    nita ntp ip | Returns IPs information on ntp container.
    nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
@@ -146,7 +151,7 @@ NITA CLI command | Description
    nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
    nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
    nita containers | Lists all NITA containers.
- | 
+ |
 
 ## Customisation
 
@@ -168,9 +173,9 @@ See below example to understand how it works and how to customise it to fit your
         }
     }
 
-Should you install the NITA CLI project (i.e. copy `nita` with +x permissions and `commands.py` to your /usr/local/bin) and run it as below (you can run it from wherever you want!) you will get the following output:
+Should you install the NITA CLI project (i.e. copy `nita` with +x permissions and `cli.py` to your /usr/local/bin) and run it as below (you can run it from wherever you want!) you will get the following output:
 
-    jizquierdo-mbp:bin jizquierdo$ nita hello world
+    $ nita hello world
 
     command:  docker run hello-world
 
@@ -196,7 +201,7 @@ Should you install the NITA CLI project (i.e. copy `nita` with +x permissions an
     For more examples and ideas, visit:
     https://docs.docker.com/engine/userguide/
 
-Such output is the output of the execution of a `docker run hello-world`. If you want to customise your `COMMANDS tree` then you just need to map in the python dictionary the arguments `nita ${ARG_1} ${ARG_2}` of your script as the path in the tree. 
+Such output is the output of the execution of a `docker run hello-world`. If you want to customise your `COMMANDS tree` then you just need to map in the python dictionary the arguments `nita ${ARG_1} ${ARG_2}` of your script as the path in the tree.
 
     COMMANDS = {
         'nita': {
@@ -244,10 +249,10 @@ Here it is another example of how to grow it:
         }
     }
 
-    jizquierdo-mbp:bin jizquierdo$ docker run alpine:latest cat /etc/alpine-release
+    $ docker run alpine:latest cat /etc/alpine-release
     3.6.2
 
-    jizquierdo-mbp:bin jizquierdo$ nita example command
+    $ nita example command
 
     command:  docker run alpine:latest cat /etc/alpine-release
 
@@ -257,7 +262,7 @@ Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
 ## Troubleshooting
 
-`nita` script has a function that checks if the nested keys of both dictionaries from `commands.py` are the same. If not, it will show a message explaining which commands are missing like the one below:
+`cli.py` library has a function that checks if the nested keys of both dictionaries from `nita` (or any other file that imports the library) are the same. If not, it will show a message explaining which commands are missing like the one below:
 
     mbp $ nita robot run test
 
@@ -279,29 +284,27 @@ As the output says, check the dictionaries for the keys shown and add the missin
 
 We would like to lead you and your customers into the Network Automation world!
 
-Get in touch with us! How? 
+Get in touch with us! How?
 
 - Write an e-mail to:
 
-Contact Name | e-mail 
+Contact Name | e-mail
 ---------|----------
 Jose Miguel Izquierdo | jizquierdo@juniper.net
 David Gethings | dgethings@juniper.net
  |
- 
-- Request access to our [Slack](https://slack.com) workspace:
 
-`nita-dev.slack.com`
+- Request access to our [Slack](https://slack.com) [NITA-dev](https://nita-dev.slack.com) workspace.
 
 You will be sent an invitation to join us.
 
 Share anything with us (request, issues, concerns, suggestions, etc...) on any of the different channels depending on the topic:
 
-Channel | Description 
+Channel | Description
 ---------|----------
-#general      | NITA Company-wide announcements and work-based matters
-#nita-dev     | NITA development channel
-#nita-support | NITA support channel
+\#general      | NITA Company-wide announcements and work-based matters
+\#nita-dev     | NITA development channel
+\#nita-support | NITA support channel
  |
 
 Thanks for using NITA!
