@@ -15,6 +15,9 @@
 import sys
 import os
 
+KEY_SEPARATOR = ' '
+
+
 def nested_keys(dictionary, path=None):
     """
     Function that returns all nested keys in a dictionary.
@@ -34,10 +37,9 @@ def print_nested_keys(dictionary):
     Function that prints a set of all nested keys (from root to leaf) 
     in a dictionary with its correspondent value.
     """
+    dictionary.pop('license', None)
     for root2leaf, value in nested_keys(dictionary):
-        # Not print the license when in help
-        if 'license' not in root2leaf:
-            print '   ' + dictionary['KEY_SEPARATOR'].join(root2leaf) + ' => ' + value
+        print '   ' + KEY_SEPARATOR.join(root2leaf) + ' => ' + value
 
 def cli2command(cli, translator):    
     for k in cli: 

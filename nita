@@ -110,7 +110,6 @@ COMMANDS = {
 
 # HELP TREE
 HELP = {
-    'KEY_SEPARATOR': ' ',
     'nita': {
         'containers': 'Lists all NITA containers.',
         'images':     'Lists all NITA images.',
