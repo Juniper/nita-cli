@@ -10,6 +10,7 @@ NITA CLI project adds a command line interface to NITA.
     - [Prerequisites](#prerequisites)
     - [About NITA CLI](#about-nita-cli)
     - [Customisation](#customisation)
+    - [Troubleshooting](#troubleshooting)
     - [Contacts](#contacts)
 
 ## Goal
@@ -253,6 +254,23 @@ Here it is another example of how to grow it:
     3.6.2
 
 Enjoy creating your own docker-like or VMM-like CLI interface!!!
+
+## Troubleshooting
+
+`nita` script has a function that checks if the nested keys of both dictionaries from `commands.py` are the same. If not, it will show a message explaining which commands are missing like the one below:
+
+    jizquierdo-mbp:nita-cli jizquierdo$ nita jenkins ip
+
+    The following command(s):
+
+    nita test
+    nita delete
+    nita remove
+
+    is/are missing either a description or a mapped command!
+    Please review HELP and/or COMMANDS trees!
+
+As the output says, check both dictionaries for the keys shown and add the missing part (description or mapped command).
 
 ## Contacts
 
