@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # <*******************
 # 
 # Copyright 2018 Juniper Networks, Inc. All rights reserved.
@@ -110,6 +110,7 @@ COMMANDS = {
 
 # HELP TREE
 HELP = {
+    'KEY_SEPARATOR': ' ',
     'nita': {
         'containers': 'Lists all NITA containers.',
         'images':     'Lists all NITA images.',
@@ -191,4 +192,4 @@ HELP = {
 # mkdir -p ${PWD}/output/${BUILD_NUMBER} ; docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project -e ROBOT_OPTIONS=&quot;-d ${PWD}/output/${BUILD_NUMBER}&quot; registry.juniper.net/nita/robot:latest ./test.sh
 
 if __name__ == '__main__':
-    cli.main()
+    cli.main(COMMANDS, HELP)

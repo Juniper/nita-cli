@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # <*******************
 # 
 # Copyright 2018 Juniper Networks, Inc. All rights reserved.
@@ -37,19 +37,19 @@ def print_nested_keys(dictionary):
     for root2leaf, value in nested_keys(dictionary):
         # Not print the license when in help
         if 'license' not in root2leaf:
-            print '   ' + commands.KEY_SEPARATOR.join(root2leaf) + ' => ' + value
+            print '   ' + dictionary['KEY_SEPARATOR'].join(root2leaf) + ' => ' + value
 
 def cli2command(cli, translator):    
     for k in cli: 
         translator = translator[str(k)]
     return translator
 
-def main():
+def main(commands, help):
     # print 'Number of arguments:', len(sys.argv), 'arguments.'
     # print 'Argument List:', str(sys.argv)
     if 'help' in sys.argv:
         print ''
-        print_nested_keys(commands.HELP)
+        print_nested_keys(help)
         print ''
         sys.exit()
 
@@ -59,7 +59,7 @@ def main():
     cli.insert(0, root)
 
     try:
-        command = cli2command(cli, commands.COMMANDS)
+        command = cli2command(cli, commands)
         # If % vars in command
         if '%' in command:
                 
