@@ -45,36 +45,16 @@ def cli2command(cli, translator):
         translator = translator[str(k)]
     return translator
 
-def commands_vs_help():
+def commands_vs_help_trees():
     """
-    Function that checks if commands.COMMANDS & commands.HELP
+    Function that checks if commands.COMMANDS & commands.HELP trees
     have the same nested keys (i.e. tries to avoid missing documentation
-    of a newly added command!).
+    and or a mapped value of a newly added command!).
     """
-    help_set = set([])
-    commands_set = set([])
 
-    # If adding below set, following error is shown:
-    # TypeError: unhashable type: 'set'
-    # set(root2leaf)
-    # Python is complaining because the inner set objects are mutable 
-    # and thus not hashable. The solution is to use frozenset 
-    # for the inner sets, to indicate that you have no 
-    # intention of modifying them: frozenset(root2leaf)
-
-    # set comprehensions instead of FOR loop
     commands_set = {frozenset(root2leaf) for root2leaf, value in nested_keys(commands.COMMANDS)}
-    # for root2leaf, value in nested_keys(commands.COMMANDS):
-    #     commands_set.add(frozenset(root2leaf))
     help_set = {frozenset(root2leaf) for root2leaf, value in nested_keys(commands.HELP)}
-    # for root2leaf, value in nested_keys(commands.HELP):
-    #     commands_set.add(frozenset(root2leaf))
-    
-    # Sets Symmetric Difference
-    # The resulting set has elements which are unique to each set. 
-    # An element will be in the result set if either it is in the 
-    # left-hand set and not in the right-hand set or it is in the 
-    # right-hand set and not in the left-hand set.
+
     symetric_diff = commands_set ^ help_set
     if symetric_diff != set([]):
         print ''
@@ -87,6 +67,8 @@ def commands_vs_help():
         sys.exit()
 
 def main():
+    
+    commands_vs_help_trees()
     # print 'Number of arguments:', len(sys.argv), 'arguments.'
     # print 'Argument List:', str(sys.argv)
     if 'help' in sys.argv:
@@ -99,12 +81,6 @@ def main():
     root = sys.argv[0].split('/')[-1]
     cli = sys.argv[1:]
     cli.insert(0, root)
-
-
-
-    commands_vs_help()
-
-
 
     try:
         command = cli2command(cli, commands.COMMANDS)
