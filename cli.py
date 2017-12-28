@@ -54,7 +54,10 @@ def cli2command(cli, translator):
         print ''
         sys.exit(1)
 
-    return translator
+    if '%' in translator:
+        return translator % os.environ.get('PROJECT_PATH', os.environ['PWD'])
+    else:
+        return translator
 
 def print_help(documentation):
     """
@@ -79,15 +82,8 @@ def main(commands, documentation):
     cli.insert(0, root)
 
     command = cli2command(cli, commands)
-    # If % vars in command
-    if '%' in command:
-        print ''
-        print '  >>>> command: ', command % commands.PROJECT_PATH
-        print ''
-        os.system(command % commands.PROJECT_PATH)
 
-    else:
-        print ''
-        print '  >>>> command: ', command
-        print ''
-        os.system(command)
+    print ''
+    print '  >>>> command: ', command
+    print ''
+    os.system(command)
