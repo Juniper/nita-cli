@@ -15,9 +15,6 @@
 
 import cli as cli
 
-# CONSTANTS
-PROJECT_PATH = '/Users/jizquierdo/Documents/Juniper/Projects/NITA/virtualdc'
-
 # COMMANDS TREE
 COMMANDS = {
     'nita': {
