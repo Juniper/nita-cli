@@ -56,8 +56,8 @@ def cli2command(cli, translator):
 
     if '%' in translator:
         return translator % os.environ.get('PROJECT_PATH', os.environ['PWD'])
-    else:
-        return translator
+
+    return translator
 
 def print_help(documentation):
     """
