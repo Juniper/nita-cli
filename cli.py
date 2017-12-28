@@ -30,7 +30,7 @@ def nested_keys(dictionary, path=None):
             for result in nested_keys(value, newpath):
                 yield result
         else:
-            yield newpath, value
+            yield ' '.join(newpath), value
 
 def print_nested_keys(dictionary):
     """
@@ -38,8 +38,8 @@ def print_nested_keys(dictionary):
     in a dictionary with its correspondent value.
     """
     dictionary.pop('license', None)
-    for root2leaf, value in nested_keys(dictionary):
-        print '   ' + KEY_SEPARATOR.join(root2leaf) + ' => ' + value
+    for cli, command in nested_keys(dictionary):
+        print "   {} => {}".format(cli, command)
 
 def cli2command(cli, translator):
     """
