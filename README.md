@@ -15,7 +15,6 @@ NITA CLI project adds a command line interface to NITA.
   - [Troubleshooting](#troubleshooting)
   - [Contacts](#contacts)
 
-
 ## Goal
 
 NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
@@ -128,12 +127,14 @@ NITA CLI command | Description
    nita webapp volumes | Returns shared volumes information on webapp container.
    nita webapp ports | Returns mapped ports information on webapp container.
    nita stats | Displays the NITA containers resource usage statistics.
+   nita license | Displays the NITA License.
    nita tacacs ip | Returns IPs information on tacacs container.
    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
    nita tacacs logs | Fetches the logs of tacacs container.
    nita tacacs volumes | Returns shared volumes information on tacacs container.
    nita tacacs ports | Returns mapped ports information on tacacs container.
    nita robot ip | Returns IPs information on robot container.
+   nita robot run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
    nita robot ports | Returns mapped ports information on robot container.
    nita robot volumes | Returns shared volumes information on robot container.
    nita robot cli | Attaches local standard input, output, and error streams to robot running container.
