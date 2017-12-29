@@ -263,7 +263,24 @@ Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
 ## Troubleshooting
 
-`cli.py` library has a function that checks if the nested keys of both dictionaries from `nita` (or any other file that imports the library) are the same. If not, it will show a message explaining which commands are missing like the one below:
+### Wrong command
+
+If a wrong command is executed (i.e. there is a wrong key on the COMMANDS dictionary), NITA CLI will show you the following message:
+
+    $ nita hello world
+
+    'hello' key does not exist! Command: 'nita hello world' is incorrect!
+
+     For a list of available commands, execute: 
+
+    >>>>  nita help
+
+Please, review `nita help` output and look for the command you are looking for. If it is not there and you consider it should... submit a merge request to add it! You can always add it to your local copy if not a general purpose command!
+
+### Missing description or mapped command
+
+
+`cli.py` library has a function that checks if the nested keys of both dictionaries from `nita` (or any other file that imports the library) are the same. That is a reminder to add not only the command but also a help/usage message that will help other users take advantage of it. If keys are not the same, it will show a message explaining which commands are wrong like the one below:
 
     $ nita robot run test
 
