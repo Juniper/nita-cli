@@ -50,7 +50,11 @@ def cli2command(cli, translator):
             translator = translator[str(k)]
     except KeyError as err:
         print ''
-        print "'{}' key does not exist at COMMANDS dictionary".format(err.message)
+        print " '{}' key does not exist! Command: '{}' is incorrect!".format(err.message, ' '.join(str(k) for k in cli))
+        print ''
+        print ' For a list of available commands, execute: '
+        print ''
+        print ' >>>>  nita help'
         print ''
         sys.exit(1)
 
