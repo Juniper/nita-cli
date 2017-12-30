@@ -78,7 +78,7 @@ def print_command_with_keys(dictionary, keys):
     as a list from the dictionary.
     """
     for root2leaf, _ in nested_keys(dictionary):
-        command_keys = ' '.join(root2leaf)
+        command_keys = ''.join(root2leaf)
         match = {key in command_keys for key in keys}
         if match == set([True]):
             return command_keys
