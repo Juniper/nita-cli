@@ -19,6 +19,10 @@ import cli as cli
 # COMMANDS TREE
 COMMANDS = {
     'nita': {
+        'new': {
+                'project': 'echo " >>>>> UNDER DEVELOPMENT...!!!"',
+                'role':    'echo " >>>>> UNDER DEVELOPMENT...!!!"'
+        },
         'containers': 'docker ps --filter "label=net.juniper.framework=NITA"',
         'images':     'docker images --filter "label=net.juniper.framework=NITA"',
         'stats':      'docker stats webapp jenkins tacacs radius ntp dns --no-stream',
@@ -111,6 +115,10 @@ COMMANDS = {
 # HELP TREE
 HELP = {
     'nita': {
+        'new': {
+            'project': 'Creates a new NITA project scaffolding.',
+            'role':    'Creates a new Ansible role scaffolding.'
+        },
         'containers': 'Lists all NITA containers.',
         'images':     'Lists all NITA images.',
         'stats':      'Displays the NITA containers resource usage statistics.',
@@ -188,10 +196,6 @@ HELP = {
         'license': 'Displays the NITA License.'
     }
 }
-
-# docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project registry.juniper.net/nita/ansible:latest ./noob.sh
-# docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project registry.juniper.net/nita/ansible:latest ./build.sh
-# mkdir -p ${PWD}/output/${BUILD_NUMBER} ; docker run --rm --volumes-from jenkins -v PROJECT_PATH:/project -e ROBOT_OPTIONS=&quot;-d ${PWD}/output/${BUILD_NUMBER}&quot; registry.juniper.net/nita/robot:latest ./test.sh
 
 if __name__ == '__main__':
     cli.main(COMMANDS, HELP)
