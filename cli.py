@@ -149,14 +149,20 @@ def main(commands, documentation):
         # last argument of cli is the name of:
         # - role
         # - project
-        name = cli[-1]
-        cli = cli[:-1]
-        raw = cli2command(cli, commands)
-        command = raw.format(name)
-        print ''
-        print '  >>>> command: ', command
-        print ''
-        os.system(command)
+        try:
+            name = cli[-1]
+            subcli = cli[:-1]
+            raw = cli2command(subcli, commands)
+            command = raw.format(name)
+            print ''
+            print '  >>>> command: ', command
+            print ''
+            os.system(command)
+        except AttributeError:
+            print ''
+            print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
+            print ''
+            sys.exit(1)
 
     else:
         command = cli2command(cli, commands)
