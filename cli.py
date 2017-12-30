@@ -126,11 +126,17 @@ def commands_vs_help_trees(commands, documentation):
     if finish:
         sys.exit()
 
+def is_new_command(cli):
+    if 'new' in cli:
+        return True
+    return False
+
 def main(commands, documentation):
     """
     Process commmand line and execute resultant command
     """
     commands_vs_help_trees(commands, documentation)
+    
     if 'help' in sys.argv:
         print_help(documentation)
 
@@ -139,9 +145,22 @@ def main(commands, documentation):
     cli = sys.argv[1:]
     cli.insert(0, root)
 
-    command = cli2command(cli, commands)
+    if is_new_command(cli):
+        # last argument of cli is the name of:
+        # - role
+        # - project
+        name = cli[-1]
+        cli = cli[:-1]
+        raw = cli2command(cli, commands)
+        command = raw.format(name)
+        print ''
+        print '  >>>> command: ', command
+        print ''
+        os.system(command)
 
-    print ''
-    print '  >>>> command: ', command
-    print ''
-    os.system(command)
+    else:
+        command = cli2command(cli, commands)
+        print ''
+        print '  >>>> command: ', command
+        print ''
+        os.system(command)
