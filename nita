@@ -20,8 +20,8 @@ import cli as cli
 COMMANDS = {
     'nita': {
         'new': {
-            'project': 'echo " >>>>> UNDER DEVELOPMENT...!!!"',
-            'role':    'echo " >>>>> UNDER DEVELOPMENT...!!!"'
+            'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
+            'role':    'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars '
         },
         'containers': 'docker ps --filter "label=net.juniper.framework=NITA"',
         'images':     'docker images --filter "label=net.juniper.framework=NITA"',
