@@ -120,6 +120,8 @@ NITA CLI command | Description
    nita radius logs | Fetches the logs of radius container.
    nita radius volumes | Returns shared volumes information on radius container.
    nita radius ports | Returns mapped ports information on radius container.
+   nita new project | Creates a new NITA project scaffolding.
+   nita new role | Creates a new Ansible role scaffolding.
    nita images | Lists all NITA images.
    nita webapp ip | Returns IPs information on webapp container.
    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
