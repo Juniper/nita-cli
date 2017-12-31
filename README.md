@@ -109,6 +109,7 @@ NITA CLI command | Description
    nita ntp logs | Fetches the logs of ntp container.
    nita ntp volumes | Returns shared volumes information on ntp container.
    nita ntp ports | Returns mapped ports information on ntp container.
+   nita ips | Shows all NITA containers IPs
    nita ansible ip | Returns IPs information on ansible container.
    nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
    nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
