@@ -128,7 +128,7 @@ NITA CLI command | Description
    nita webapp logs | Fetches the logs of webapp container.
    nita webapp volumes | Returns shared volumes information on webapp container.
    nita webapp ports | Returns mapped ports information on webapp container.
-   nita stats | Displays the NITA containers resource usage statistics.
+   nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita license | Displays the NITA License.
    nita tacacs ip | Returns IPs information on tacacs container.
    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.

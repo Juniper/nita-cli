@@ -25,7 +25,7 @@ COMMANDS = {
         },
         'containers': 'docker ps --filter "label=net.juniper.framework=NITA"',
         'images':     'docker images --filter "label=net.juniper.framework=NITA"',
-        'stats':      'docker stats webapp jenkins tacacs radius ntp dns --no-stream',
+        'stats':      'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker stats',
         'jenkins': {
             'jobs': {
                 'ls':     'docker exec -it jenkins list_jenkins_jobs.py',
@@ -121,7 +121,7 @@ HELP = {
         },
         'containers': 'Lists all NITA containers.',
         'images':     'Lists all NITA images.',
-        'stats':      'Displays the NITA containers resource usage statistics.',
+        'stats':      'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
             'jobs': {
                 'ls':     'Lists all Jenkins jobs.',
