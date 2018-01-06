@@ -147,7 +147,7 @@ NITA CLI command | Description
    nita dns volumes | Returns shared volumes information on dns container.
    nita dns ports | Returns mapped ports information on dns container.
    nita jenkins jobs ls | Lists all Jenkins jobs.
-   nita jenkins jobs remove | Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.
+   nita jenkins jobs remove --regex REGEX | Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.
    nita jenkins logs | Fetches the logs of jenkins container.
    nita jenkins ip | Returns IPs information on jenkins container.
    nita jenkins volumes | Returns shared volumes information on jenkins container.

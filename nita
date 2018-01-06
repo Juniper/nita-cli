@@ -30,7 +30,7 @@ COMMANDS = {
         'jenkins': {
             'jobs': {
                 'ls':     'docker exec -it jenkins list_jenkins_jobs.py',
-                'remove': 'docker exec -it jenkins remove_from_jenkins.py -y --regex REGEX'
+                'remove': 'docker exec -it jenkins remove_from_jenkins.py -y --regex {0}'
             },
             'cli': {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',

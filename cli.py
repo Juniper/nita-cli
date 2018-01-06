@@ -26,6 +26,8 @@ def nested_keys(dictionary, path=None):
         path = []
     for key, value in dictionary.items():
         newpath = path + [key]
+        if 'jenkins' and 'remove' in newpath:
+            newpath = newpath + ['--regex'] + ['REGEX']
         if isinstance(value, dict):
             for result in nested_keys(value, newpath):
                 yield result
@@ -131,6 +133,11 @@ def is_new_command(cli):
         return True
     return False
 
+def is_jenkins_rm_command(cli):
+    if 'jenkins' and 'remove' in cli:
+        return True
+    return False
+
 def main(commands, documentation):
     """
     Process commmand line and execute resultant command
@@ -146,9 +153,6 @@ def main(commands, documentation):
     cli.insert(0, root)
 
     if is_new_command(cli):
-        # last argument of cli is the name of:
-        # - role
-        # - project
         try:
             name = cli[-1]
             subcli = cli[:-1]
@@ -163,7 +167,21 @@ def main(commands, documentation):
             print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
             print ''
             sys.exit(1)
-
+    elif is_jenkins_rm_command(cli):
+        try:
+            regex = cli[-1]
+            subcli = cli[:-2]
+            raw = cli2command(subcli, commands)
+            command = raw.format(regex)
+            print ''
+            print '  >>>> command: ', command
+            print ''
+            os.system(command)
+        except AttributeError:
+            print ''
+            print " Command: '{}' is missing the option: $regex!".format(' '.join(str(k) for k in cli))
+            print ''
+            sys.exit(1)
     else:
         command = cli2command(cli, commands)
         print ''
