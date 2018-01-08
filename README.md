@@ -11,6 +11,7 @@ NITA CLI project adds a command line interface to NITA.
   - [About NITA CLI](#about-nita-cli)
     - [cli.py](#clipy)
     - [nita](#nita)
+  - [Installation](#installation)
   - [Customisation](#customisation)
   - [Troubleshooting](#troubleshooting)
   - [Contacts](#contacts)
@@ -157,9 +158,25 @@ NITA CLI command | Description
    nita containers | Lists all NITA containers.
  |
 
+## Installation
+
+In order to install NITA CLI, clone this project and execute `install.sh` script.
+
+    $ sh install.sh 
+
+     >>>> Copying cli.py & nita to /usr/local/bin/
+
+     >>>> Adding +x permissions to /usr/local/bin/nita
+
+     >>>> NITA CLI has been installed successfully!
+
+    $
+
 ## Customisation
 
-See below example to understand how it works and how to customise it to fit your needs. Imagine this is your COMMANDS tree. It has a hello world example:
+See below example to understand how it works and how to customise it to fit your needs. 
+
+Imagine this is your COMMANDS tree. This is a `hello world` example:
 
     COMMANDS = {
         'nita': {
@@ -177,7 +194,7 @@ See below example to understand how it works and how to customise it to fit your
         }
     }
 
-Should you install the NITA CLI project (i.e. copy `nita` with +x permissions and `cli.py` to your /usr/local/bin) and run it as below (you can run it from wherever you want!) you will get the following output:
+Should you [install](#installation) the NITA CLI project and run it as below (you will be able to run it from wherever you want!) you will get the following output:
 
     $ nita hello world
 
