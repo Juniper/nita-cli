@@ -377,6 +377,17 @@ A NEW ROLE in the project???
     nita new role srx_cluster
     tree srx_cluster
 
+What if I misspell a command???
+
+    $ nita ansible abc
+
+    'abc' key does not exist! Command: 'nita ansible abc' is incorrect!
+
+    For a list of available commands, execute: 
+
+    >>>>  nita help
+
+
 In a nutshell, anything you want to know about what NITA CLI does, just issue the help:
 
     nita help
