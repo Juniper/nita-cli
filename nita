@@ -75,7 +75,7 @@ COMMANDS = {
             'cli':     'docker exec -it tacacs /bin/bash'
         },
         'radius': {
-            'logs':    'docker exec -it radius tail -200 /var/log/radius/radius.log',
+            'logs':    'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
             'ports':   'docker port radius',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
