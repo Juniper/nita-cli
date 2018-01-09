@@ -322,7 +322,7 @@ As the output says, check the dictionaries for the keys shown and add the missin
 
 NITA CLI (Command Line interface) is the way of interacting with NITA by using simple and very intuitive commands. It abstracts the user from the complexity of most of the commands running behind the scenes (related to docker, unix and some other tools). 
 
-During the demo it will be shown both the NITA CLI command and its unix/docker/mixed equivalent to prove the simplicity and intuition of NITA CLI.
+During the demo both the NITA CLI command and its unix/docker/mixed mapped command it will be shown to prove the simplicity and intuition of NITA CLI.
 
 Here they are some commands as an example:
 
