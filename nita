@@ -68,14 +68,14 @@ COMMANDS = {
             'cli':     'docker exec -it webapp /bin/bash'
         },
         'tacacs': {
-            'logs':    'docker run -it tacacs tail -200 /var/log/tacacs.log',
+            'logs':    'docker exec -it tacacs tail -200 /var/log/tacacs.log',
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
             'ports':   'docker port tacacs',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
             'cli':     'docker exec -it tacacs /bin/bash'
         },
         'radius': {
-            'logs':    'docker logs radius --tail 200',
+            'logs':    'docker exec -it radius tail -200 /var/log/radius/radius.log',
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
             'ports':   'docker port radius',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
