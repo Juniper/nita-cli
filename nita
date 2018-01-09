@@ -26,7 +26,7 @@ COMMANDS = {
         'containers': 'docker ps --filter "label=net.juniper.framework=NITA"',
         'images':     'docker images --filter "label=net.juniper.framework=NITA"',
         'ips':        'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
-        'stats':      'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker stats',
+        'stats':      'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker stats --no-stream',
         'jenkins': {
             'jobs': {
                 'ls':     'docker exec -it jenkins list_jenkins_jobs.py',
