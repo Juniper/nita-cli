@@ -394,6 +394,8 @@ In a nutshell, anything you want to know about what NITA CLI does, just issue th
 
 and you will get all the things that NITA CLI can do for you!!!!
 
+_Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
+
 ## Contacts
 
 `Juniper Internal only`
