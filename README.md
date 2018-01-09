@@ -377,7 +377,7 @@ A NEW ROLE in the project???
     nita new role srx_cluster
     tree srx_cluster
 
-In a nutshell, should you want to know what NITA CLI does, just issue
+In a nutshell, anything you want to know about what NITA CLI does, just issue the help:
 
     nita help
 
