@@ -1,6 +1,6 @@
 # NITA CLI
 
-NITA CLI project adds a command line interface to NITA.
+NITA CLI project adds a command line interface to NITA. It is the way of interacting with NITA by using simple and very intuitive commands. It abstracts the user from the complexity of most of the commands running behind the scenes (related to docker, unix and some other tools).
 
 ## TOC
 
@@ -14,6 +14,7 @@ NITA CLI project adds a command line interface to NITA.
   - [Installation](#installation)
   - [Customisation](#customisation)
   - [Troubleshooting](#troubleshooting)
+  - [Demo](#demo)
   - [Contacts](#contacts)
 
 ## Goal
@@ -315,6 +316,72 @@ Please, review `nita help` output and look for the command you are looking for. 
     >>> Please add it to the COMMANDS tree!
 
 As the output says, check the dictionaries for the keys shown and add the missing part (description or mapped command) as told by the script output.
+
+
+## Demo
+
+NITA CLI (Command Line interface) is the way of interacting with NITA by using simple and very intuitive commands. It abstracts the user from the complexity of most of the commands running behind the scenes (related to docker, unix and some other tools). 
+
+During the demo it will be shown both the NITA CLI command and its unix/docker/mixed equivalent to prove the simplicity and intuition of NITA CLI.
+
+Here they are some commands as an example:
+
+To check docker images vs. nita images:
+
+    docker images vs. nita images
+
+To check docker running containers vs. nita running containers:
+
+    docker ps -a  vs. nita containers
+
+To check docker containers statistics vs. nita containers statistics:
+
+    docker stats  vs. nita stats
+
+Imagine you need to know all your NITA framework IPs... See the different from these 2 commands:
+
+    nita ips
+
+Which port did you map your NTP port?
+
+    nita ntp ports
+
+Also, to check which volumes is sharing the Jenkins container:
+
+    nita jenkins volumes
+
+In order to check the webapp container logs
+
+    nita webapp logs
+
+Should you want to debug TACACS on the server side
+
+    nita tacacs logs
+
+Imagine login in radius container
+
+    nita radius cli    ->  ps -fea    ->   kill PID   ->  freeradius -X
+
+Or even run NOOB, Build and Test without needed to do it from the UI (You will save a LOT of time)
+
+    nita ansible run noob
+
+You are requested to create a NEW PROJECT???
+
+    nita new project new_nita_project-12345-alt
+    tree new_nita_project-12345-alt
+
+A NEW ROLE in the project???
+
+    cd into project and roles/ dir
+    nita new role srx_cluster
+    tree srx_cluster
+
+In a nutshell, should you want to know what NITA CLI does, just issue
+
+    nita help
+
+and you will get all the things that NITA CLI can do for you!!!!
 
 ## Contacts
 
