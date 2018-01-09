@@ -162,7 +162,7 @@ NITA CLI command | Description
 
 In order to install NITA CLI, clone this project and execute `install.sh` script.
 
-    $ sh install.sh 
+    $ sudo sh install.sh 
 
      >>>> Copying cli.py & nita to /usr/local/bin/
 
