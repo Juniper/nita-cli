@@ -129,13 +129,20 @@ def commands_vs_help_trees(commands, documentation):
         sys.exit()
 
 def is_new_command(cli):
+    """
+    Checks if the cli command contains 'new' in it.
+    """
     if 'new' in cli:
         return True
     return False
 
-def is_jenkins_rm_command(cli):
-    if 'jenkins' and 'remove' in cli:
-        return True
+def has_options(cli):
+    """
+    Checks if the cli command contains any options (e.g. --regex $REGEX).
+    """
+    for item in cli:
+        if '--' in item:
+            return True
     return False
 
 def main(commands, documentation):
@@ -167,12 +174,13 @@ def main(commands, documentation):
             print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
             print ''
             sys.exit(1)
-    elif is_jenkins_rm_command(cli):
+    elif has_options(cli):
         try:
-            regex = cli[-1]
+            option = cli[-2]
+            value = cli[-1]
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
-            command = raw.format(regex)
+            command = raw.format(option, value)
             print ''
             print '  >>>> command: ', command
             print ''
