@@ -332,11 +332,19 @@ Here they are some commands as an example:
 
 To check docker images vs. nita images:
 
-    docker images vs. nita images
+    docker images vs. nita images ls
+
+To check the versions of NITA images:
+
+    nita images versions
 
 To check docker running containers vs. nita running containers:
 
-    docker ps -a  vs. nita containers
+    docker ps  vs. nita containers ls
+
+To check the versions of NITA running containers:
+
+    nita containers versions
 
 To check docker containers statistics vs. nita containers statistics:
 
