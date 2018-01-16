@@ -51,8 +51,8 @@ COMMANDS = {
         },
         'ansible': {
             'run': {
-                'noob':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
-                'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh',
+                'noob':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./noob.sh',
+                'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./build.sh',
             },
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ansible',
             'ports':   'docker port ansible',
