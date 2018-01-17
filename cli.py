@@ -191,8 +191,21 @@ def main(commands, documentation):
             print ''
             sys.exit(1)
     else:
-        command = cli2command(cli, commands)
-        print ''
-        print '  >>>> command: ', command
-        print ''
-        os.system(command)
+        try:
+            command = cli2command(cli, commands)
+            # if command is not a leaf in the dictionary (string), 
+            # but a branch with more leaves, command will not run!
+            if isinstance(command, str):
+                print ''
+                print '  >>>> command: ', command
+                print ''
+                os.system(command)
+            else:
+                raise TypeError
+        except TypeError:
+            print ''
+            print " Command: '{}' is not a mapped command!".format(' '.join(str(k) for k in cli))
+            print ''
+            print " Issue 'nita help' for some insights..."
+            print ''
+            sys.exit(1)
