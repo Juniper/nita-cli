@@ -100,7 +100,11 @@ The *COMMANDS* tree is a python dictorionary and represents the hierarchycal com
 
 The *HELP* tree deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script. Moreover the script will error complaining the *COMMANDS* and *HELP* structures are not in sync! An undocumented command is no command at all...
 
-See both files on the repo for a deeper understanding.
+See both files on the repo for a deeper understanding:
+
+- [nita](/nita)
+
+- [cli.py](/cli.py)
 
 There is a `help` implemented on the script which basically shows the commands already mapped. Here it is the `nita help` command output:
 
@@ -118,13 +122,13 @@ NITA CLI command | Description
    nita ntp logs | Fetches the logs of ntp container.
    nita ntp volumes | Returns shared volumes information on ntp container.
    nita ntp ports | Returns mapped ports information on ntp container.
-   nita up | Create and start NITA containers and networks.
+   nita up | Creates and starts NITA containers and networks.
    nita robot ip | Returns IPs information on robot container.
    nita robot run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
    nita robot ports | Returns mapped ports information on robot container.
    nita robot volumes | Returns shared volumes information on robot container.
    nita robot cli | Attaches local standard input, output, and error streams to robot running container.
-   nita down | Stop and remove NITA containers and networks.
+   nita down | Stops and removes NITA containers and networks.
    nita ips | Shows all NITA containers IPs
    nita ansible ip | Returns IPs information on ansible container.
    nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
