@@ -23,7 +23,7 @@ NITA CLI resolves the complexity of dealing with a lot of different technologies
 
 Imagine trying to type the following command to get jenkins container IPs:
 
-    $ docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins
+    $ docker inspect --format='{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}' jenkins
 
     172.19.0.3   172.18.0.7
 
