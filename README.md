@@ -39,7 +39,7 @@ Or this one to list all NITA containers:
 
 Compare it with this one in order to get the same output:
 
-    $ nita containers
+    $ nita containers ls
 
     command:  docker ps --filter "label=net.juniper.framework=NITA"
 
