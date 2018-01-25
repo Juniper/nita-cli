@@ -412,7 +412,7 @@ and you will get all the things that NITA CLI can do for you!!!!
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
-## Contacts
+# Contact
 
 `Juniper Internal only`
 
@@ -420,25 +420,28 @@ We would like to lead you and your customers into the Network Automation world!
 
 Get in touch with us! How?
 
-- Write an e-mail to:
+- Submit bugs, features, roadmap items to Visual Studio Teams (VST):
+
+    https://ps-network-automation.visualstudio.com/NITA
+
+- Request access to our [MS Teams](https://products.office.com/en-us/microsoft-teams/group-chat-software) workspace:
+
+    NITA team (public).
+
+Share anything with us (request, issues, concerns, suggestions, etc...) on any of the different channels depending on the topic:
+
+ Channel | Description
+---------|----------
+General  | NITA Company-wide announcements and work-based matters
+Development | NITA development channel
+Support | NITA support channel
+ |
+
+If none of above recommended options works for you, write an e-mail to:
 
 Contact Name | e-mail
 ---------|----------
 Jose Miguel Izquierdo | jizquierdo@juniper.net
 David Gethings | dgethings@juniper.net
  |
-
-- Request access to our [Slack](https://slack.com) [NITA-dev](https://nita-dev.slack.com) workspace.
-
-You will be sent an invitation to join us.
-
-Share anything with us (request, issues, concerns, suggestions, etc...) on any of the different channels depending on the topic:
-
-Channel | Description
----------|----------
-\#general      | NITA Company-wide announcements and work-based matters
-\#nita-dev     | NITA development channel
-\#nita-support | NITA support channel
- |
-
 Thanks for using NITA!
