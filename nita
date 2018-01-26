@@ -132,9 +132,9 @@ HELP = {
             'versions': 'Lists all running NITA containers versions.',
         },
         'images': {
-                'ls':       'Lists all NITA images.',
-                'versions': 'Displays NITA images versions',
-            },
+            'ls':       'Lists all NITA images.',
+            'versions': 'Displays NITA images versions',
+        },
         'ips':        'Shows all NITA containers IPs',
         'stats':      'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
