@@ -51,13 +51,8 @@ def cli2command(cli, translator):
         for k in cli:
             translator = translator[str(k)]
     except KeyError as err:
-        print ''
-        print " '{}' key does not exist! Command: '{}' is incorrect!".format(err.message, ' '.join(str(k) for k in cli))
-        print ''
-        print ' For a list of available commands, execute: '
-        print ''
-        print ' >>>>  nita help'
-        print ''
+        print "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in cli))
+        print "\n For a list of available commands, execute:\n\n >>>> nita help\n\n"
         sys.exit(1)
 
     if '%' in translator:
@@ -150,7 +145,7 @@ def main(commands, documentation):
     Process commmand line and execute resultant command
     """
     commands_vs_help_trees(commands, documentation)
-    
+
     if 'help' in sys.argv:
         print_help(documentation)
 
@@ -165,14 +160,10 @@ def main(commands, documentation):
             subcli = cli[:-1]
             raw = cli2command(subcli, commands)
             command = raw.format(name)
-            print ''
-            print '  >>>> command: ', command
-            print ''
+            print "\n  >>>> command: {}\n".format(command)
             os.system(command)
         except AttributeError:
-            print ''
-            print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
-            print ''
+            print "\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
     elif has_options(cli):
         try:
@@ -181,31 +172,21 @@ def main(commands, documentation):
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
-            print ''
-            print '  >>>> command: ', command
-            print ''
+            print "\n  >>>> command: {}\n".format(command)
             os.system(command)
         except AttributeError:
-            print ''
-            print " Command: '{}' is missing the option: $regex!".format(' '.join(str(k) for k in cli))
-            print ''
+            print "\n Command: '{}' is missing the option: $regex!\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
     else:
         try:
             command = cli2command(cli, commands)
-            # if command is not a leaf in the dictionary (string), 
+            # if command is not a leaf in the dictionary (string),
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
-                print ''
-                print '  >>>> command: ', command
-                print ''
+                print "\n  >>>> command: {}\n".format(command)
                 os.system(command)
             else:
                 raise TypeError
         except TypeError:
-            print ''
-            print " Command: '{}' is not a mapped command!".format(' '.join(str(k) for k in cli))
-            print ''
-            print " Issue 'nita help' for some insights..."
-            print ''
+            print "\n Command: '{}' is not a mapped command!\n\n Issue 'nita help' for some insights...\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
