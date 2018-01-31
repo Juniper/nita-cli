@@ -123,19 +123,15 @@ NITA CLI command | Description
    nita ntp volumes | Returns shared volumes information on ntp container.
    nita ntp ports | Returns mapped ports information on ntp container.
    nita up | Creates and starts NITA containers and networks.
-   nita robot ip | Returns IPs information on robot container.
    nita robot run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
-   nita robot ports | Returns mapped ports information on robot container.
-   nita robot volumes | Returns shared volumes information on robot container.
    nita robot cli | Attaches local standard input, output, and error streams to robot running container.
+   nita robot volumes | Returns shared volumes information on robot container.
    nita down | Stops and removes NITA containers and networks.
    nita ips | Shows all NITA containers IPs
-   nita ansible ip | Returns IPs information on ansible container.
    nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
    nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
-   nita ansible ports | Returns mapped ports information on ansible container.
-   nita ansible volumes | Returns shared volumes information on ansible container.
    nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
+   nita ansible volumes | Returns shared volumes information on ansible container.
    nita radius ip | Returns IPs information on radius container.
    nita radius cli | Attaches local standard input, output, and error streams to radius running container.
    nita radius logs | Fetches the logs of radius container.
@@ -303,9 +299,9 @@ If a wrong command is executed (i.e. there is a wrong key on the COMMANDS dictio
 
      For a list of available commands, execute:
 
-    >>>>  nita help
+    >>>>  "nita --help" or "nita -h"
 
-Please, review `nita help` output and look for the command you are looking for. If it is not there and you consider it should... submit a merge request to add it! You can always add it to your local copy if not a general purpose command!
+Please, review `nita --help` or `nita -h` output and look for the command you are looking for. If it is not there and you consider it should, submit a merge request to add it! You can always add it to your local copy if not a general purpose command!
 
 ### Missing description or mapped command
 
@@ -401,14 +397,29 @@ What if I misspell a command???
 
     For a list of available commands, execute: 
 
-    >>>>  nita help
+    >>>>  "nita --help" or "nita -h"
 
 
-In a nutshell, anything you want to know about what NITA CLI does, just issue the help:
+In a nutshell, anything you want to know about what NITA CLI does, just issue the NITA CLI help command:
 
-    nita help
+    "nita --help" or "nita -h"
 
-and you will get all the things that NITA CLI can do for you!!!!
+and you will get all the things that NITA CLI can do for you!!!! You can even do it at any command level:
+
+    $ nita webapp --help
+
+    nita webapp cli => Attaches local standard input, output, and error streams to webapp running container.
+    nita webapp ip => Returns IPs information on webapp container.
+    nita webapp labels => Returns labels information on webapp container.
+    nita webapp volumes => Returns shared volumes information on webapp container.
+    nita webapp ports => Returns mapped ports information on webapp container.
+    nita webapp logs => Fetches the logs of webapp container.
+
+or
+
+    $ nita tacacs cli -h
+
+    nita tacacs cli => Attaches local standard input, output, and error streams to tacacs running container.
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
