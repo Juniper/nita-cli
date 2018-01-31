@@ -69,10 +69,6 @@ def print_nested_keys_from(dictionary, *subkeys):
     in a dictionary with its correspondent value.
     """
     dictionary.pop('license', None)
-    precommand = ''
-    if subkeys:
-        precommand = ' '.join(str(k) for k in subkeys[0])
-
     for cli, command in nested_keys_from(dictionary, subkeys[0]):
         print "   {} => {}".format(cli, command)
 
@@ -84,13 +80,8 @@ def cli2command(cli, translator):
         for k in cli:
             translator = translator[str(k)]
     except KeyError as err:
-        print ''
-        print " '{}' key does not exist! Command: '{}' is incorrect!".format(err.message, ' '.join(str(k) for k in cli))
-        print ''
-        print ' For a list of available commands, execute: '
-        print ''
-        print ' >>>>  "nita --help" or "nita -h"'
-        print ''
+        print "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in cli))
+        print "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h'\n\n"
         sys.exit(1)
 
     if '%' in translator:
@@ -164,7 +155,7 @@ def commands_vs_help_trees(commands, documentation):
     if finish:
         sys.exit()
 
-def help(cli):
+def is_help_cmd(cli):
     """
     Checks if the cli command is requesting 'help'.
     """
@@ -172,7 +163,7 @@ def help(cli):
         return True
     return False
 
-def new(cli):
+def is_new_cmd(cli):
     """
     Checks if the cli command contains 'new' in it.
     """
@@ -180,7 +171,7 @@ def new(cli):
         return True
     return False
 
-def options(cli):
+def has_options(cli):
     """
     Checks if the cli command contains any options (e.g. --regex $REGEX).
     """
@@ -200,7 +191,7 @@ def main(commands, documentation):
     cli = sys.argv[1:]
     cli.insert(0, root)
 
-    if help(cli):
+    if is_help_cmd(cli):
         try:
             subcli = cli[:-1]
             print_help(documentation, subcli)
@@ -210,55 +201,42 @@ def main(commands, documentation):
             doc_help = raw.format(subcli)
             print "   {} => {}".format(' '.join(str(k) for k in subcli), doc_help)
             print ''
-    elif new(cli):
+
+    elif is_new_cmd(cli):
         try:
             name = cli[-1]
             subcli = cli[:-1]
             raw = cli2command(subcli, commands)
             command = raw.format(name)
-            print ''
-            print '  >>>> command: ', command
-            print ''
+            print "\n  >>>> command: {}\n".format(command)
             os.system(command)
         except AttributeError:
-            print ''
-            print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
-            print ''
+            print "\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
 
-    elif options(cli):
+    elif has_options(cli):
         try:
             option = cli[-2]
             value = cli[-1]
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
-            print ''
-            print '  >>>> command: ', command
-            print ''
+            print "\n  >>>> command: {}\n".format(command)
             os.system(command)
         except AttributeError:
-            print ''
-            print " Command: '{}' is missing an option: $value!".format(' '.join(str(k) for k in cli))
-            print ''
+            print "\n Command: '{}' is missing the option: $value!\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
 
     else:
         try:
             command = cli2command(cli, commands)
-            # if command is not a leaf in the dictionary (string), 
+            # if command is not a leaf in the dictionary (string),
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
-                print ''
-                print '  >>>> command: ', command
-                print ''
+                print "\n  >>>> command: {}\n".format(command)
                 os.system(command)
             else:
                 raise TypeError
         except TypeError:
-            print ''
-            print " Command: '{}' is not a mapped command!".format(' '.join(str(k) for k in cli))
-            print ''
-            print ' Issue "nita --help" or "nita -h" for some insights...'
-            print ''
+            print "\n Command: '{}' is not a mapped command!\n\n Issue 'nita --help' or 'nita -h' for some insights...\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
