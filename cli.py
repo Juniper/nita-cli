@@ -34,6 +34,26 @@ def nested_keys(dictionary, path=None):
         else:
             yield ' '.join(newpath), value
 
+def nested_keys_from(dictionary, path=None):
+    """
+    Function that returns all nested keys in a dictionary from a subkey.
+    """
+    subdictionary = dictionary.copy()
+    if path is None:
+        path = []
+    else:
+        for subkey in path:
+            subdictionary = subdictionary[subkey]
+        for key, value in subdictionary.items():
+            newpath = path + [key]
+            if 'jenkins' and 'remove' in newpath:
+                newpath = newpath + ['--regex'] + ['REGEX']
+            if isinstance(value, dict):
+                for result in nested_keys(value, newpath):
+                    yield result
+            else:
+                yield ' '.join(newpath), value
+
 def print_nested_keys(dictionary):
     """
     Function that prints a set of all nested keys (from root to leaf)
@@ -43,9 +63,22 @@ def print_nested_keys(dictionary):
     for cli, command in nested_keys(dictionary):
         print "   {} => {}".format(cli, command)
 
+def print_nested_keys_from(dictionary, *subkeys):
+    """
+    Function that prints a set of all subnested keys (from subkeys to leaf)
+    in a dictionary with its correspondent value.
+    """
+    dictionary.pop('license', None)
+    precommand = ''
+    if subkeys:
+        precommand = ' '.join(str(k) for k in subkeys[0])
+
+    for cli, command in nested_keys_from(dictionary, subkeys[0]):
+        print "   {} => {}".format(cli, command)
+
 def cli2command(cli, translator):
     """
-    Function resolves cli command given to command to exec
+    Function resolves cli command given to command to execute
     """
     try:
         for k in cli:
@@ -56,23 +89,26 @@ def cli2command(cli, translator):
         print ''
         print ' For a list of available commands, execute: '
         print ''
-        print ' >>>>  nita help'
+        print ' >>>>  "nita --help" or "nita -h"'
         print ''
         sys.exit(1)
 
     if '%' in translator:
-        return translator % os.environ.get('PROJECT_PATH', os.environ['PWD'])
+        # nita stats => Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS]
+        if 'stats' in cli:
+            pass
+        else:
+            return translator % os.environ.get('PROJECT_PATH', os.environ['PWD'])
 
     return translator
 
-def print_help(documentation):
+def print_help(documentation, *args):
     """
     Print usage info
     """
     print ''
-    print_nested_keys(documentation)
+    print_nested_keys_from(documentation, args[0])
     print ''
-    sys.exit()
 
 def print_command_with_keys(dictionary, keys):
     """
@@ -128,7 +164,15 @@ def commands_vs_help_trees(commands, documentation):
     if finish:
         sys.exit()
 
-def is_new_command(cli):
+def help(cli):
+    """
+    Checks if the cli command is requesting 'help'.
+    """
+    if ('--help' in cli[-1]) or ('-h' in cli[-1]):
+        return True
+    return False
+
+def new(cli):
     """
     Checks if the cli command contains 'new' in it.
     """
@@ -136,7 +180,7 @@ def is_new_command(cli):
         return True
     return False
 
-def has_options(cli):
+def options(cli):
     """
     Checks if the cli command contains any options (e.g. --regex $REGEX).
     """
@@ -150,16 +194,23 @@ def main(commands, documentation):
     Process commmand line and execute resultant command
     """
     commands_vs_help_trees(commands, documentation)
-    
-    if 'help' in sys.argv:
-        print_help(documentation)
 
     # Remove /usr/local/bin/ from first argument (/usr/local/bin/nita)
     root = sys.argv[0].split('/')[-1]
     cli = sys.argv[1:]
     cli.insert(0, root)
 
-    if is_new_command(cli):
+    if help(cli):
+        try:
+            subcli = cli[:-1]
+            print_help(documentation, subcli)
+            sys.exit()
+        except AttributeError:
+            raw = cli2command(subcli, documentation)
+            doc_help = raw.format(subcli)
+            print "   {} => {}".format(' '.join(str(k) for k in subcli), doc_help)
+            print ''
+    elif new(cli):
         try:
             name = cli[-1]
             subcli = cli[:-1]
@@ -174,7 +225,8 @@ def main(commands, documentation):
             print " Command: '{}' is missing the argument: $name!".format(' '.join(str(k) for k in cli))
             print ''
             sys.exit(1)
-    elif has_options(cli):
+
+    elif options(cli):
         try:
             option = cli[-2]
             value = cli[-1]
@@ -187,9 +239,10 @@ def main(commands, documentation):
             os.system(command)
         except AttributeError:
             print ''
-            print " Command: '{}' is missing the option: $regex!".format(' '.join(str(k) for k in cli))
+            print " Command: '{}' is missing an option: $value!".format(' '.join(str(k) for k in cli))
             print ''
             sys.exit(1)
+
     else:
         try:
             command = cli2command(cli, commands)
@@ -206,6 +259,6 @@ def main(commands, documentation):
             print ''
             print " Command: '{}' is not a mapped command!".format(' '.join(str(k) for k in cli))
             print ''
-            print " Issue 'nita help' for some insights..."
+            print ' Issue "nita --help" or "nita -h" for some insights...'
             print ''
             sys.exit(1)

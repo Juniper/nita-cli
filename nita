@@ -34,12 +34,13 @@ COMMANDS = {
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'ips':        'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
-        'stats':      'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker stats --no-stream',
+        'stats':      'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'jobs': {
                 'ls':     'docker exec -it jenkins list_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
             },
+            #'labels':     'docker-inspect.sh jenkins',
             'cli': {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
                 'root':    'docker exec -it -u root jenkins /bin/bash',
@@ -51,28 +52,35 @@ COMMANDS = {
         },
         'ansible': {
             'run': {
-                'noob':  'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./noob.sh',
-                'build': 'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./build.sh',
+                'noob':  'docker run --rm --name ansible --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./noob.sh',
+                'build': 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:3.0.5 ./build.sh',
             },
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ansible',
-            'ports':   'docker port ansible',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
+            #'labels':  'docker-inspect.sh ansible',
             'cli':     'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible',
         },
         'robot': {
             'run': {
-                'test':    'docker run --rm --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh',
+                'test':    'docker run --rm --name robot --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh',
             },
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' robot',
-            'ports':   'docker port robot',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' robot | jq',
+            #'labels':  'docker-inspect.sh robot',
             'cli':     'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest /bin/bash ; docker attach robot',
         },
+        # 'toby': {
+        #     'run': {
+        #         'test':    'docker run --rm --name toby -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/NITA_v3.0/toby:/project -e USER="nita" -it nita/toby:1.12.1 toby -p t_object.yaml suites/common.robot',
+        #     },
+        #     'volumes': 'docker inspect --format \'{{json .Mounts}}\' toby | jq',
+        #     'labels':  'docker-inspect.sh toby',
+        #     'cli':     'docker run -d --rm --name toby -it -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/NITA_v3.0/toby:/project nita/toby:1.12.1 /bin/bash ; docker attach toby',
+        # },
         'webapp': {
             'logs':    'docker logs webapp --tail 200',
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
             'ports':   'docker port webapp',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
+            #'labels':  'docker-inspect.sh webapp',
             'cli':     'docker exec -it webapp /bin/bash',
         },
         'tacacs': {
@@ -80,6 +88,7 @@ COMMANDS = {
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
             'ports':   'docker port tacacs',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
+            #'labels':  'docker-inspect.sh tacacs',
             'cli':     'docker exec -it tacacs /bin/bash',
         },
         'radius': {
@@ -87,6 +96,7 @@ COMMANDS = {
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
             'ports':   'docker port radius',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
+            #'labels':  'docker-inspect.sh radius',
             'cli':     'docker exec -it radius /bin/bash',
         },
         'ntp': {
@@ -94,6 +104,7 @@ COMMANDS = {
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
             'ports':   'docker port ntp',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
+            #'labels':  'docker-inspect.sh ntp',
             'cli':     'docker exec -it ntp /bin/sh',
         },
         'dns': {
@@ -101,6 +112,7 @@ COMMANDS = {
             'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
             'ports':   'docker port dns',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
+            #'labels':  'docker-inspect.sh dns',
             'cli':     'docker exec -it dns /bin/sh',
         },
         'license':"""
@@ -121,8 +133,8 @@ COMMANDS = {
 # HELP TREE
 HELP = {
     'nita': {
-        'up':   'Create and start NITA containers and networks.',
-        'down': 'Stop and remove NITA containers and networks.',
+        'up':   'Creates and starts NITA containers and networks.',
+        'down': 'Stops and removes NITA containers and networks.',
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
             'role':    'Creates a new Ansible role scaffolding.',
@@ -142,6 +154,7 @@ HELP = {
                 'ls':     'Lists all Jenkins jobs.',
                 'remove': 'Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.',
             },
+            #'labels':  'Returns labels information on jenkins container',
             'cli': {
                 'jenkins': 'Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.',
                 'root':    'Attaches local standard input, output, and error streams to jenkins running container with "root" user.',
@@ -156,25 +169,32 @@ HELP = {
                 'noob':  'Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.',
                 'build': 'Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.',
             },
-            'ip':      'Returns IPs information on ansible container.',
-            'ports':   'Returns mapped ports information on ansible container.',
             'volumes': 'Returns shared volumes information on ansible container.',
+            #'labels':  'Returns labels information on ansible container',
             'cli':     'Attaches local standard input, output, and error streams to ansible running container.',
         },
         'robot': {
             'run': {
                 'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
             },
-            'ip':      'Returns IPs information on robot container.',
-            'ports':   'Returns mapped ports information on robot container.',
             'volumes': 'Returns shared volumes information on robot container.',
+            #'labels':  'Returns labels information on robot container',
             'cli':     'Attaches local standard input, output, and error streams to robot running container.',
         },
+        # 'toby': {
+        #     'run': {
+        #         'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
+        #     },
+        #     'volumes': 'Returns shared volumes information on toby container.',
+        #     'labels':  'Returns labels information on toby container',
+        #     'cli':     'Attaches local standard input, output, and error streams to toby running container.',
+        # },
         'webapp': {
             'logs':    'Fetches the logs of webapp container.',
             'ip':      'Returns IPs information on webapp container.',
             'ports':   'Returns mapped ports information on webapp container.',
             'volumes': 'Returns shared volumes information on webapp container.',
+            #'labels':  'Returns labels information on webapp container',
             'cli':     'Attaches local standard input, output, and error streams to webapp running container.',
         },
         'tacacs': {
@@ -182,6 +202,7 @@ HELP = {
             'ip':      'Returns IPs information on tacacs container.',
             'ports':   'Returns mapped ports information on tacacs container.',
             'volumes': 'Returns shared volumes information on tacacs container.',
+            #'labels':  'Returns labels information on tacacs container',
             'cli':     'Attaches local standard input, output, and error streams to tacacs running container.',
         },
         'radius': {
@@ -189,6 +210,7 @@ HELP = {
             'ip':      'Returns IPs information on radius container.',
             'ports':   'Returns mapped ports information on radius container.',
             'volumes': 'Returns shared volumes information on radius container.',
+            #'labels':  'Returns labels information on radius container',
             'cli':     'Attaches local standard input, output, and error streams to radius running container.',
         },
         'ntp': {
@@ -196,6 +218,7 @@ HELP = {
             'ip':      'Returns IPs information on ntp container.',
             'ports':   'Returns mapped ports information on ntp container.',
             'volumes': 'Returns shared volumes information on ntp container.',
+            #'labels':  'Returns labels information on ntp container',
             'cli':     'Attaches local standard input, output, and error streams to ntp running container.',
         },
         'dns': {
@@ -203,6 +226,7 @@ HELP = {
             'ip':      'Returns IPs information on dns container.',
             'ports':   'Returns mapped ports information on dns container.',
             'volumes': 'Returns shared volumes information on dns container.',
+            #'labels':  'Returns labels information on dns container',
             'cli':     'Attaches local standard input, output, and error streams to dns running container.',
         },
         'license': 'Displays the NITA License.',
