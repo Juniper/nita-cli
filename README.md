@@ -402,7 +402,7 @@ What if I misspell a command???
 
 In a nutshell, anything you want to know about what NITA CLI does, just issue the NITA CLI help command:
 
-    "nita --help" or "nita -h"
+    "nita --help" or "nita -h" or or "nita ?"
 
 and you will get all the things that NITA CLI can do for you!!!! You can even do it at any command level:
 
@@ -420,6 +420,17 @@ or
     $ nita tacacs cli -h
 
     nita tacacs cli => Attaches local standard input, output, and error streams to tacacs running container.
+
+or
+
+    $ nita dns ?
+
+    nita dns cli => Attaches local standard input, output, and error streams to dns running container.
+    nita dns ip => Returns IPs information on dns container.
+    nita dns labels => Returns labels information on dns container.
+    nita dns volumes => Returns shared volumes information on dns container.
+    nita dns ports => Returns mapped ports information on dns container.
+    nita dns logs => Fetches the logs of dns container.
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
