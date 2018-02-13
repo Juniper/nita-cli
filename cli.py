@@ -159,7 +159,7 @@ def is_help_cmd(cli):
     """
     Checks if the cli command is requesting 'help'.
     """
-    if ('--help' in cli[-1]) or ('-h' in cli[-1]):
+    if ('--help' in cli[-1]) or ('-h' in cli[-1]) or ('?' in cli[-1]):
         return True
     return False
 
