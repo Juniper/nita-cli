@@ -299,9 +299,9 @@ If a wrong command is executed (i.e. there is a wrong key on the COMMANDS dictio
 
      For a list of available commands, execute:
 
-    >>>>  "nita --help" or "nita -h"
+    >>>>  "nita --help" or "nita -h" or "nita ?"
 
-Please, review `nita --help` or `nita -h` output and look for the command you are looking for. If it is not there and you consider it should, submit a merge request to add it! You can always add it to your local copy if not a general purpose command!
+Please, review `nita --help` or `nita -h` or `nita ?`output and look for the command you are looking for. If it is not there and you consider it should, submit a merge request to add it! You can always add it to your local copy if not a general purpose command!
 
 ### Missing description or mapped command
 
@@ -397,12 +397,12 @@ What if I misspell a command???
 
     For a list of available commands, execute: 
 
-    >>>>  "nita --help" or "nita -h"
+    >>>>  "nita --help" or "nita -h" or "nita ?"
 
 
 In a nutshell, anything you want to know about what NITA CLI does, just issue the NITA CLI help command:
 
-    "nita --help" or "nita -h" or or "nita ?"
+    "nita --help" or "nita -h" or "nita ?"
 
 and you will get all the things that NITA CLI can do for you!!!! You can even do it at any command level:
 
