@@ -81,7 +81,7 @@ def cli2command(cli, translator):
             translator = translator[str(k)]
     except KeyError as err:
         print "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in cli))
-        print "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h'\n\n"
+        print "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n"
         sys.exit(1)
 
     if '%' in translator:
@@ -238,5 +238,5 @@ def main(commands, documentation):
             else:
                 raise TypeError
         except TypeError:
-            print "\n Command: '{}' is not a mapped command!\n\n Issue 'nita --help' or 'nita -h' for some insights...\n".format(' '.join(str(k) for k in cli))
+            print "\n Command: '{}' is not a mapped command!\n\n Issue 'nita --help' or 'nita -h' or 'nita ?' for some insights...\n".format(' '.join(str(k) for k in cli))
             sys.exit(1)
