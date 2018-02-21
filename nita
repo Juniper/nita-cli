@@ -70,13 +70,13 @@ COMMANDS = {
             'labels':  'docker-inspect.sh robot',
             'cli':     'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest /bin/bash ; docker attach robot',
         },
-        'toby': {
+        'test': {
             'run': {
-                'test':    'docker run --rm --name toby -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/NITA_v3.0/toby:/project -e USER="nita" -it nita/toby:1.12.1 toby -p t_object.yaml suites/common.robot',
+                'test':    'docker run --rm --name test -v %s:/project -e USER="nita" -it registry.juniper.net/jizquierdo/toby:2.2.2 toby -p t_object.yaml suites/common.robot',
             },
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' toby | jq',
-            'labels':  'docker-inspect.sh toby',
-            'cli':     'docker run -d --rm --name toby -it -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/NITA_v3.0/toby:/project nita/toby:1.12.1 /bin/bash ; docker attach toby',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
+            'labels':  'docker-inspect.sh test',
+            'cli':     'docker run -d --rm --name test -it -v %s:/project registry.juniper.net/jizquierdo/toby:2.2.2 /bin/bash ; docker attach test',
         },
         'webapp': {
             'logs':    'docker logs webapp --tail 200',
@@ -187,13 +187,13 @@ HELP = {
             'labels':  'Returns labels information on robot container.',
             'cli':     'Attaches local standard input, output, and error streams to robot running container.',
         },
-        'toby': {
+        'test': {
             'run': {
                 'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
             },
-            'volumes': 'Returns shared volumes information on toby container.',
-            'labels':  'Returns labels information on toby container.',
-            'cli':     'Attaches local standard input, output, and error streams to toby running container.',
+            'volumes': 'Returns shared volumes information on test container.',
+            'labels':  'Returns labels information on test container.',
+            'cli':     'Attaches local standard input, output, and error streams to test running container.',
         },
         'webapp': {
             'logs':    'Fetches the logs of webapp container.',
