@@ -19,6 +19,9 @@ import cli as cli
 # COMMANDS TREE
 COMMANDS = {
     'nita': {
+        'cli': {
+            'version': 'echo NITA CLI master branch',
+        },
         'up':       'docker-compose up -d',
         'down':     'docker-compose down',
         'new': {
@@ -133,6 +136,9 @@ COMMANDS = {
 # HELP TREE
 HELP = {
     'nita': {
+        'cli': {
+            'version': 'Shows NITA CLI current version',
+        },
         'up':   'Creates and starts NITA containers and networks.',
         'down': 'Stops and removes NITA containers and networks.',
         'new': {
