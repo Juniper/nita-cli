@@ -111,56 +111,69 @@ There is a `help` implemented on the script which basically shows the commands a
 NITA CLI command | Description
 -----------------|-------------------
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
+   nita cli version | Shows NITA CLI current version
    nita license | Displays the NITA License.
-   nita tacacs ip | Returns IPs information on tacacs container.
-   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
-   nita tacacs logs | Fetches the logs of tacacs container.
-   nita tacacs volumes | Returns shared volumes information on tacacs container.
-   nita tacacs ports | Returns mapped ports information on tacacs container.
-   nita ntp ip | Returns IPs information on ntp container.
+   nita test labels | Returns labels information on test container.
+   nita test run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
+   nita test cli | Attaches local standard input, output, and error streams to test running container.
+   nita test volumes | Returns shared volumes information on test container.
    nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
-   nita ntp logs | Fetches the logs of ntp container.
+   nita ntp ip | Returns IPs information on ntp container.
+   nita ntp labels | Returns labels information on ntp container.
    nita ntp volumes | Returns shared volumes information on ntp container.
    nita ntp ports | Returns mapped ports information on ntp container.
+   nita ntp logs | Fetches the logs of ntp container.
    nita up | Creates and starts NITA containers and networks.
+   nita robot labels | Returns labels information on robot container.
    nita robot run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
    nita robot cli | Attaches local standard input, output, and error streams to robot running container.
    nita robot volumes | Returns shared volumes information on robot container.
    nita down | Stops and removes NITA containers and networks.
-   nita ips | Shows all NITA containers IPs
+   nita ips | Shows all NITA containers IPs.
+   nita ansible labels | Returns labels information on ansible container.
    nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
    nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
    nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
    nita ansible volumes | Returns shared volumes information on ansible container.
-   nita radius ip | Returns IPs information on radius container.
    nita radius cli | Attaches local standard input, output, and error streams to radius running container.
-   nita radius logs | Fetches the logs of radius container.
+   nita radius ip | Returns IPs information on radius container.
+   nita radius labels | Returns labels information on radius container.
    nita radius volumes | Returns shared volumes information on radius container.
    nita radius ports | Returns mapped ports information on radius container.
-   nita dns ip | Returns IPs information on dns container.
+   nita radius logs | Fetches the logs of radius container.
    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
-   nita dns logs | Fetches the logs of dns container.
+   nita dns ip | Returns IPs information on dns container.
+   nita dns labels | Returns labels information on dns container.
    nita dns volumes | Returns shared volumes information on dns container.
    nita dns ports | Returns mapped ports information on dns container.
+   nita dns logs | Fetches the logs of dns container.
    nita jenkins jobs ls | Lists all Jenkins jobs.
    nita jenkins jobs remove --regex REGEX | Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.
-   nita jenkins logs | Fetches the logs of jenkins container.
-   nita jenkins ip | Returns IPs information on jenkins container.
-   nita jenkins volumes | Returns shared volumes information on jenkins container.
-   nita jenkins ports | Returns mapped ports information on jenkins container.
    nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
    nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
+   nita jenkins ip | Returns IPs information on jenkins container.
+   nita jenkins labels | Returns labels information on jenkins container.
+   nita jenkins volumes | Returns shared volumes information on jenkins container.
+   nita jenkins ports | Returns mapped ports information on jenkins container.
+   nita jenkins logs | Fetches the logs of jenkins container.
    nita images ls | Lists all NITA images.
-   nita images versions | Displays NITA images versions
+   nita images versions | Displays NITA images versions.
    nita new project | Creates a new NITA project scaffolding.
    nita new role | Creates a new Ansible role scaffolding.
-   nita webapp ip | Returns IPs information on webapp container.
    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
-   nita webapp logs | Fetches the logs of webapp container.
+   nita webapp ip | Returns IPs information on webapp container.
+   nita webapp labels | Returns labels information on webapp container.
    nita webapp volumes | Returns shared volumes information on webapp container.
    nita webapp ports | Returns mapped ports information on webapp container.
+   nita webapp logs | Fetches the logs of webapp container.
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
+   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
+   nita tacacs ip | Returns IPs information on tacacs container.
+   nita tacacs labels | Returns labels information on tacacs container.
+   nita tacacs volumes | Returns shared volumes information on tacacs container.
+   nita tacacs ports | Returns mapped ports information on tacacs container.
+   nita tacacs logs | Fetches the logs of tacacs container.
  |
 
 ## Installation
@@ -408,29 +421,29 @@ and you will get all the things that NITA CLI can do for you!!!! You can even do
 
     $ nita webapp --help
 
-    nita webapp cli => Attaches local standard input, output, and error streams to webapp running container.
-    nita webapp ip => Returns IPs information on webapp container.
-    nita webapp labels => Returns labels information on webapp container.
-    nita webapp volumes => Returns shared volumes information on webapp container.
-    nita webapp ports => Returns mapped ports information on webapp container.
-    nita webapp logs => Fetches the logs of webapp container.
+    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
+    nita webapp ip | Returns IPs information on webapp container.
+    nita webapp labels | Returns labels information on webapp container.
+    nita webapp volumes | Returns shared volumes information on webapp container.
+    nita webapp ports | Returns mapped ports information on webapp container.
+    nita webapp logs | Fetches the logs of webapp container.
 
 or
 
     $ nita tacacs cli -h
 
-    nita tacacs cli => Attaches local standard input, output, and error streams to tacacs running container.
+    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
 
 or
 
     $ nita dns ?
 
-    nita dns cli => Attaches local standard input, output, and error streams to dns running container.
-    nita dns ip => Returns IPs information on dns container.
-    nita dns labels => Returns labels information on dns container.
-    nita dns volumes => Returns shared volumes information on dns container.
-    nita dns ports => Returns mapped ports information on dns container.
-    nita dns logs => Fetches the logs of dns container.
+    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
+    nita dns ip | Returns IPs information on dns container.
+    nita dns labels | Returns labels information on dns container.
+    nita dns volumes | Returns shared volumes information on dns container.
+    nita dns ports | Returns mapped ports information on dns container.
+    nita dns logs | Fetches the logs of dns container.
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
