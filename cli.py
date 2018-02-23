@@ -201,6 +201,10 @@ def main(commands, documentation):
             doc_help = raw.format(subcli)
             print "   {} => {}".format(' '.join(str(k) for k in subcli), doc_help)
             print ''
+        except KeyError as err:
+            print "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in subcli))
+            print "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n"
+            sys.exit(1)
 
     elif is_new_cmd(cli):
         try:
