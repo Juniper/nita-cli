@@ -17,6 +17,9 @@ import sys
 import os
 
 KEY_SEPARATOR = ' '
+# Red color to debug command mapped
+CRED = '\033[91m'
+CEND = '\033[0m'
 
 def nested_keys(dictionary, path=None):
     """
@@ -26,6 +29,7 @@ def nested_keys(dictionary, path=None):
         path = []
     for key, value in dictionary.items():
         newpath = path + [key]
+        # Consider remove this piece!!!
         if 'jenkins' and 'remove' in newpath:
             newpath = newpath + ['--regex'] + ['REGEX']
         if isinstance(value, dict):
@@ -84,7 +88,7 @@ def cli2command(cli, translator):
         print "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n"
         sys.exit(1)
 
-    if '%' in translator:
+    if ' %s' in translator:
         # nita stats => Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS]
         if 'stats' in cli:
             pass
@@ -212,7 +216,7 @@ def main(commands, documentation):
             subcli = cli[:-1]
             raw = cli2command(subcli, commands)
             command = raw.format(name)
-            print "\n  >>>> command: {}\n".format(command)
+            print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
             print "\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli))
@@ -225,7 +229,7 @@ def main(commands, documentation):
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
-            print "\n  >>>> command: {}\n".format(command)
+            print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
             print "\n Command: '{}' is missing the option: $value!\n".format(' '.join(str(k) for k in cli))
@@ -237,7 +241,7 @@ def main(commands, documentation):
             # if command is not a leaf in the dictionary (string),
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
-                print "\n  >>>> command: {}\n".format(command)
+                print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
                 os.system(command)
             else:
                 raise TypeError
