@@ -17,6 +17,7 @@ import sys
 import os
 
 KEY_SEPARATOR = ' '
+DEBUG = False
 # Red color to debug command mapped
 CRED = '\033[91m'
 CEND = '\033[0m'
@@ -188,12 +189,16 @@ def main(commands, documentation):
     """
     Process commmand line and execute resultant command
     """
+    global DEBUG
     commands_vs_help_trees(commands, documentation)
 
     # Remove /usr/local/bin/ from first argument (/usr/local/bin/nita)
     root = sys.argv[0].split('/')[-1]
     cli = sys.argv[1:]
     cli.insert(0, root)
+    if cli[1] == '-d':
+        cli.pop(1)
+        DEBUG = True
 
     if is_help_cmd(cli):
         try:
@@ -216,7 +221,8 @@ def main(commands, documentation):
             subcli = cli[:-1]
             raw = cli2command(subcli, commands)
             command = raw.format(name)
-            print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+            if DEBUG:
+                print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
             print "\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli))
@@ -229,7 +235,8 @@ def main(commands, documentation):
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
-            print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+            if DEBUG:
+                print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
             print "\n Command: '{}' is missing the option: $value!\n".format(' '.join(str(k) for k in cli))
@@ -241,7 +248,8 @@ def main(commands, documentation):
             # if command is not a leaf in the dictionary (string),
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
-                print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                if DEBUG:
+                    print (CRED + "\n  >>>> command: {}\n".format(command) + CEND)
                 os.system(command)
             else:
                 raise TypeError
