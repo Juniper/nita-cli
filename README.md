@@ -339,7 +339,20 @@ As the output says, check the dictionaries for the keys shown and add the missin
 
 NITA CLI (Command Line interface) is the way of interacting with NITA by using simple and very intuitive commands. It abstracts the user from the complexity of most of the commands running behind the scenes (related to docker, unix and some other tools). 
 
-During the demo both the NITA CLI command and its unix/docker/etc mapped command will be shown to prove the simplicity and intuition of NITA CLI.
+During the demo both the NITA CLI command and its unix/docker/etc mapped command will be shown to prove the simplicity and intuition of NITA CLI. In order to enable the debugging of the mapped command, it is needed to add the `-d` option to NITA CLI.
+
+Without debugging option:
+
+    $ nita cli version
+    NITA CLI v4.0 branch
+
+With (`-d`) debugging option, mapped command is shown on `>>>> command`:
+
+    $ nita -d cli version
+
+    >>>> command: echo NITA CLI v4.0 branch
+
+    NITA CLI v4.0 branch
 
 Here they are some commands as an example:
 
