@@ -158,7 +158,7 @@ HELP = {
         'jenkins': {
             'jobs': {
                 'ls':     'Lists all Jenkins jobs.',
-                'remove': 'Removes Jenkins jobs containing REGEX. Assume "yes" as answer to all prompts and run non-interactively.',
+                'remove': 'Removes Jenkins jobs matching --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
             },
             #'labels':  'Returns labels information on jenkins container.',
             'cli': {
