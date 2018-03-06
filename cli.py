@@ -28,7 +28,7 @@ def nested_keys(dictionary, path=None):
     """
     if path is None:
         path = []
-    for key, value in dictionary.items():
+    for key, value in sorted(dictionary.items()):
         newpath = path + [key]
         # Consider remove this piece!!!
         if 'jenkins' and 'remove' in newpath:
@@ -49,7 +49,7 @@ def nested_keys_from(dictionary, path=None):
     else:
         for subkey in path:
             subdictionary = subdictionary[subkey]
-        for key, value in subdictionary.items():
+        for key, value in sorted(subdictionary.items()):
             newpath = path + [key]
             if 'jenkins' and 'remove' in newpath:
                 newpath = newpath + ['--regex'] + ['REGEX']
