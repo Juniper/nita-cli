@@ -191,9 +191,14 @@ def main(commands, documentation):
     root = sys.argv[0].split('/')[-1]
     cli = sys.argv[1:]
     cli.insert(0, root)
-    if cli[1] == '-d':
-        cli.pop(1)
-        DEBUG = True
+    try:
+        if cli[1] == '-d':
+            cli.pop(1)
+            DEBUG = True
+    except IndexError:
+        # If cli[1] does not exist 
+        # (e.g. command = 'nita', do nothing!
+        pass
 
     if is_help_cmd(cli):
         try:
