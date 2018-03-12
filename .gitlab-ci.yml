@@ -1,0 +1,19 @@
+image: alpine:latest
+
+stages:
+  - test
+
+before_script:
+  - apk --update add python git openssh
+
+test:
+  stage: test
+  script:
+  - git clone https://jizquierdo@git.juniper.net/NITA/nita-cli.git
+  - cd nita-cli/
+  - sh install.sh
+  - nita ?
+  only:
+  - master
+  tags:
+  - docker
