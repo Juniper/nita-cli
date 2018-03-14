@@ -12,6 +12,7 @@ test:
   - git clone https://jizquierdo@git.juniper.net/NITA/nita-cli.git
   - cd nita-cli/
   - sh install.sh
+  - nita cli version
   - nita ?
   only:
   - master
