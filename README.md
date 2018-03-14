@@ -41,7 +41,7 @@ Compare it with this one in order to get the same output:
 
     $ nita -d containers ls
 
-    command:  docker ps --filter "label=net.juniper.framework=NITA"
+    >>>> command:  docker ps --filter "label=net.juniper.framework=NITA"
 
     CONTAINER ID        IMAGE                                     COMMAND             CREATED             STATUS              PORTS                     NAMES
     8a36d29b6b1f        registry.juniper.net/nita/jenkins:latest   "/bin/tini -- /usr..."   5 hours ago         Up 5 hours (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
@@ -214,9 +214,9 @@ Imagine this is your COMMANDS tree. This is a `hello world` example:
 
 Should you [install](#installation) the NITA CLI project and run it as below (you will be able to run it from wherever you want!) you will get the following output:
 
-    $ nita hello world
+    $ nita -d hello world
 
-    command:  docker run hello-world
+    >>>> command:  docker run hello-world
 
 
     Hello from Docker!
@@ -291,9 +291,9 @@ Here it is another example of how to grow it:
     $ docker run alpine:latest cat /etc/alpine-release
     3.6.2
 
-    $ nita example command
+    $ nita -d example command
 
-    command:  docker run alpine:latest cat /etc/alpine-release
+    >>>> command:  docker run alpine:latest cat /etc/alpine-release
 
     3.6.2
 
