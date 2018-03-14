@@ -113,14 +113,15 @@ NITA CLI command | Description
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita cli version | Shows NITA CLI current version
    nita license | Displays the NITA License.
-   nita test run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
-   nita test cli | Attaches local standard input, output, and error streams to test running container.
-   nita test volumes | Returns shared volumes information on test container.
-   nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
-   nita ntp ip | Returns IPs information on ntp container.
-   nita ntp volumes | Returns shared volumes information on ntp container.
-   nita ntp ports | Returns mapped ports information on ntp container.
-   nita ntp logs | Fetches the logs of ntp container.
+   nita test pull dynamic | Creates topology object from dynamic inventory.
+   nita test pull static | Creates topology object from static inventory.
+   nita test run specific firewall | Executes firewall test suite on firewall.
+   nita test run specific router | Executes router test suite on Router.
+   nita test run specific switch | Executes switch test suite on switch.
+   nita test run common firewall | Executes common test suite on firewall.
+   nita test run common router | Executes common test suite on Router.
+   nita test run common switch | Executes common test suite on switch.
+   nita create inventory | Creates a new Inventory scaffolding.
    nita up | Creates and starts NITA containers and networks.
    nita robot run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
    nita robot cli | Attaches local standard input, output, and error streams to robot running container.
@@ -135,7 +136,8 @@ NITA CLI command | Description
    nita radius ip | Returns IPs information on radius container.
    nita radius volumes | Returns shared volumes information on radius container.
    nita radius ports | Returns mapped ports information on radius container.
-   nita radius logs | Fetches the logs of radius container.
+   nita inventory populate | Populates a NITA inventory data.
+   nita dns ip | Returns IPs information on dns container.
    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
    nita dns ip | Returns IPs information on dns container.
    nita dns volumes | Returns shared volumes information on dns container.
@@ -157,14 +159,18 @@ NITA CLI command | Description
    nita webapp ip | Returns IPs information on webapp container.
    nita webapp volumes | Returns shared volumes information on webapp container.
    nita webapp ports | Returns mapped ports information on webapp container.
-   nita webapp logs | Fetches the logs of webapp container.
+   nita ntp ip | Returns IPs information on ntp container.
+   nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
+   nita ntp logs | Fetches the logs of ntp container.
+   nita ntp volumes | Returns shared volumes information on ntp container.
+   nita ntp ports | Returns mapped ports information on ntp container.
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
-   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
    nita tacacs ip | Returns IPs information on tacacs container.
+   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
+   nita tacacs logs | Fetches the logs of tacacs container.
    nita tacacs volumes | Returns shared volumes information on tacacs container.
    nita tacacs ports | Returns mapped ports information on tacacs container.
-   nita tacacs logs | Fetches the logs of tacacs container.
  |
 
 ## Installation

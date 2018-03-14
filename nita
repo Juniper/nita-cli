@@ -24,9 +24,13 @@ COMMANDS = {
         },
         'up':       'docker-compose up -d',
         'down':     'docker-compose down',
+        'demo':     'nita create inventory ; sleep 5 ; nita inventory populate ; nita ansible run noob ; nita ansible run build ; nita test pull dynamic ; nita test run common router',
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
             'role':    'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
+        },
+        'create' : {
+            'inventory': 'docker run -d -p 15984:5984 --name inventory -it couchdb',
         },
         'containers': {
             'ls':       'docker ps --filter "label=net.juniper.framework=NITA"',
@@ -36,7 +40,10 @@ COMMANDS = {
             'ls':       'docker images --filter "label=net.juniper.framework=NITA"',
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
-        'ips':        'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
+        'inventory': {
+            'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
+        },
+        'ips': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats':      'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'jobs': {
@@ -55,28 +62,36 @@ COMMANDS = {
         },
         'ansible': {
             'run': {
-                'noob':  'docker run --rm --name ansible --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
-                'build': 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh',
+                'noob':  'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
+                'build': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh',
             },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
             #'labels':  'docker-inspect.sh ansible',
-            'cli':     'docker run -d --rm --name ansible -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible',
-        },
-        'robot': {
-            'run': {
-                'test':    'docker run --rm --name robot --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh',
-            },
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' robot | jq',
-            #'labels':  'docker-inspect.sh robot',
-            'cli':     'docker run -d --rm --name robot -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest /bin/bash ; docker attach robot',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible',
         },
         'test': {
             'run': {
-                'test':    'docker run --rm --name test -v %s:/project -e USER="nita" -it registry.juniper.net/jizquierdo/toby:2.2.2 toby -p t_object.yaml suites/common.robot',
-            },
+                'test': 'docker run --rm --name test --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh',
+                'common': 
+                    { 
+                    'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
+                    'switch'  : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot'
+                    },
+                'specific' : 
+                    {
+                    'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
+                    'switch' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                    'router' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot'
+                    }                   
+                },
+            'pull': {
+                'static' : 'python inventory2toby.py --static',
+                'dynamic' : 'python inventory2toby.py --dynamic'
+                },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
-            #'labels':  'docker-inspect.sh test',
-            'cli':     'docker run -d --rm --name test -it -v %s:/project registry.juniper.net/jizquierdo/toby:2.2.2 /bin/bash ; docker attach test',
+            # 'labels':  'docker-inspect.sh test',
+            'cli':     'docker run -d --rm --name test --volumes-from jenkins -it -v %s:/project registry.juniper.net/nita/test:latest /bin/bash ; docker attach test',
         },
         'webapp': {
             'logs':    'docker logs webapp --tail 200',
@@ -126,13 +141,17 @@ COMMANDS = {
 HELP = {
     'nita': {
         'cli': {
-            'version': 'Shows NITA CLI current version',
+            'version': 'Shows NITA CLI current version.',
         },
         'up':   'Creates and starts NITA containers and networks.',
         'down': 'Stops and removes NITA containers and networks.',
+        'demo': 'Runs the whole NITA demo with a single script. It needs to be run from virtualdc/ folder.',
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
             'role':    'Creates a new Ansible role scaffolding.',
+        },
+        'create' : {
+            'inventory' : 'Creates a new Inventory scaffolding.'
         },
         'containers': {
             'ls':       'Lists all running NITA containers.',
@@ -142,12 +161,15 @@ HELP = {
             'ls':       'Lists all NITA images.',
             'versions': 'Displays NITA images versions.',
         },
+        'inventory': {
+            'populate': 'Populates a NITA inventory data.',
+        },
         'ips':        'Shows all NITA containers IPs.',
         'stats':      'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
             'jobs': {
                 'ls':     'Lists all Jenkins jobs.',
-                'remove': 'Removes Jenkins jobs matching --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
+                'remove': 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
             },
             #'labels':  'Returns labels information on jenkins container.',
             'cli': {
@@ -168,17 +190,23 @@ HELP = {
             #'labels':  'Returns labels information on ansible container.',
             'cli':     'Attaches local standard input, output, and error streams to ansible running container.',
         },
-        'robot': {
-            'run': {
-                'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
-            },
-            'volumes': 'Returns shared volumes information on robot container.',
-            #'labels':  'Returns labels information on robot container.',
-            'cli':     'Attaches local standard input, output, and error streams to robot running container.',
-        },
         'test': {
             'run': {
                 'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
+                'common': { 
+                    'firewall' : 'Executes common test suite on firewall.',
+                    'switch'  : 'Executes common test suite on switch.',
+                    'router'   : 'Executes common test suite on Router.',
+                },
+                'specific' : { 
+                    'firewall' : 'Executes firewall test suite on firewall.',
+                    'switch'  : 'Executes switch test suite on switch.',
+                    'router'   : 'Executes router test suite on Router.',
+                }
+            },
+            'pull': {
+                'static' : 'Creates topology object from static inventory.',
+                'dynamic' : 'Creates topology object from dynamic inventory.',
             },
             'volumes': 'Returns shared volumes information on test container.',
             #'labels':  'Returns labels information on test container.',
