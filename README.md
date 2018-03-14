@@ -433,29 +433,29 @@ and you will get all the things that NITA CLI can do for you!!!! You can even do
 
     $ nita webapp --help
 
-    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
-    nita webapp ip | Returns IPs information on webapp container.
-    nita webapp labels | Returns labels information on webapp container.
-    nita webapp volumes | Returns shared volumes information on webapp container.
-    nita webapp ports | Returns mapped ports information on webapp container.
-    nita webapp logs | Fetches the logs of webapp container.
+    nita webapp cli => Attaches local standard input, output, and error streams to webapp running container.
+    nita webapp ip => Returns IPs information on webapp container.
+    nita webapp labels => Returns labels information on webapp container.
+    nita webapp volumes => Returns shared volumes information on webapp container.
+    nita webapp ports => Returns mapped ports information on webapp container.
+    nita webapp logs => Fetches the logs of webapp container.
 
 or
 
     $ nita tacacs cli -h
 
-    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
+    nita tacacs cli => Attaches local standard input, output, and error streams to tacacs running container.
 
 or
 
     $ nita dns ?
 
-    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
-    nita dns ip | Returns IPs information on dns container.
-    nita dns labels | Returns labels information on dns container.
-    nita dns volumes | Returns shared volumes information on dns container.
-    nita dns ports | Returns mapped ports information on dns container.
-    nita dns logs | Fetches the logs of dns container.
+    nita dns cli => Attaches local standard input, output, and error streams to dns running container.
+    nita dns ip => Returns IPs information on dns container.
+    nita dns labels => Returns labels information on dns container.
+    nita dns volumes => Returns shared volumes information on dns container.
+    nita dns ports => Returns mapped ports information on dns container.
+    nita dns logs => Fetches the logs of dns container.
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
