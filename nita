@@ -24,7 +24,10 @@ COMMANDS = {
         },
         'up':       'docker-compose up -d',
         'down':     'docker-compose down',
-        'demo':     'nita create inventory ; sleep 10 ; nita inventory populate ; sleep 10 ; nita ansible run noob ; sleep 10 ; nita ansible run build ; nita test pull dynamic ; sleep 10 ; nita test run common router ; sleep 10 ; nita test run common firewall',
+        'demo': {
+            'vmm':    'nita create inventory ; sleep 10 ; nita inventory populate ; sleep 60 ; nita ansible run noob ; sleep 60 ; nita ansible run build ; nita test pull dynamic ; sleep 10 ; nita test run common router ; sleep 10 ; nita test run common firewall',
+            'laptop': 'nita create inventory ; sleep 5  ; nita inventory populate ; sleep 5  ; nita ansible run noob ; sleep 5  ; nita ansible run build ; nita test pull dynamic ; sleep 5  ; nita test run common router ; sleep 5  ; nita test run common firewall',        
+        },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
             'role':    'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
@@ -145,7 +148,10 @@ HELP = {
         },
         'up':   'Creates and starts NITA containers and networks.',
         'down': 'Stops and removes NITA containers and networks.',
-        'demo': 'Runs the whole NITA demo with a single script. It needs to be run from virtualdc/ folder.',
+        'demo': {
+            'vmm':    'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
+            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
+        },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
             'role':    'Creates a new Ansible role scaffolding.',
