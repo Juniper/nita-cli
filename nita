@@ -24,7 +24,7 @@ COMMANDS = {
         },
         'up':       'docker-compose up -d',
         'down':     'docker-compose down',
-        'demo':     'nita create inventory ; sleep 5 ; nita inventory populate ; nita ansible run noob ; nita ansible run build ; nita test pull dynamic ; nita test run common router',
+        'demo':     'nita create inventory ; sleep 8 ; nita inventory populate ; nita ansible run noob ; nita ansible run build ; nita test pull dynamic ; nita test run common router',
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
             'role':    'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
