@@ -14,8 +14,37 @@ echo ""
 echo " >>>> Copying cli.py & nita to /usr/local/bin/"
 cp cli.py nita /usr/local/bin/
 echo ""
-echo " >>>> Adding +x permissions to /usr/local/bin/nita"
+echo " >>>> Setting 775 permissions to scripts"
+chmod 775 /usr/local/bin/cli.py
+chmod 775 /usr/local/bin/nita
 echo ""
-chmod +x /usr/local/bin/nita
+echo " >>>> Generating bash completion script"
+python autocomplete
+echo ""
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux
+    echo " >>>> Copying bash_completion.d/nita to /etc/bash_completion.d/"
+    cp bash_completion.d/nita /etc/bash_completion.d/
+    . /etc/bash_completion.d/nita
+
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    echo " >>>> Copying bash_completion.d/nita to $(brew --prefix)/etc/bash_completion.d/"
+    cp bash_completion.d/nita $(brew --prefix)/etc/bash_completion.d/
+    . $(brew --prefix)/etc/bash_completion.d/nita
+
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    # Cygwin on Windows
+    echo " >>>> Copying bash_completion.d/nita to /etc/bash_completion.d/"
+    cp bash_completion.d/nita /etc/bash_completion.d/
+    . /etc/bash_completion.d/nita
+
+else
+    # Unknown.
+    echo "This is an unknown OS"
+fi
+
+echo ""
 echo " >>>> NITA CLI has been successfully installed!"
 echo ""

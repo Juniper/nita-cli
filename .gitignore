@@ -1,2 +1,5 @@
 **.pyc
 launch.json
+nitac
+bash_completion.d/nita*
+tmp/vars.yml*
