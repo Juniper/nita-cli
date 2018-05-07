@@ -7,6 +7,7 @@ NITA CLI project adds a command line interface to NITA. It is the way of interac
 - [NITA CLI](#nita-cli)
   - [Goal](#goal)
   - [Reusability](#reusability)
+  - [Autocompletion](#autocompletion)
   - [Prerequisites](#prerequisites)
   - [About NITA CLI](#about-nita-cli)
     - [cli.py](#clipy)
@@ -57,6 +58,86 @@ These scripts are basically a wrapper to almost any command a consultant could i
 
 Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `cli.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
 
+## Autocompletion
+
+Another cool feature it has is `autocompletion`. So far, it has been tested in the following Operating Systems:
+
+ - `Linux` (Ubuntu 16.04.4 LTS) 
+ - `OS X` (Sierra and High Sierra)
+ - `Windows 10` (with [Cygwin](https://www.cygwin.com/)).
+
+It makes use of the following links:
+
+- https://debian-administration.org/article/316/An_introduction_to_bash_completion_part_1
+- https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
+
+## Prerequisites
+
+Following packages are needed to make use of autocompletion:
+
+- python
+- python-pip
+- pyYAML (pip package)
+- Jinja2 (pip package)
+- brew _or_ cygwin (if OS X or Windows machines)
+
+If in `OS X`:
+
+Install [brew](https://brew.sh/) to be able to install `bash-completion` package:
+
+    brew install bash-completion
+
+and before you run your first NITA CLI command, add the following tidbit to your `~/.bash_profile`: 
+
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+    fi
+
+If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete` package as well. Edit your `~/.bashrc` file to turn on autocompletion as below:
+
+    # Uncomment to turn on programmable completion enhancements.
+    # Any completions you add in ~/.bash_completion are sourced last.
+    [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+
+## Usage
+
+Just by typing the root of your CLI command and then `TAB` twice will show you the different options you might have to autocomplete your command.
+
+You should not worry about how it has been implemented, but as it is something integrated/reusable into any forked/branched repository, here it is a brief explanation. 
+
+When running script `./autocomplete` (as a stand alone script or as part of ./install.sh script) it renders a template `templates/*.j2` with the values obtained from the CLI COMMANDS dictionary. They are dump into a temporary file `tmp/vars.yml` and generates a bash script into `bash_completion.d/` folder.
+
+This autocompletion script is then copied by `install.sh` script into the `/etc/bash_completion.d/` folder on the host server.
+
+In order to __load autocompletion__ it is needed to type following commmands into your shell (It is automatically done by the script, but if you want to test it in your terminal without the need to restart it (so changes take effect right after command execution!)):
+
+- Linux
+
+        $ . /etc/bash_completion.d/nita
+
+- OS X
+
+        $ . $(brew --prefix)/etc/bash_completion.d/nita
+
+- Windows (Cygwin)
+
+        . /etc/bash_completion.d/nita
+
+How do you know it works? If you type complete command grepping by your script, it should appear as below.
+
+    $ complete -p | grep nita
+    complete -F _nita nita
+
+Also, type `nita` and then `TAB` twice and it should give you some options to autocomplete. See below:
+
+    $ nita (TAB TAB)
+    ansible     containers  demo        up      down ....
+    ...
+
+## Suggestion
+
+Name every nested key in the CLI so they are not repeated. If repeated, autocompletion might suggest a completion with does not correspond to that command. It is not a big deal, but a known issue!
+
 ## Prerequisites
 
 `jq` is a lightweight and flexible command-line JSON processor.
@@ -86,7 +167,7 @@ It can be installed from [github](https://stedolan.github.io/jq/) or running `br
 
 ## About NITA CLI
 
-It is composed of two different python scripts:
+It is mainly composed of two different python scripts. There are others (like installation and autocomplete, but they are not really part of the heart of the CLI):
 
 ### `cli.py`
 
@@ -106,7 +187,7 @@ See both files on the repo for a deeper understanding:
 
 - [cli.py](/cli.py)
 
-There is a `help` implemented on the script which basically shows the commands already mapped. Here it is the `nita help` command output:
+There is a `help` implemented at each level of the script which basically shows the commands mapped and what they do. Here it is the `nita help` command output (top level):
 
 NITA CLI command | Description
 -----------------|-------------------
@@ -177,18 +258,20 @@ NITA CLI command | Description
 
 ## Installation
 
-In order to install NITA CLI, clone this project and execute `install.sh` script with sudo.
+In order to install NITA CLI, clone this project and execute `install.sh` script with `sudo`.
 
-    $ sudo sh install.sh
+    $ sudo ./install.sh
     Password:
 
-     >>>> Copying cli.py & nita to /usr/local/bin/
+    >>>> Copying cli.py & nita to /usr/local/bin/
 
-     >>>> Adding +x permissions to /usr/local/bin/nita
+    >>>> Setting 775 permissions to scripts
 
-     >>>> NITA CLI has been installed successfully!
+    >>>> Generating bash completion script
 
-    $
+    >>>> Copying bash_completion.d/nita to /usr/local/etc/bash_completion.d/
+
+    >>>> NITA CLI has been successfully installed!
 
 ## Customisation
 
@@ -332,7 +415,6 @@ Please, review `nita --help` or `nita -h` or `nita ?`output and look for the com
     >>> Please add it to the COMMANDS tree!
 
 As the output says, check the dictionaries for the keys shown and add the missing part (description or mapped command) as told by the script output.
-
 
 ## Demo
 
@@ -492,3 +574,4 @@ Jose Miguel Izquierdo | jizquierdo@juniper.net
 David Gethings | dgethings@juniper.net
  |
 Thanks for using NITA!
+
