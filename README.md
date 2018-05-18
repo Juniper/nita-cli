@@ -1,26 +1,41 @@
 # NITA CLI
 
-NITA CLI project adds a command line interface to NITA. It is the way of interacting with NITA by using simple and very intuitive commands. It abstracts the user from the complexity of most of the commands running behind the scenes (related to docker, unix and some other tools).
+NITA CLI project adds a command line interface to NITA. It is the way of interacting with NITA by using simple and intuitive commands. It focusses the user on getting a task done without having to learn the complex commands that run behind the scenes (related to docker, unix and some other tools). It is a move towards user-friendly, intuitive NetDevOps.
+
+Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an example of this. It is creativity with an eye toward pragmatism. It is not just innovation, but innovation applied.
 
 ## TOC
 
 - [NITA CLI](#nita-cli)
-  - [Goal](#goal)
-  - [Reusability](#reusability)
-  - [Autocompletion](#autocompletion)
-  - [Prerequisites](#prerequisites)
-  - [About NITA CLI](#about-nita-cli)
-    - [cli.py](#clipy)
-    - [nita](#nita)
-  - [Installation](#installation)
-  - [Customisation](#customisation)
-  - [Troubleshooting](#troubleshooting)
-  - [Demo](#demo)
-  - [Contacts](#contacts)
+    - [TOC](#toc)
+    - [Goal](#goal)
+    - [Reusability](#reusability)
+    - [Autocompletion](#autocompletion)
+    - [Usage](#usage)
+    - [Suggestion](#suggestion)
+    - [Prerequisites](#prerequisites)
+        - [Basic](#basic)
+        - [Autocomplete](#autocomplete)
+    - [Installation](#installation)
+    - [About NITA CLI](#about-nita-cli)
+        - [`cli.py`](#clipy)
+        - [`nita`](#nita)
+    - [Customisation](#customisation)
+    - [Troubleshooting](#troubleshooting)
+    - [Demo](#demo)
+    - [Contact](#contact)
 
 ## Goal
 
 NITA CLI resolves the complexity of dealing with a lot of different technologies within the same framework by simplifying any command with its arguments, options, etc... into a single, customisable, intuitive and easy to remember command of your choice.
+
+It is designed to help on:
+
+- Support
+- Operations/Engineering
+- Development
+
+so a lot of its commands come from the tasks carried out routinely on the following topics.
 
 Imagine trying to type the following command to get jenkins container IPs:
 
@@ -40,21 +55,19 @@ Or this one to list all NITA containers:
 
 Compare it with this one in order to get the same output:
 
-    $ nita -d containers ls
-
-    >>>> command:  docker ps --filter "label=net.juniper.framework=NITA"
-
-    CONTAINER ID        IMAGE                                     COMMAND             CREATED             STATUS              PORTS                     NAMES
-    8a36d29b6b1f        registry.juniper.net/nita/jenkins:latest   "/bin/tini -- /usr..."   5 hours ago         Up 5 hours (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
-    9f04684e6f82        registry.juniper.net/nita/tacacs:latest    "tacacs-runner"          5 hours ago         Up 5 hours             0.0.0.0:10049->49/tcp                              tacacs
-    6a11f837b797        registry.juniper.net/nita/dns:latest       "dns-runner"             5 hours ago         Up 5 hours             0.0.0.0:53->53/udp                                 dns
-    93b54c5d7a8f        registry.juniper.net/nita/radius:latest    "radius-runner"          5 hours ago         Up 5 hours             0.0.0.0:11812->1812/udp                            radius
-    d224c2bdf0f5        registry.juniper.net/nita/webapp:latest    "webapp-runner"          5 hours ago         Up 5 hours             0.0.0.0:8090->8060/tcp                             webapp
-    90c5c7afcace        registry.juniper.net/nita/ntp:latest       "ntp-runner"             5 hours ago         Up 5 hours             0.0.0.0:123->123/tcp                               ntp
+    $ nita containers ls
+    CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS                       PORTS                                              NAMES
+    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+    5ed87b63500f        registry.juniper.net/nita/webapp:latest    "webapp-runner"          About an hour ago   Up About an hour             0.0.0.0:8090->8060/tcp                             webapp
+    714107fad380        registry.juniper.net/nita/rsyslog:latest   "rsyslog-runner"         About an hour ago   Up About an hour             0.0.0.0:514->514/udp                               rsyslog
+    effe8a4a7217        registry.juniper.net/nita/ntp:latest       "ntp-runner"             About an hour ago   Up About an hour             0.0.0.0:123->123/tcp                               ntp
+    00e83ef33c4f        registry.juniper.net/nita/radius:latest    "radius-runner"          About an hour ago   Up About an hour             0.0.0.0:11812->1812/udp                            radius
+    79ce0367ac8a        registry.juniper.net/nita/tacacs:latest    "tacacs-runner"          About an hour ago   Up About an hour             0.0.0.0:10049->49/tcp                              tacacs
+    94c5e76fe470        registry.juniper.net/nita/dns:latest       "dns-runner"             About an hour ago   Up About an hour             0.0.0.0:53->53/udp                                 dns
 
 ## Reusability
 
-These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed is so easy to add them that anybody will be able to play with it and get it customised.
+These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed, it is so _easy_ to add them that anybody will be able to play with it and get it customised.
 
 Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `cli.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
 
@@ -71,39 +84,17 @@ It makes use of the following links:
 - https://debian-administration.org/article/316/An_introduction_to_bash_completion_part_1
 - https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
 
-## Prerequisites
-
-Following packages are needed to make use of autocompletion:
-
-- python
-- python-pip
-- pyYAML (pip package)
-- Jinja2 (pip package)
-- brew _or_ cygwin (if OS X or Windows machines)
-
-If in `OS X`:
-
-Install [brew](https://brew.sh/) to be able to install `bash-completion` package:
-
-    brew install bash-completion
-
-and before you run your first NITA CLI command, add the following tidbit to your `~/.bash_profile`: 
-
-    if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-    fi
-
-If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete` package as well. Edit your `~/.bashrc` file to turn on autocompletion as below:
-
-    # Uncomment to turn on programmable completion enhancements.
-    # Any completions you add in ~/.bash_completion are sourced last.
-    [[ -f /etc/bash_completion ]] && . /etc/bash_completion
-
 ## Usage
 
-Just by typing the root of your CLI command and then `TAB` twice will show you the different options you might have to autocomplete your command.
+NITA CLI comes with a bunch of pre-installed commands. Just by typing the root of your CLI command (e.g. `nita`) and then `?` or `-h` or `--help` it will list you all with a brief description of what each of them does.
 
-You should not worry about how it has been implemented, but as it is something integrated/reusable into any forked/branched repository, here it is a brief explanation. 
+Also, if NITA CLI root command is typed (`nita`), just press `TAB` key twice and it will show you the different options you might have to autocomplete your command. For example:
+
+    $ nita (TAB TAB)
+    ansible     containers  demo        up      down ....
+    ...
+
+You should not worry about how it has been implemented, but as it is something integrated/reusable into any forked/branched repository, here it is a brief explanation.
 
 When running script `./autocomplete` (as a stand alone script or as part of ./install.sh script) it renders a template `templates/*.j2` with the values obtained from the CLI COMMANDS dictionary. They are dump into a temporary file `tmp/vars.yml` and generates a bash script into `bash_completion.d/` folder.
 
@@ -136,10 +127,24 @@ Also, type `nita` and then `TAB` twice and it should give you some options to au
 
 ## Suggestion
 
-Name every nested key in the CLI so they are not repeated. If repeated, autocompletion might suggest a completion with does not correspond to that command. It is not a big deal, but a known issue!
+Name every nested key in the CLI so they are not repeated. If repeated, autocompletion might suggest a completion with does not correspond to that command. It is not a big deal, but a known issue! See example below:
+
+    $ nita cli
+    jenkins  root     version
+
+    $ nita cli ?
+
+    nita cli version => Shows NITA CLI current version.
+
+    $ nita jenkins cli ?
+    
+    nita jenkins cli jenkins => Attaches local stdin/stdout/stderr to jenkins running container with "jenkins" user.
+    nita jenkins cli root => Attaches local stdin/stdout/stderr to jenkins running container with "root" user.
+
 
 ## Prerequisites
 
+### Basic
 `jq` is a lightweight and flexible command-line JSON processor.
 
 It is not really a prerequisite since NITA CLI runs without `jq`, but it really improves readability when using it! Here is the evidence:
@@ -163,7 +168,54 @@ than this:
     }
     ]
 
-It can be installed from [github](https://stedolan.github.io/jq/) or running `brew install jq` on OS X.
+It can be installed from:
+- [github](https://stedolan.github.io/jq/)
+- running `brew install jq` on OS X.
+- running `apt-get install jq` on Linux.
+
+### Autocomplete
+Following packages are needed to make use of autocompletion:
+
+- python
+- python-pip
+- pyYAML (pip package)
+- Jinja2 (pip package)
+- brew _or_ cygwin (if OS X or Windows machines)
+
+If in `OS X`:
+
+Install [brew](https://brew.sh/) to be able to install `bash-completion` package:
+
+    brew install bash-completion
+
+and before you run your first NITA CLI command, add the following tidbit to your `~/.bash_profile`: 
+
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+    fi
+
+If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete` package as well. Edit your `~/.bashrc` file to turn on autocompletion as below:
+
+    # Uncomment to turn on programmable completion enhancements.
+    # Any completions you add in ~/.bash_completion are sourced last.
+    [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+
+## Installation
+
+In order to install NITA CLI, clone this project and execute `install.sh` script with `sudo` (if needed).
+
+    $ sudo ./install.sh
+    Password:
+
+    >>>> Copying cli.py & nita to /usr/local/bin/
+
+    >>>> Setting 775 permissions to scripts
+
+    >>>> Generating bash completion script
+
+    >>>> Copying bash_completion.d/nita to /usr/local/etc/bash_completion.d/
+
+    >>>> NITA CLI has been successfully installed!
 
 ## About NITA CLI
 
@@ -192,6 +244,7 @@ There is a `help` implemented at each level of the script which basically shows 
 NITA CLI command | Description
 -----------------|-------------------
    nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
+   nita ansible labels | Returns labels information on ansible container.
    nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
    nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
    nita ansible volumes | Returns shared volumes information on ansible container.
@@ -199,9 +252,11 @@ NITA CLI command | Description
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
    nita create inventory | Creates a new Inventory scaffolding.
-   nita demo | Runs the whole NITA demo with a single script. It needs to be run from virtualdc/ folder.
+   nita demo laptop | Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.
+   nita demo vmm | Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.
    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
    nita dns ip | Returns IPs information on dns container.
+   nita dns labels | Returns labels information on dns container.
    nita dns logs | Fetches the logs of dns container.
    nita dns ports | Returns mapped ports information on dns container.
    nita dns volumes | Returns shared volumes information on dns container.
@@ -215,6 +270,7 @@ NITA CLI command | Description
    nita jenkins ip | Returns IPs information on jenkins container.
    nita jenkins jobs ls | Lists all Jenkins jobs.
    nita jenkins jobs remove | Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
+   nita jenkins labels | Returns labels information on jenkins container.
    nita jenkins logs | Fetches the logs of jenkins container.
    nita jenkins ports | Returns mapped ports information on jenkins container.
    nita jenkins volumes | Returns shared volumes information on jenkins container.
@@ -223,21 +279,31 @@ NITA CLI command | Description
    nita new role | Creates a new Ansible role scaffolding.
    nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
    nita ntp ip | Returns IPs information on ntp container.
+   nita ntp labels | Returns labels information on ntp container.
    nita ntp logs | Fetches the logs of ntp container.
    nita ntp ports | Returns mapped ports information on ntp container.
    nita ntp volumes | Returns shared volumes information on ntp container.
    nita radius cli | Attaches local standard input, output, and error streams to radius running container.
    nita radius ip | Returns IPs information on radius container.
+   nita radius labels | Returns labels information on radius container.
    nita radius logs | Fetches the logs of radius container.
    nita radius ports | Returns mapped ports information on radius container.
    nita radius volumes | Returns shared volumes information on radius container.
+   nita rsyslog cli | Attaches local standard input, output, and error streams to rsyslog running container.
+   nita rsyslog ip | Returns IPs information on rsyslog container.
+   nita rsyslog labels | Returns labels information on rsyslog container.
+   nita rsyslog logs | Fetches the logs of rsyslog container.
+   nita rsyslog ports | Returns mapped ports information on rsyslog container.
+   nita rsyslog volumes | Returns shared volumes information on rsyslog container.
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
    nita tacacs ip | Returns IPs information on tacacs container.
+   nita tacacs labels | Returns labels information on tacacs container.
    nita tacacs logs | Fetches the logs of tacacs container.
    nita tacacs ports | Returns mapped ports information on tacacs container.
    nita tacacs volumes | Returns shared volumes information on tacacs container.
    nita test cli | Attaches local standard input, output, and error streams to test running container.
+   nita test labels | Returns labels information on test container.
    nita test pull dynamic | Creates topology object from dynamic inventory.
    nita test pull static | Creates topology object from static inventory.
    nita test run common firewall | Executes common test suite on firewall.
@@ -251,27 +317,11 @@ NITA CLI command | Description
    nita up | Creates and starts NITA containers and networks.
    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
    nita webapp ip | Returns IPs information on webapp container.
+   nita webapp labels | Returns labels information on webapp container.
    nita webapp logs | Fetches the logs of webapp container.
    nita webapp ports | Returns mapped ports information on webapp container.
    nita webapp volumes | Returns shared volumes information on webapp container.
  |
-
-## Installation
-
-In order to install NITA CLI, clone this project and execute `install.sh` script with `sudo`.
-
-    $ sudo ./install.sh
-    Password:
-
-    >>>> Copying cli.py & nita to /usr/local/bin/
-
-    >>>> Setting 775 permissions to scripts
-
-    >>>> Generating bash completion script
-
-    >>>> Copying bash_completion.d/nita to /usr/local/etc/bash_completion.d/
-
-    >>>> NITA CLI has been successfully installed!
 
 ## Customisation
 
@@ -541,7 +591,7 @@ or
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
-# Contact
+## Contact
 
 `Juniper Internal only`
 
