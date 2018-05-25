@@ -1,5 +1,7 @@
 # NITA CLI
 
+[![build status](https://git.juniper.net/NITA/nita-cli/badges/master/build.svg)](https://git.juniper.net/NITA/nita-cli/commits/master)
+
 NITA CLI project adds a command line interface to NITA. It is the way of interacting with NITA by using simple and intuitive commands. It focusses the user on getting a task done without having to learn the complex commands that run behind the scenes (related to docker, unix and some other tools). It is a move towards user-friendly, intuitive NetDevOps.
 
 Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an example of this. It is creativity with an eye toward pragmatism. It is not just innovation, but innovation applied.
