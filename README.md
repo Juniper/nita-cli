@@ -21,6 +21,7 @@ Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an examp
         - [`cli.py`](#clipy)
         - [`nita`](#nita)
     - [Customisation](#customisation)
+    - [Continuos integration (CI)](#continuos-integration-ci)
     - [Troubleshooting](#troubleshooting)
     - [Demo](#demo)
     - [Contact](#contact)
@@ -431,6 +432,10 @@ Here it is another example of how to grow it:
     3.6.2
 
 Enjoy creating your own docker-like or VMM-like CLI interface!!!
+
+## Continuos integration (CI)
+
+Continuous integration is the practice of routinely integrating code changes into the main branch of a repository and testing them as soon and often as possible. Any merge request (MR) into master branch triggers a CI/CD pipeline to validate those changes.
 
 ## Troubleshooting
 
