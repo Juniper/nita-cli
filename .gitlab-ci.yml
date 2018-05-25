@@ -2,6 +2,7 @@ image: alpine:latest
 
 stages:
   - test
+  - demo
 
 before_script:
   - apk --update add python git openssh
@@ -14,7 +15,17 @@ test:
   - sh install.sh
   - nita cli version
   - nita ?
-  only:
-  - master
   tags:
-  - docker
+    - docker
+  only:
+    - master
+
+trigger_demo:
+  stage: demo
+  script:
+    - apk --update add curl
+    - curl -X POST -F token=$VN_TOKEN -F ref=master https://git.juniper.net/api/v4/projects/1600/trigger/pipeline
+  tags:
+    - docker
+  only:
+    - master
