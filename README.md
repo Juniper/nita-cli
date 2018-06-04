@@ -89,13 +89,44 @@ It makes use of the following links:
 
 ## Usage
 
-NITA CLI comes with a bunch of pre-installed commands. Just by typing the root of your CLI command (e.g. `nita`) and then `?` or `-h` or `--help` it will list you all with a brief description of what each of them does.
+### Help
+NITA CLI comes with a bunch of pre-installed commands and a description of help features. Just by typing the root of your CLI command (e.g. `nita`) and ask for help, (e.g. `?`, `-h` or `--help`) it will list you all with a brief description of what each of them does.
 
-Also, if NITA CLI root command is typed (`nita`), just press `TAB` key twice and it will show you the different options you might have to autocomplete your command. For example:
+NITA CLI help is context sensitive. So it matters where you use the help. You can get a list of all available commands at certain level of the commands tree, which would be a different set than from other part of the command tree. See below:
+
+    $ nita jenkins ?
+
+    nita jenkins cli jenkins => Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
+    nita jenkins cli root => Attaches local standard input, output, and error streams to jenkins running container with "root" user.
+    nita jenkins ip => Returns IPs information on jenkins container.
+    nita jenkins jobs export => Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
+    nita jenkins jobs import => Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
+    nita jenkins jobs ls => Lists all Jenkins jobs.
+    nita jenkins jobs remove => Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
+    nita jenkins labels => Returns labels information on jenkins container.
+    nita jenkins logs => Fetches the logs of jenkins container.
+    nita jenkins ports => Returns mapped ports information on jenkins container.
+    nita jenkins volumes => Returns shared volumes information on jenkins container.
+
+    $ nita rsyslog ?
+
+    nita rsyslog cli => Attaches local standard input, output, and error streams to rsyslog running container.
+    nita rsyslog ip => Returns IPs information on rsyslog container.
+    nita rsyslog labels => Returns labels information on rsyslog container.
+    nita rsyslog logs => Fetches the logs of rsyslog container.
+    nita rsyslog ports => Returns mapped ports information on rsyslog container.
+    nita rsyslog volumes => Returns shared volumes information on rsyslog container.
+
+### Autocompletion
+
+NITA CLI autocompletion is also context sensitive. Just by pressing `TAB` key twice at any level of the command tree, it will show you the different options you might have to autocomplete your command. For example:
 
     $ nita (TAB TAB)
     ansible     containers  demo        up      down ....
     ...
+
+    $ nita tacacs (TAB TAB)
+    cli      ip       labels   logs     ports    volumes
 
 You should not worry about how it has been implemented, but as it is something integrated/reusable into any forked/branched repository, here it is a brief explanation.
 
