@@ -7,9 +7,8 @@ stages:
 test:
   stage: test
   script:
-  - apk --update add python git openssh py-pip && \
-    pip install --upgrade pip==9.0.3 && \
-    pip --no-cache-dir install pyyaml jinja2
+  - apk --update add python git openssh py-pip
+  - pip install pyyaml jinja2
   - git clone -b $CI_COMMIT_REF_NAME https://_gitlab@git.juniper.net/NITA/nita-cli.git
   - cd nita-cli/
   - sh install.sh
