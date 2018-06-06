@@ -294,7 +294,7 @@ NITA CLI command | Description
    nita dns logs | Fetches the logs of dns container.
    nita dns ports | Returns mapped ports information on dns container.
    nita dns volumes | Returns shared volumes information on dns container.
-   nita down | Stops and removes NITA containers and networks.
+   nita down | Stops and removes NITA containers (both Core and CaaS) and networks.
    nita images ls | Lists all NITA images.
    nita images versions | Displays NITA images versions.
    nita inventory populate | Populates a NITA inventory data.
@@ -302,6 +302,8 @@ NITA CLI command | Description
    nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
    nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
    nita jenkins ip | Returns IPs information on jenkins container.
+   nita jenkins jobs export | Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
+   nita jenkins jobs import | Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
    nita jenkins jobs ls | Lists all Jenkins jobs.
    nita jenkins jobs remove | Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
    nita jenkins labels | Returns labels information on jenkins container.
@@ -343,12 +345,19 @@ NITA CLI command | Description
    nita test run common firewall | Executes common test suite on firewall.
    nita test run common router | Executes common test suite on Router.
    nita test run common switch | Executes common test suite on switch.
+   nita test run specific bgp | Executes BGP test suite on Router.
+   nita test run specific dns | Executes DNS test suite on Router.
    nita test run specific firewall | Executes firewall test suite on firewall.
+   nita test run specific ntp | Executes NTP test suite on Router.
+   nita test run specific ospf | Executes OSPF test suite on Router.
+   nita test run specific radius | Executes Radius test suite on Router.
    nita test run specific router | Executes router test suite on Router.
    nita test run specific switch | Executes switch test suite on switch.
+   nita test run specific syslog | Executes Syslog test suite on Router.
+   nita test run specific tacacs | Executes TACACS test suite on Router.
    nita test run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
    nita test volumes | Returns shared volumes information on test container.
-   nita up | Creates and starts NITA containers and networks.
+   nita up | Creates and starts NITA containers (both Core and CaaS) and networks.
    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
    nita webapp ip | Returns IPs information on webapp container.
    nita webapp labels | Returns labels information on webapp container.
@@ -468,7 +477,12 @@ Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
 ## Continuos integration (CI)
 
-Continuous integration is the practice of routinely integrating code changes into the main branch of a repository and testing them as soon and often as possible. Any merge request (MR) into master branch triggers a CI/CD pipeline to validate those changes.
+Continuous integration is the practice of routinely integrating code changes into the main branch of a repository and testing them as soon and often as possible. Any merge request (MR) into master branch triggers a CI/CD pipeline to validate those changes. It is made up of 2 different stages:
+
+- test
+- demo
+
+Former runs a simple test to check if all available commands are well documented and latter triggers a CI pipeline of the whole NITA demo (on virtual-network project). 
 
 ## Troubleshooting
 

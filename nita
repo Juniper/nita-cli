@@ -11,7 +11,7 @@
 #
 # *******************>
 """
-    Python module containing all NITA commands and CONSTANTS
+    Python module containing NITA CLI commands and help.
 """
 
 import cli as cli
@@ -22,35 +22,35 @@ COMMANDS = {
         'cli': {
             'version': 'echo NITA CLI master branch',
         },
-        'up':       'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
+        'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'demo': {
-            'vmm':    'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""',
+            'vmm'   : 'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""',
             'laptop': 'nita -d create inventory ; sleep 10  ; nita -d inventory populate ; sleep 10  ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""', 
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
-            'role':    'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
+            'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
         },
         'create' : {
             'inventory': 'docker run -d -p 15984:5984 --name inventory -it couchdb',
         },
         'containers': {
-            'ls':       'docker ps --filter "label=net.juniper.framework=NITA"',
+            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA"',
             'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .Name }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'images': {
-            'ls':       'docker images --filter "label=net.juniper.framework=NITA"',
+            'ls'      : 'docker images --filter "label=net.juniper.framework=NITA"',
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'inventory': {
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
         },
-        'ips': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
-        'stats':      'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
+        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
+        'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'jobs': {
-                'ls':     'docker exec -it jenkins list_jenkins_jobs.py',
+                'ls'    : 'docker exec -it jenkins list_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
                 'import': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp registry.juniper.net/nita/jenkins:latest import_jenkins_jobs.sh {0} {1}",
                 'export': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp registry.juniper.net/nita/jenkins:latest export_jenkins_jobs.sh {0} {1}",
@@ -61,20 +61,20 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel jenkins """,
             'cli': {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
-                'root':    'docker exec -it -u root jenkins /bin/bash',
+                'root'   : 'docker exec -it -u root jenkins /bin/bash',
             },
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
-            'ports':   'docker port jenkins',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
+            'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
-            'logs':    'docker logs jenkins --tail 200',
+            'logs'   : 'docker logs jenkins --tail 200',
         },
         'ansible': {
             'run': {
-                'noob':  'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
+                'noob' : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
                 'build': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh',
             },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
@@ -86,18 +86,25 @@ COMMANDS = {
                 'common': 
                     { 
                     'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
-                    'switch'  : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                    'switch'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
                     'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot'
                     },
                 'specific' : 
                     {
                     'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
-                    'switch' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
-                    'router' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot'
+                    'switch'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
+                    'tacacs'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
+                    'radius'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
+                    'syslog'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
+                    'dns'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
+                    'ntp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
+                    'ospf'     : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
+                    'bgp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
                     }                   
                 },
             'pull': {
-                'static' : 'python inventory2toby.py --static',
+                'static'  : 'python inventory2toby.py --static',
                 'dynamic' : 'python inventory2toby.py --dynamic'
                 },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
@@ -108,66 +115,66 @@ COMMANDS = {
             'cli':     'docker run -d --rm --name test --volumes-from jenkins -it -v %s:/project registry.juniper.net/nita/test:latest /bin/bash ; docker attach test',
         },
         'webapp': {
-            'logs':    'docker logs webapp --tail 200',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
-            'ports':   'docker port webapp',
+            'logs'   : 'docker logs webapp --tail 200',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
+            'ports'  : 'docker port webapp',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel webapp """,
             'cli':     'docker exec -it webapp /bin/bash',
         },
         'tacacs': {
-            'logs':    'docker exec -it tacacs tail -200 /var/log/tacacs.log',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
-            'ports':   'docker port tacacs',
+            'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
+            'ports'  : 'docker port tacacs',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel tacacs """,
             'cli':     'docker exec -it tacacs /bin/bash',
         },
         'radius': {
-            'logs':    'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
-            'ports':   'docker port radius',
+            'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
+            'ports'  : 'docker port radius',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel radius """,
             'cli':     'docker exec -it radius /bin/bash',
         },
         'ntp': {
-            'logs':    'docker logs ntp --tail 200',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
-            'ports':   'docker port ntp',
+            'logs'   : 'docker logs ntp --tail 200',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
+            'ports'  : 'docker port ntp',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ntp """,
             'cli':     'docker exec -it ntp /bin/sh',
         },
         'dns': {
-            'logs':    'docker logs dns --tail 200',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
-            'ports':   'docker port dns',
+            'logs'   : 'docker logs dns --tail 200',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
+            'ports'  : 'docker port dns',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel dns """,
             'cli':     'docker exec -it dns /bin/sh',
         },
         'rsyslog': {
-            'logs':    'docker logs rsyslog --tail 200',
-            'ip':      'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' rsyslog',
-            'ports':   'docker port rsyslog',
+            'logs'   : 'docker logs rsyslog --tail 200',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' rsyslog',
+            'ports'  : 'docker port rsyslog',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' rsyslog | jq',
-            'labels':  """containerlabel() { docker inspect -f '
+            'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel rsyslog """,
@@ -183,35 +190,35 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
-        'up':   'Creates and starts NITA containers (both Core and CaaS) and networks.',
+        'up'  : 'Creates and starts NITA containers (both Core and CaaS) and networks.',
         'down': 'Stops and removes NITA containers (both Core and CaaS) and networks.',
         'demo': {
-            'vmm':    'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
+            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
             'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
         },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
-            'role':    'Creates a new Ansible role scaffolding.',
+            'role'   : 'Creates a new Ansible role scaffolding.',
         },
         'create' : {
             'inventory' : 'Creates a new Inventory scaffolding.'
         },
         'containers': {
-            'ls':       'Lists all running NITA containers.',
+            'ls'      : 'Lists all running NITA containers.',
             'versions': 'Lists all running NITA containers versions.',
         },
         'images': {
-            'ls':       'Lists all NITA images.',
+            'ls'      : 'Lists all NITA images.',
             'versions': 'Displays NITA images versions.',
         },
         'inventory': {
             'populate': 'Populates a NITA inventory data.',
         },
-        'ips':        'Shows all NITA containers IPs.',
-        'stats':      'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
+        'ips'  : 'Shows all NITA containers IPs.',
+        'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
             'jobs': {
-                'ls':     'Lists all Jenkins jobs.',
+                'ls'    : 'Lists all Jenkins jobs.',
                 'remove': 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
                 'import': 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
                 'export': 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
@@ -219,91 +226,98 @@ HELP = {
             'labels':  'Returns labels information on jenkins container.',
             'cli': {
                 'jenkins': 'Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.',
-                'root':    'Attaches local standard input, output, and error streams to jenkins running container with "root" user.',
+                'root'   : 'Attaches local standard input, output, and error streams to jenkins running container with "root" user.',
             },
-            'ip':      'Returns IPs information on jenkins container.',
-            'ports':   'Returns mapped ports information on jenkins container.',
+            'ip'     : 'Returns IPs information on jenkins container.',
+            'ports'  : 'Returns mapped ports information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
-            'logs':    'Fetches the logs of jenkins container.',
+            'logs'   : 'Fetches the logs of jenkins container.',
         },
         'ansible': {
             'run': {
-                'noob':  'Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.',
+                'noob' : 'Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.',
                 'build': 'Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.',
             },
             'volumes': 'Returns shared volumes information on ansible container.',
-            'labels':  'Returns labels information on ansible container.',
-            'cli':     'Attaches local standard input, output, and error streams to ansible running container.',
+            'labels' : 'Returns labels information on ansible container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to ansible running container.',
         },
         'test': {
             'run': {
                 'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
                 'common': { 
-                    'firewall' : 'Executes common test suite on firewall.',
+                    'firewall': 'Executes common test suite on firewall.',
                     'switch'  : 'Executes common test suite on switch.',
-                    'router'   : 'Executes common test suite on Router.',
+                    'router'  : 'Executes common test suite on Router.',
                 },
                 'specific' : { 
-                    'firewall' : 'Executes firewall test suite on firewall.',
+                    'firewall': 'Executes firewall test suite on firewall.',
                     'switch'  : 'Executes switch test suite on switch.',
-                    'router'   : 'Executes router test suite on Router.',
+                    'router'  : 'Executes router test suite on Router.',
+                    'tacacs'  : 'Executes TACACS test suite on Router.',
+                    'radius'  : 'Executes Radius test suite on Router.',
+                    'syslog'  : 'Executes Syslog test suite on Router.',
+                    'dns'     : 'Executes DNS test suite on Router.',
+                    'ntp'     : 'Executes NTP test suite on Router.',
+                    'ospf'    : 'Executes OSPF test suite on Router.',
+                    'bgp'     : 'Executes BGP test suite on Router.',
                 }
             },
             'pull': {
                 'static' : 'Creates topology object from static inventory.',
-                'dynamic' : 'Creates topology object from dynamic inventory.',
+                'dynamic': 'Creates topology object from dynamic inventory.',
             },
             'volumes': 'Returns shared volumes information on test container.',
-            'labels':  'Returns labels information on test container.',
-            'cli':     'Attaches local standard input, output, and error streams to test running container.',
+            'labels' : 'Returns labels information on test container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to test running container.',
         },
         'webapp': {
-            'logs':    'Fetches the logs of webapp container.',
-            'ip':      'Returns IPs information on webapp container.',
-            'ports':   'Returns mapped ports information on webapp container.',
+            'logs'   : 'Fetches the logs of webapp container.',
+            'ip'     : 'Returns IPs information on webapp container.',
+            'ports'  : 'Returns mapped ports information on webapp container.',
             'volumes': 'Returns shared volumes information on webapp container.',
-            'labels':  'Returns labels information on webapp container.',
-            'cli':     'Attaches local standard input, output, and error streams to webapp running container.',
+            'labels' : 'Returns labels information on webapp container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
         },
         'tacacs': {
-            'logs':    'Fetches the logs of tacacs container.',
-            'ip':      'Returns IPs information on tacacs container.',
-            'ports':   'Returns mapped ports information on tacacs container.',
+            'logs'   : 'Fetches the logs of tacacs container.',
+            'ip'     : 'Returns IPs information on tacacs container.',
+            'ports'  : 'Returns mapped ports information on tacacs container.',
             'volumes': 'Returns shared volumes information on tacacs container.',
-            'labels':  'Returns labels information on tacacs container.',
-            'cli':     'Attaches local standard input, output, and error streams to tacacs running container.',
+            'labels' : 'Returns labels information on tacacs container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to tacacs running container.',
         },
         'radius': {
-            'logs':    'Fetches the logs of radius container.',
-            'ip':      'Returns IPs information on radius container.',
-            'ports':   'Returns mapped ports information on radius container.',
+            'logs'   : 'Fetches the logs of radius container.',
+            'ip'     : 'Returns IPs information on radius container.',
+            'ports'  : 'Returns mapped ports information on radius container.',
             'volumes': 'Returns shared volumes information on radius container.',
-            'labels':  'Returns labels information on radius container.',
-            'cli':     'Attaches local standard input, output, and error streams to radius running container.',
+            'labels' : 'Returns labels information on radius container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to radius running container.',
         },
         'ntp': {
-            'logs':    'Fetches the logs of ntp container.',
-            'ip':      'Returns IPs information on ntp container.',
-            'ports':   'Returns mapped ports information on ntp container.',
+            'logs'   : 'Fetches the logs of ntp container.',
+            'ip'     : 'Returns IPs information on ntp container.',
+            'ports'  : 'Returns mapped ports information on ntp container.',
             'volumes': 'Returns shared volumes information on ntp container.',
-            'labels':  'Returns labels information on ntp container.',
-            'cli':     'Attaches local standard input, output, and error streams to ntp running container.',
+            'labels' : 'Returns labels information on ntp container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to ntp running container.',
         },
         'dns': {
-            'logs':    'Fetches the logs of dns container.',
-            'ip':      'Returns IPs information on dns container.',
-            'ports':   'Returns mapped ports information on dns container.',
+            'logs'   : 'Fetches the logs of dns container.',
+            'ip'     : 'Returns IPs information on dns container.',
+            'ports'  : 'Returns mapped ports information on dns container.',
             'volumes': 'Returns shared volumes information on dns container.',
-            'labels':  'Returns labels information on dns container.',
-            'cli':     'Attaches local standard input, output, and error streams to dns running container.',
+            'labels' : 'Returns labels information on dns container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to dns running container.',
         },
         'rsyslog': {
-            'logs':    'Fetches the logs of rsyslog container.',
-            'ip':      'Returns IPs information on rsyslog container.',
-            'ports':   'Returns mapped ports information on rsyslog container.',
+            'logs'   : 'Fetches the logs of rsyslog container.',
+            'ip'     : 'Returns IPs information on rsyslog container.',
+            'ports'  : 'Returns mapped ports information on rsyslog container.',
             'volumes': 'Returns shared volumes information on rsyslog container.',
-            'labels':  'Returns labels information on rsyslog container.',
-            'cli':     'Attaches local standard input, output, and error streams to rsyslog running container.',
+            'labels' : 'Returns labels information on rsyslog container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to rsyslog running container.',
         },
         'license': 'Displays the NITA License.',
     },
