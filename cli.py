@@ -116,7 +116,7 @@ def commands_vs_help_trees(commands, documentation):
     """
     Function that checks if commands & documentation trees
     have the same nested keys (i.e. tries to avoid missing documentation
-    and or a mapped value of a newly added command!).
+    and or a mapped value of a newly added command!). If so, it exits with rc=1
     """
 
     finish = False
@@ -153,7 +153,7 @@ def commands_vs_help_trees(commands, documentation):
         print ''
 
     if finish:
-        sys.exit()
+        sys.exit(1)
 
 def is_help_cmd(cli):
     """

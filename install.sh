@@ -18,31 +18,37 @@ echo " >>>> Setting 775 permissions to scripts"
 chmod 775 /usr/local/bin/cli.py
 chmod 775 /usr/local/bin/nita
 echo ""
-echo " >>>> Generating bash completion script"
-python autocomplete
-echo ""
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Linux
+    echo " >>>> Generating bash completion script"
+    python autocomplete
+    echo ""
     echo " >>>> Copying bash_completion.d/nita to /etc/bash_completion.d/"
     cp bash_completion.d/nita /etc/bash_completion.d/
     . /etc/bash_completion.d/nita
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
+    echo " >>>> Generating bash completion script"
+    python autocomplete
+    echo ""
     echo " >>>> Copying bash_completion.d/nita to $(brew --prefix)/etc/bash_completion.d/"
     cp bash_completion.d/nita $(brew --prefix)/etc/bash_completion.d/
     . $(brew --prefix)/etc/bash_completion.d/nita
 
 elif [[ "$OSTYPE" == "cygwin" ]]; then
     # Cygwin on Windows
+    echo " >>>> Generating bash completion script"
+    python autocomplete
+    echo ""
     echo " >>>> Copying bash_completion.d/nita to /etc/bash_completion.d/"
     cp bash_completion.d/nita /etc/bash_completion.d/
     . /etc/bash_completion.d/nita
 
 else
     # Unknown.
-    echo "This is an unknown OS"
+    echo " This is an unknown OS!!!"
 fi
 
 echo ""
