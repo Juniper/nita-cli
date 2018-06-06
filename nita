@@ -22,8 +22,8 @@ COMMANDS = {
         'cli': {
             'version': 'echo NITA CLI master branch',
         },
-        'up':       'docker-compose up -d',
-        'down':     'docker-compose down',
+        'up':       'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
+        'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'demo': {
             'vmm':    'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""',
             'laptop': 'nita -d create inventory ; sleep 10  ; nita -d inventory populate ; sleep 10  ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""', 
@@ -183,8 +183,8 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
-        'up':   'Creates and starts NITA containers and networks.',
-        'down': 'Stops and removes NITA containers and networks.',
+        'up':   'Creates and starts NITA containers (both Core and CaaS) and networks.',
+        'down': 'Stops and removes NITA containers (both Core and CaaS) and networks.',
         'demo': {
             'vmm':    'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
             'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
