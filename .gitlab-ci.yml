@@ -5,20 +5,20 @@ stages:
   - demo
 
 before_script:
-  - apk --update add python git openssh
+  - apk --update add python git openssh py-pip && \
+    pip install --upgrade pip==9.0.3 && \
+    pip --no-cache-dir install pyyaml jinja2
 
 test:
   stage: test
   script:
-  - git clone https://jizquierdo@git.juniper.net/NITA/nita-cli.git
+  - git clone -b $CI_COMMIT_REF_NAME https://_gitlab@git.juniper.net/NITA/nita-cli.git
   - cd nita-cli/
   - sh install.sh
-  - nita cli version
   - nita ?
+  - nita cli version
   tags:
     - docker
-  only:
-    - master
 
 trigger_demo:
   stage: demo
