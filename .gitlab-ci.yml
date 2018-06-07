@@ -7,7 +7,7 @@ stages:
 test:
   stage: test
   script:
-  - apk --update add python git openssh python-pip
+  - apk --update add python git openssh py-pip
   - pip install git+https://git.juniper.net/NITA/nita-cli.git@pip_install
   - nita ?
   - nita cli version
