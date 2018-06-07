@@ -47,15 +47,15 @@ class InstallWrapper(install):
   def _get_env_prefix(self):
     os_type = platform.system()
     if os_type == "Linux":
-      self._TARGET_COMPLETION_PATH = "/etc/bash_completion.d"
+      self._TARGET_COMPLETION_PATH = "/etc/bash_completion.d/"
 
     elif os_type == "Darwin":
       proc = subprocess.Popen(
         'brew --prefix', shell=True, stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
       stdout, stderr = proc.communicate()
-      brew_prefix = stdout
-      self._TARGET_COMPLETION_PATH = stdout
+      brew_prefix = "{0}/etc/bash_completion.d/".format(stdout)
+      self._TARGET_COMPLETION_PATH = brew_prefix
 
   def _run_autocomplete(self):
     cmd = 'python autocomplete'
