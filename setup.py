@@ -30,6 +30,7 @@ class InstallWrapper(install):
     # Run this first so the install stops in case 
     # these fail otherwise the Python package is
     # successfully installed
+    self._get_env_prefix()
     self._run_autocomplete()
     self._copy_files()
     messages = '''# Those are following files copy by setup.py install.
@@ -43,6 +44,18 @@ class InstallWrapper(install):
     # Run the standard PyPi copy
     install.run(self)
 
+  def _get_env_prefix(self):
+    os_type = platform.system()
+    if os_type == "Linux":
+      self._TARGET_COMPLETION_PATH = "/etc/bash_completion.d"
+
+    elif os_type == "Darwin":
+      proc = subprocess.Popen(
+        'brew --prefix', shell=True, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+      stdout, stderr = proc.communicate()
+      brew_prefix = stdout
+      self._TARGET_COMPLETION_PATH = stdout
 
   def _run_autocomplete(self):
     cmd = 'python autocomplete'
