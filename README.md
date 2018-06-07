@@ -236,20 +236,18 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 ## Installation
 
-In order to install NITA CLI, clone this project and execute `install.sh` script with `sudo` (if needed).
+In order to install NITA CLI, use pip command and specifiy nita_cli git repository with `sudo` (if needed).
+    Note. git url will be update after merge master branch
 
-    $ sudo ./install.sh
-    Password:
-
-    >>>> Copying cli.py & nita to /usr/local/bin/
-
-    >>>> Setting 775 permissions to scripts
-
-    >>>> Generating bash completion script
-
-    >>>> Copying bash_completion.d/nita to /usr/local/etc/bash_completion.d/
-
-    >>>> NITA CLI has been successfully installed!
+    $ pip install git+https://git.juniper.net/NITA/nita-cli.git@pip_install
+    Collecting git+https://git.juniper.net/NITA/nita-cli.git@pip_install
+    Cloning https://git.juniper.net/NITA/nita-cli.git (to pip_install) to /tmp/pip-6hUwuC-build
+    Requirement already satisfied: pyyaml in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
+    Requirement already satisfied: jinja2 in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
+    Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python2.7/dist-packages (from jinja2->nita-cli==0.0.1)
+    Installing collected packages: nita-cli
+    Running setup.py install for nita-cli ... done
+    Successfully installed nita-cli-0.0.1
 
 ## About NITA CLI
 
