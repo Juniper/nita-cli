@@ -54,7 +54,7 @@ class InstallWrapper(install):
         'brew --prefix', shell=True, stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
       stdout, stderr = proc.communicate()
-      brew_prefix = "{0}/etc/bash_completion.d/".format(stdout)
+      brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
       self._TARGET_COMPLETION_PATH = brew_prefix
 
   def _run_autocomplete(self):
