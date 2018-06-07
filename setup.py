@@ -32,8 +32,17 @@ class InstallWrapper(install):
     # successfully installed
     self._run_autocomplete()
     self._copy_files()
+    messages = '''# Those are following files copy by setup.py install.
+    You should remove manually when you uninstalled nita_cli.
+    - /usr/local/bin/nita
+    - /usr/local/bin/cli.py
+    - /etc/bash_completion.d/nita
+    '''
+    print (messages)
+
     # Run the standard PyPi copy
     install.run(self)
+
 
   def _run_autocomplete(self):
     cmd = 'python autocomplete'
@@ -96,10 +105,3 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     cmdclass={'install': InstallWrapper}
 )
-messages = '''# Those are following files copy by setup.py install.
-You should remove manually when you uninstalled nita_cli.
-  - /usr/local/bin/nita
-  - /usr/local/bin/cli.py
-  - /etc/bash_completion.d/nita
-            '''
-print (messages)
