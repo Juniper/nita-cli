@@ -29,7 +29,7 @@ COMMANDS = {
             'laptop': 'nita -d create inventory ; sleep 10  ; nita -d inventory populate ; sleep 10  ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""', 
         },    
         'new': {
-            'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites {0}/test/templates {0}/test/variables_file',
+            'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
         },
         'create' : {
