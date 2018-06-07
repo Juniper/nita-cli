@@ -15,94 +15,118 @@ import os, shutil
 import platform
 import subprocess
 
-class InstallWrapper(install):
-  """Provides a install wrapper for nita cli.py files
-  to copy on /usr/local/bin/ and /etc/bash_completion.d/
-  """
+#class InstallWrapper(install):
+#  """Provides a install wrapper for nita cli.py files
+#  to copy on /usr/local/bin/ and /etc/bash_completion.d/
+#  """
+#
+#  _TARGET_BIN_PATH = "/usr/local/bin/"
+#  _TARGET_COMPLETION_PATH = '/etc/bash_completion.d/'
+#  _COPY_BIN = ['nita', 'cli.py']
+#  _COPY_AUTOCOMPLETION = ['bash_completion.d/nita']
+#
+#
+#  def run(self):
+#    # Run this first so the install stops in case 
+#    # these fail otherwise the Python package is
+#    # successfully installed
+#    self._get_env_prefix()
+#    self._run_autocomplete()
+#    self._copy_files()
+#    messages = '''# Those are following files copy by setup.py install.
+#    You should remove manually when you uninstalled nita_cli.
+#    - /usr/local/bin/nita
+#    - /usr/local/bin/cli.py
+#    - /etc/bash_completion.d/nita
+#    '''
+#    print (messages)
+#
+#    # Run the standard PyPi copy
+#    install.run(self)
+#
+#  def _get_env_prefix(self):
+#    os_type = platform.system()
+#    if os_type == "Linux":
+#      self._TARGET_COMPLETION_PATH = "/etc/bash_completion.d/"
+#
+#    elif os_type == "Darwin":
+#      proc = subprocess.Popen(
+#        'brew --prefix', shell=True, stdout=subprocess.PIPE,
+#        stderr=subprocess.PIPE)
+#      stdout, stderr = proc.communicate()
+#      brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
+#      self._TARGET_COMPLETION_PATH = brew_prefix
+#
+#  def _run_autocomplete(self):
+#    cmd = 'python autocomplete'
+#    proc = subprocess.Popen(
+#      cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#    stdout, stderr = proc.communicate()
+#
+#
+#  def _copy_files(self):
+#    # Check to see that the required folders exists 
+#    # Do this first so we don't fail half way
+#    for folder in self._COPY_BIN:
+#      if not os.access(folder, os.R_OK):
+#        raise IOError("%s not readable from achive" % 
+#        folder)
+#
+#    # Check to see we can write to the target
+#    if not os.access(self._TARGET_BIN_PATH, os.W_OK):
+#      raise IOError("%s not writeable by user" % 
+#      self._TARGET_BIN_PATH)
+#
+#    # Copy files
+#    for file in self._COPY_BIN:
+#      target_path = os.path.join(
+#        self._TARGET_BIN_PATH, file)
+#
+#      # Copy the files from the archive
+#      shutil.copy(file, self._TARGET_BIN_PATH)
+#
+#    # Repeat same action for bash_completion
+#    for folder in self._COPY_AUTOCOMPLETION:
+#      if not os.access(folder, os.R_OK):
+#        raise IOError("%s not readable from achive" % 
+#        folder)
+#
+#    # Check to see we can write to the target
+#    if not os.access(self._TARGET_COMPLETION_PATH, os.W_OK):
+#      raise IOError("%s not writeable by user" % 
+#      self._TARGET_COMPLETION_PATH)
+#
+#    # Copy files
+#    for file in self._COPY_AUTOCOMPLETION:
+#      target_path = os.path.join(
+#        self._TARGET_COMPLETION_PATH, file)
+#
+#      # Copy the files from the archive
+#      shutil.copy(file, self._TARGET_COMPLETION_PATH)
 
-  _TARGET_BIN_PATH = "/usr/local/bin/"
-  _TARGET_COMPLETION_PATH = '/etc/bash_completion.d/'
-  _COPY_BIN = ['nita', 'cli.py']
-  _COPY_AUTOCOMPLETION = ['bash_completion.d/nita']
-
-
-  def run(self):
-    # Run this first so the install stops in case 
-    # these fail otherwise the Python package is
-    # successfully installed
-    self._get_env_prefix()
-    self._run_autocomplete()
-    self._copy_files()
-    messages = '''# Those are following files copy by setup.py install.
-    You should remove manually when you uninstalled nita_cli.
-    - /usr/local/bin/nita
-    - /usr/local/bin/cli.py
-    - /etc/bash_completion.d/nita
-    '''
-    print (messages)
-
-    # Run the standard PyPi copy
-    install.run(self)
-
-  def _get_env_prefix(self):
-    os_type = platform.system()
-    if os_type == "Linux":
-      self._TARGET_COMPLETION_PATH = "/etc/bash_completion.d/"
-
-    elif os_type == "Darwin":
-      proc = subprocess.Popen(
-        'brew --prefix', shell=True, stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-      stdout, stderr = proc.communicate()
-      brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
-      self._TARGET_COMPLETION_PATH = brew_prefix
-
-  def _run_autocomplete(self):
-    cmd = 'python autocomplete'
+def get_env_prefix():
+  os_type = platform.system()
+  if os_type == "Linux":
+    TARGET_COMPLETION_PATH = "/etc/bash_completion.d/"
+  elif os_type == "Darwin":
     proc = subprocess.Popen(
-      cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      'brew --prefix', shell=True, stdout=subprocess.PIPE,
+      stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()
+    brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
+    TARGET_COMPLETION_PATH = brew_prefix
+  return TARGET_COMPLETION_PATH
+
+def run_autocomplete():
+  cmd = 'python autocomplete'
+  proc = subprocess.Popen(
+    cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  stdout, stderr = proc.communicate()
 
 
-  def _copy_files(self):
-    # Check to see that the required folders exists 
-    # Do this first so we don't fail half way
-    for folder in self._COPY_BIN:
-      if not os.access(folder, os.R_OK):
-        raise IOError("%s not readable from achive" % 
-        folder)
-
-    # Check to see we can write to the target
-    if not os.access(self._TARGET_BIN_PATH, os.W_OK):
-      raise IOError("%s not writeable by user" % 
-      self._TARGET_BIN_PATH)
-
-    # Copy files
-    for file in self._COPY_BIN:
-      target_path = os.path.join(
-        self._TARGET_BIN_PATH, file)
-
-      # Copy the files from the archive
-      shutil.copy(file, self._TARGET_BIN_PATH)
-
-    # Repeat same action for bash_completion
-    for folder in self._COPY_AUTOCOMPLETION:
-      if not os.access(folder, os.R_OK):
-        raise IOError("%s not readable from achive" % 
-        folder)
-
-    # Check to see we can write to the target
-    if not os.access(self._TARGET_COMPLETION_PATH, os.W_OK):
-      raise IOError("%s not writeable by user" % 
-      self._TARGET_COMPLETION_PATH)
-
-    # Copy files
-    for file in self._COPY_AUTOCOMPLETION:
-      target_path = os.path.join(
-        self._TARGET_COMPLETION_PATH, file)
-
-      # Copy the files from the archive
-      shutil.copy(file, self._TARGET_COMPLETION_PATH)
+TARGET_COMPLETION_PATH = get_env_prefix()
+TARGET_BIN_PATH = "/usr/local/bin/"
+run_autocomplete()
 
 
 setup(
@@ -116,5 +140,7 @@ setup(
     url='',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
-    cmdclass={'install': InstallWrapper}
+    data_files=[(TARGET_BIN_PATH, ['nita', 'cli.py']),
+    (TARGET_COMPLETION_PATH, ['bash_completion.d/nita'])]
+#    cmdclass={'install': InstallWrapper}
 )
