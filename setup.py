@@ -19,7 +19,6 @@ https://github.com/pypa/sampleproject
 from setuptools import setup, find_packages
 import platform
 import subprocess
-import shutil
 import os
 import re
 
@@ -48,15 +47,12 @@ def get_env_prefix():
   # Return true if CYGWIN or cygwin there in os type string
   elif re.search(cygwin, os_type):
     TARGET_COMPLETION_PATH = '/etc/bash_completion.d/'
+    TARGET_BIN_PATH = '/usr/bin/'
     if not os.path.exists(TARGET_COMPLETION_PATH):
       os.makedirs(TARGET_COMPLETION_PATH)
 
-    if not os.path.exists(TARGET_BIN_PATH):
-      os.makedirs(TARGET_BIN_PATH)
-
-    # copy nita bin manually. cygwin pip installed on lib directory for data_files.
-    shutil.copyfile('nita', "{0}nita".format(TARGET_BIN_PATH))
-    os.chmod("{0}nita".format(TARGET_BIN_PATH), stat.S_IRWXG)
+#    if not os.path.exists(TARGET_BIN_PATH):
+#      os.makedirs(TARGET_BIN_PATH)
 
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
