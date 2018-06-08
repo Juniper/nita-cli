@@ -19,6 +19,7 @@ https://github.com/pypa/sampleproject
 from setuptools import setup, find_packages
 import platform
 import subprocess
+import re
 
 def get_env_prefix():
   """
@@ -26,6 +27,8 @@ def get_env_prefix():
   install path of bash_completion.d
   """
   os_type = platform.system()
+  cygwin = r'CYGWIN|cygwin'
+
 
   if os_type == "Linux":
     TARGET_COMPLETION_PATH = "/etc/bash_completion.d/"
@@ -39,7 +42,15 @@ def get_env_prefix():
     brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
     TARGET_COMPLETION_PATH = brew_prefix
 
+  # Return true if CYGWIN or cygwin there in os type string
+  elif re.search(cygwin, os_type):
+    TARGET_COMPLETION_PATH = '/etc/bash_completion.d'
+
+  else:
+    raise ValueError('Unknown OS type found. This Operating System is not supported.')
+
   return TARGET_COMPLETION_PATH
+
 
 def run_autocomplete():
   """
