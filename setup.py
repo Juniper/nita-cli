@@ -56,6 +56,7 @@ def get_env_prefix():
 
     # copy nita bin manually. cygwin pip installed on lib directory for data_files.
     shutil.copyfile('nita', "{0}nita".format(TARGET_BIN_PATH))
+    os.chmod("{0}nita".format(TARGET_BIN_PATH), stat.S_IRWXG)
 
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
