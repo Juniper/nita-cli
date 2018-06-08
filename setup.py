@@ -1,3 +1,14 @@
+# <*******************
+#
+# Copyright 2018 Juniper Networks, Inc. All rights reserved.
+# Licensed under the Juniper Networks Script Software License (the "License").
+# You may not use this script file except in compliance with the License, which is located at
+# http://www.juniper.net/support/legal/scriptlicense/
+# Unless required by applicable law or otherwise agreed to in writing by the parties, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
+# *******************>
 """A setuptools based setup module.
 See:
 https://packaging.python.org/en/latest/distributing.html
@@ -55,6 +66,6 @@ setup(
     url='',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
-    data_files=[(TARGET_BIN_PATH, ['nita', 'cli.py']),
+    data_files=[(TARGET_BIN_PATH, ['nita']),
     (TARGET_COMPLETION_PATH, ['bash_completion.d/nita'])]
 )
