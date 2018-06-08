@@ -19,6 +19,7 @@ https://github.com/pypa/sampleproject
 from setuptools import setup, find_packages
 import platform
 import subprocess
+import os
 import re
 
 def get_env_prefix():
@@ -44,7 +45,9 @@ def get_env_prefix():
 
   # Return true if CYGWIN or cygwin there in os type string
   elif re.search(cygwin, os_type):
-    TARGET_COMPLETION_PATH = '/etc/bash_completion.d'
+    TARGET_COMPLETION_PATH = '/etc/bash_completion.d/'
+    if not os.path.exists(TARGET_COMPLETION_PATH):
+      os.makedirs(TARGET_COMPLETION_PATH)
 
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
