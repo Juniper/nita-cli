@@ -14,7 +14,7 @@
     Python module containing NITA CLI commands and help.
 """
 
-import cli as cli
+from nita_cli import cli as cli
 
 # COMMANDS TREE
 COMMANDS = {
