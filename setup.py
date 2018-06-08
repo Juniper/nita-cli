@@ -76,9 +76,9 @@ run_autocomplete()
 setup(
     name='nita_cli',
     version='0.0.1',
-    description='Test nita cli',
-    long_description='nita command line wrapper',
-    author='JosemiJose Miguel Izquierdo Lopez',
+    description='NITA CLI',
+    long_description='NITA command line wrapper',
+    author='Jose Miguel Izquierdo',
     author_email='jizquierdo@juniper.net',
     install_requires=['pyyaml','jinja2'],
     url='',
