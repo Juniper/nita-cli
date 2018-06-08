@@ -19,6 +19,7 @@ https://github.com/pypa/sampleproject
 from setuptools import setup, find_packages
 import platform
 import subprocess
+import shutil
 import os
 import re
 
@@ -52,6 +53,9 @@ def get_env_prefix():
 
     if not os.path.exists(TARGET_BIN_PATH):
       os.makedirs(TARGET_BIN_PATH)
+
+    # copy nita bin manually. cygwin pip installed on lib directory for data_files.
+    shutil.copyfile('nita', TARGET_BIN_PATH)
 
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
