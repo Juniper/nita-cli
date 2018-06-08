@@ -51,9 +51,6 @@ def get_env_prefix():
     if not os.path.exists(TARGET_COMPLETION_PATH):
       os.makedirs(TARGET_COMPLETION_PATH)
 
-#    if not os.path.exists(TARGET_BIN_PATH):
-#      os.makedirs(TARGET_BIN_PATH)
-
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
 
