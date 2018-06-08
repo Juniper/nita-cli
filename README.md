@@ -236,7 +236,7 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 ## Installation
 
-In order to install NITA CLI, use pip command and specifiy nita-cli git repository with `sudo` (if needed).
+In order to install NITA CLI, use pip command and specifiy nita_cli git repository with `sudo` (if needed).
     Note. git url will be update after merge master branch
 
     $ pip install git+https://git.juniper.net/NITA/nita-cli.git@pip_install
