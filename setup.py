@@ -27,6 +27,7 @@ def get_env_prefix():
   Automatically identify os_type information which use for 
   install path of bash_completion.d
   """
+  TARGET_BIN_PATH = '/usr/local/bin/'
   os_type = platform.system()
   cygwin = r'CYGWIN|cygwin'
 
@@ -49,10 +50,13 @@ def get_env_prefix():
     if not os.path.exists(TARGET_COMPLETION_PATH):
       os.makedirs(TARGET_COMPLETION_PATH)
 
+    if not os.path.exists(TARGET_BIN_PATH):
+      os.makedirs(TARGET_BIN_PATH)
+
   else:
     raise ValueError('Unknown OS type found. This Operating System is not supported.')
 
-  return TARGET_COMPLETION_PATH
+  return TARGET_COMPLETION_PATH, TARGET_BIN_PATH
 
 
 def run_autocomplete():
@@ -65,8 +69,7 @@ def run_autocomplete():
   stdout, stderr = proc.communicate()
 
 
-TARGET_COMPLETION_PATH = get_env_prefix()
-TARGET_BIN_PATH = "/usr/local/bin/"
+TARGET_COMPLETION_PATH, TARGET_BIN_PATH = get_env_prefix()
 run_autocomplete()
 
 setup(
