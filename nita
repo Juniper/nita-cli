@@ -20,20 +20,17 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': 'echo NITA CLI master branch',
+            'version': "echo NITA CLI master branch - $(pip list | grep nita-cli | awk '{print $2}')",
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'demo': {
-            'vmm'   : 'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""',
-            'laptop': 'nita -d create inventory ; sleep 10  ; nita -d inventory populate ; sleep 10  ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# nita CLI VERSION #\n" ; nita cli version ; echo ""', 
+            'vmm'   : 'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""',
+            'laptop': 'nita -d create inventory ; sleep 10 ; nita -d inventory populate ; sleep 10 ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""', 
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
-        },
-        'create' : {
-            'inventory': 'docker run -d -p 15984:5984 --name inventory -it couchdb',
         },
         'containers': {
             'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA"',
@@ -44,6 +41,7 @@ COMMANDS = {
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'inventory': {
+            'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb',
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
         },
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
@@ -101,6 +99,7 @@ COMMANDS = {
                     'ntp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                     'ospf'     : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
                     'bgp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
+                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot /project/test/suites/radius.robot /project/test/suites/dns.robot /project/test/suites/ntp.robot /project/test/suites/syslog.robot',
                     }                   
                 },
             'pull': {
@@ -200,9 +199,6 @@ HELP = {
             'project': 'Creates a new NITA project scaffolding.',
             'role'   : 'Creates a new Ansible role scaffolding.',
         },
-        'create' : {
-            'inventory' : 'Creates a new Inventory scaffolding.'
-        },
         'containers': {
             'ls'      : 'Lists all running NITA containers.',
             'versions': 'Lists all running NITA containers versions.',
@@ -212,7 +208,8 @@ HELP = {
             'versions': 'Displays NITA images versions.',
         },
         'inventory': {
-            'populate': 'Populates a NITA inventory data.',
+            'create'  : 'Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.',
+            'populate': 'Populates virtual DC dynamic inventory with data related to NITA demo.',
         },
         'ips'  : 'Shows all NITA containers IPs.',
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
@@ -248,19 +245,20 @@ HELP = {
                 'common': { 
                     'firewall': 'Executes common test suite on firewall.',
                     'switch'  : 'Executes common test suite on switch.',
-                    'router'  : 'Executes common test suite on Router.',
+                    'router'  : 'Executes common test suite on router.',
                 },
                 'specific' : { 
-                    'firewall': 'Executes firewall test suite on firewall.',
-                    'switch'  : 'Executes switch test suite on switch.',
-                    'router'  : 'Executes router test suite on Router.',
-                    'tacacs'  : 'Executes TACACS test suite on Router.',
-                    'radius'  : 'Executes Radius test suite on Router.',
-                    'syslog'  : 'Executes Syslog test suite on Router.',
-                    'dns'     : 'Executes DNS test suite on Router.',
-                    'ntp'     : 'Executes NTP test suite on Router.',
-                    'ospf'    : 'Executes OSPF test suite on Router.',
-                    'bgp'     : 'Executes BGP test suite on Router.',
+                    'firewall' : 'Executes firewall test suite on firewall.',
+                    'switch'   : 'Executes switch test suite on switch.',
+                    'router'   : 'Executes router test suite on router.',
+                    'tacacs'   : 'Executes TACACS test suite on router.',
+                    'radius'   : 'Executes Radius test suite on router.',
+                    'syslog'   : 'Executes Syslog test suite on router.',
+                    'dns'      : 'Executes DNS test suite on router.',
+                    'ntp'      : 'Executes NTP test suite on router.',
+                    'ospf'     : 'Executes OSPF test suite on router.',
+                    'bgp'      : 'Executes BGP test suite on router.',
+                    '3rd-party': 'Executes all 3rd party test suites on router.',
                 }
             },
             'pull': {

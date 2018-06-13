@@ -72,7 +72,7 @@ run_autocomplete()
 
 setup(
     name='nita_cli',
-    version='0.0.1',
+    version='0.0.2',
     description='NITA CLI',
     long_description='NITA command line wrapper',
     author='Jose Miguel Izquierdo',
