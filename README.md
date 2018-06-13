@@ -238,13 +238,33 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 In order to install NITA CLI, use pip command and specifiy nita_cli git repository with `sudo` (if needed).
 
+`sudo pip install git+https://git.juniper.net/NITA/nita-cli.git`
+
     $ pip install git+https://git.juniper.net/NITA/nita-cli.git
+
     Collecting git+https://git.juniper.net/NITA/nita-cli.git
     Cloning https://git.juniper.net/NITA/nita-cli.git (to pip_install) to /tmp/pip-6hUwuC-build
     Requirement already satisfied: pyyaml in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
     Requirement already satisfied: jinja2 in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
     Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python2.7/dist-packages (from jinja2->nita-cli==0.0.1)
     Installing collected packages: nita-cli
+    Running setup.py install for nita-cli ... done
+    Successfully installed nita-cli-0.0.1
+
+If you are a developer and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command:
+
+`sudo pip install nita-cli/`
+
+    $ sudo pip install nita-cli/
+    
+    Processing ./nita-cli
+    Requirement already satisfied: pyyaml in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from nita-cli==0.0.1) (3.12)
+    Requirement already satisfied: jinja2 in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from nita-cli==0.0.1) (2.10)
+    Requirement already satisfied: MarkupSafe>=0.23 in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from jinja2->nita-cli==0.0.1) (1.0)
+    Installing collected packages: nita-cli
+    Found existing installation: nita-cli 0.0.1
+        Uninstalling nita-cli-0.0.1:
+        Successfully uninstalled nita-cli-0.0.1
     Running setup.py install for nita-cli ... done
     Successfully installed nita-cli-0.0.1
 
