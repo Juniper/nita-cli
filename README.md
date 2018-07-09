@@ -244,29 +244,28 @@ In order to install NITA CLI, use pip command and specifiy nita_cli git reposito
 
     Collecting git+https://git.juniper.net/NITA/nita-cli.git
     Cloning https://git.juniper.net/NITA/nita-cli.git (to pip_install) to /tmp/pip-6hUwuC-build
-    Requirement already satisfied: pyyaml in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
-    Requirement already satisfied: jinja2 in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.1)
-    Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python2.7/dist-packages (from jinja2->nita-cli==0.0.1)
+    Requirement already satisfied: pyyaml in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.2)
+    Requirement already satisfied: jinja2 in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.2)
+    Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python2.7/dist-packages (from jinja2->nita-cli==0.0.2)
     Installing collected packages: nita-cli
     Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-0.0.1
+    Successfully installed nita-cli-0.0.2
 
-If you are a developer and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command:
+If you are a developer and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
-`sudo pip install nita-cli/`
+`sudo pip install -I nita-cli/`
 
-    $ sudo pip install nita-cli/
+    $ sudo pip install -I nita-cli/
     
     Processing ./nita-cli
-    Requirement already satisfied: pyyaml in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from nita-cli==0.0.1) (3.12)
-    Requirement already satisfied: jinja2 in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from nita-cli==0.0.1) (2.10)
-    Requirement already satisfied: MarkupSafe>=0.23 in /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages (from jinja2->nita-cli==0.0.1) (1.0)
-    Installing collected packages: nita-cli
-    Found existing installation: nita-cli 0.0.1
-        Uninstalling nita-cli-0.0.1:
-        Successfully uninstalled nita-cli-0.0.1
-    Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-0.0.1
+    Collecting pyyaml (from nita-cli==0.0.2)
+    Collecting jinja2 (from nita-cli==0.0.2)
+        Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
+        100% |████████████████████████████████| 133kB 1.9MB/s
+    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.2)
+    Installing collected packages: pyyaml, MarkupSafe, jinja2, nita-cli
+        Running setup.py install for nita-cli ... done
+    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.2 pyyaml-3.13
 
 ## About NITA CLI
 
