@@ -24,6 +24,7 @@ COMMANDS = {
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
+        'status':   'docker-compose ps',
         'demo': {
             'vmm'   : 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""',
             'laptop': 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 10 ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""', 
