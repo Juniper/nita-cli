@@ -192,6 +192,7 @@ HELP = {
         },
         'up'  : 'Creates and starts NITA containers (both Core and CaaS) and networks.',
         'down': 'Stops and removes NITA containers (both Core and CaaS) and networks.',
+        'status': 'Shows the status of the NITA containers.',
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
             'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
