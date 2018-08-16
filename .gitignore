@@ -3,3 +3,6 @@ launch.json
 nitac
 bash_completion.d/nita*
 tmp/vars.yml*
+build
+dist
+nita_cli.egg-info

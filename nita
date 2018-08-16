@@ -100,8 +100,8 @@ COMMANDS = {
                     'ntp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                     'ospf'     : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
                     'bgp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
-                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot /project/test/suites/radius.robot /project/test/suites/dns.robot /project/test/suites/ntp.robot /project/test/suites/syslog.robot',
-                    }                   
+                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"'
+                    },                   
                 },
             'pull': {
                 'static'  : 'python inventory2toby.py --static',
@@ -261,7 +261,7 @@ HELP = {
                     'ospf'     : 'Executes OSPF test suite on router.',
                     'bgp'      : 'Executes BGP test suite on router.',
                     '3rd-party': 'Executes all 3rd party test suites on router.',
-                }
+                },
             },
             'pull': {
                 'static' : 'Creates topology object from static inventory.',
