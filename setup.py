@@ -85,9 +85,11 @@ setup(
     long_description='NITA command line wrapper',
     author='Jose Miguel Izquierdo',
     author_email='jizquierdo@juniper.net',
+    include_package_data=True,
     install_requires=['pyyaml', 'jinja2'],
     url='',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
-    data_files=data_files_list
+    data_files=data_files_list,
+    zip_safe=False
 )
