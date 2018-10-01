@@ -72,12 +72,12 @@ TARGET_COMPLETION_PATH, TARGET_BIN_PATH = get_env_prefix()
 run_autocomplete()
 
 # Include data files if those exist
+# for that we iterate the folder and append the files
 data_files_list = [(TARGET_BIN_PATH, ['nita'])]
 for file in os.listdir('bash_completion.d/'):
     f1 = 'bash_completion.d/' + file
     if os.path.isfile(f1):  # skip directories
-        data_files_list.append(f1)
-
+        data_files_list.append((TARGET_COMPLETION_PATH, [f1]))
 setup(
     name='nita_cli',
     version='0.0.3',
