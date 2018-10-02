@@ -34,7 +34,7 @@ node('master') {
                 }
                 stage('Autocomplete'){
                     echo 'Generate autocomplete'
-                    sh 'autocomplete'
+                    sh 'python3 autocomplete'
                 }
                 stage('Publish'){
                     if (env.SOURCE_BRANCH == 'refs/heads/master') {
