@@ -1,6 +1,6 @@
 # NITA CLI
-
-[![build status](https://git.juniper.net/NITA/nita-cli/badges/master/build.svg)](https://git.juniper.net/NITA/nita-cli/commits/master)
+<!-- 
+[![build status](https://git.juniper.net/NITA/nita-cli/badges/master/build.svg)](https://git.juniper.net/NITA/nita-cli/commits/master) -->
 
 NITA CLI project adds a command line interface to NITA. It is the way of interacting with NITA by using simple and intuitive commands. It focusses the user on getting a task done without having to learn the complex commands that run behind the scenes (related to docker, unix and some other tools). It is a move towards user-friendly, intuitive NetDevOps.
 
@@ -236,36 +236,37 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 ## Installation
 
-In order to install NITA CLI, use pip command and specifiy nita_cli git repository with `sudo` (if needed).
+In order to install NITA CLI, use pip command and specifiy nita_cli repository with `sudo` (if needed).
 
-`sudo pip install git+https://git.juniper.net/NITA/nita-cli.git`
+`pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli`
 
-    $ pip install git+https://git.juniper.net/NITA/nita-cli.git
+    $ pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli
 
-    Collecting git+https://git.juniper.net/NITA/nita-cli.git
-    Cloning https://git.juniper.net/NITA/nita-cli.git (to pip_install) to /tmp/pip-6hUwuC-build
-    Requirement already satisfied: pyyaml in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.2)
-    Requirement already satisfied: jinja2 in /usr/local/lib/python2.7/dist-packages (from nita-cli==0.0.2)
-    Requirement already satisfied: MarkupSafe>=0.23 in /usr/local/lib/python2.7/dist-packages (from jinja2->nita-cli==0.0.2)
+    Collecting nita-cli
+    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/0.0.3/nita_cli-0.0.3.tar.gz
+    Requirement already satisfied (use --upgrade to upgrade): pyyaml in /usr/local/lib/python3.5/dist-packages (from nita-cli)
+    Requirement already satisfied (use --upgrade to upgrade): jinja2 in /usr/local/lib/python3.5/dist-packages (from nita-cli)
+    Requirement already satisfied (use --upgrade to upgrade): MarkupSafe>=0.23 in /usr/local/lib/python3.5/dist-packages (from jinja2->nita-cli)
+    Skipping bdist_wheel for nita-cli, due to binaries being disabled for it.
     Installing collected packages: nita-cli
-    Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-0.0.2
+      Running setup.py install for nita-cli ... done
+    Successfully installed nita-cli-0.0.3
 
 If you are a developer and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
-`sudo pip install -I nita-cli/`
+`sudo pip3 install -I nita-cli/`
 
-    $ sudo pip install -I nita-cli/
+    $ sudo pip3 install -I nita-cli/
     
     Processing ./nita-cli
-    Collecting pyyaml (from nita-cli==0.0.2)
-    Collecting jinja2 (from nita-cli==0.0.2)
-        Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
-        100% |████████████████████████████████| 133kB 1.9MB/s
-    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.2)
+    Collecting pyyaml (from nita-cli==0.0.3)
+    Collecting jinja2 (from nita-cli==0.0.3)
+      Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
+        100% |████████████████████████████████| 133kB 424kB/s 
+    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.3)
     Installing collected packages: pyyaml, MarkupSafe, jinja2, nita-cli
-        Running setup.py install for nita-cli ... done
-    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.2 pyyaml-3.13
+      Running setup.py install for nita-cli ... done
+    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.3 pyyaml-3.13
 
 ## About NITA CLI
 
@@ -689,6 +690,7 @@ If none of above recommended options works for you, write an e-mail to:
 Contact Name | e-mail
 ---------|----------
 Jose Miguel Izquierdo | jizquierdo@juniper.net
+Ignacio Suarez | inavas@juniper.net
 David Gethings | dgethings@juniper.net
 Andrew Sharp | asharp@juniper.net
  |
