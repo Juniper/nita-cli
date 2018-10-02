@@ -8,7 +8,7 @@ _nita()
     opts="{{ opts | join(' ') }}" 
 
     case "${prev}" in
-{% for k, v in nita.iteritems() %}
+{% for k, v in nita.items() %}
     {{ k }})
         local {{ k }}="{{ v | join(' ') }}"
         COMPREPLY=( $(compgen -W "${{ k }}" -- ${cur}) )

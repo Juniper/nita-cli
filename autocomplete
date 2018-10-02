@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # <*******************
 #
 # Copyright 2018 Juniper Networks, Inc. All rights reserved.
@@ -14,7 +14,7 @@
     Python module to generate autocomplete
 """
 
-import imp
+import importlib.machinery
 import yaml
 from jinja2 import Environment, FileSystemLoader
 
@@ -29,7 +29,9 @@ CLI_SCRIPT = COMPLETION + CLI_COMMAND
 
 AUTOCOMPLETE = {}
 
-source = imp.load_source(CLI_COMMAND, CLI_COMMAND)
+loader = importlib.machinery.SourceFileLoader(CLI_COMMAND, CLI_COMMAND)
+source = loader.load_module()
+
 
 def autocomplete_values(dictionary, root):
     """
@@ -39,7 +41,6 @@ def autocomplete_values(dictionary, root):
 
     if isinstance(dictionary, dict):
         for key, value in dictionary.items():
-
             # Dive into a nested level.
             if isinstance(value, dict):
                 try:
@@ -47,7 +48,7 @@ def autocomplete_values(dictionary, root):
                         for item in value.keys():
                             AUTOCOMPLETE[root][key].append(item)
                 except KeyError:
-                    AUTOCOMPLETE[root][key] = value.keys()
+                    AUTOCOMPLETE[root][key] = list(value.keys())
 
                 value = autocomplete_values(value, root)
             else:
@@ -57,12 +58,12 @@ def autocomplete_values(dictionary, root):
                 except KeyError:
                     pass
     else:
-        print 'It is not dictionary'
+        print('It is not dictionary')
     return dictionary
 
 if __name__ == '__main__':
 
-    AUTOCOMPLETE['opts'] = source.COMMANDS.get(CLI_COMMAND).keys()
+    AUTOCOMPLETE['opts'] = list(source.COMMANDS.get(CLI_COMMAND).keys())
     AUTOCOMPLETE[CLI_COMMAND] = {}
     autocomplete = autocomplete_values(source.COMMANDS, CLI_COMMAND)
 
@@ -71,10 +72,11 @@ if __name__ == '__main__':
 
     config_data = yaml.load(open(VARS))
 
-    env = Environment(loader=FileSystemLoader(TEMPLATES), trim_blocks=True, lstrip_blocks=True)
+    env = Environment(loader=FileSystemLoader(TEMPLATES),
+                      trim_blocks=True, lstrip_blocks=True)
     template = env.get_template(CLI_TEMPLATE)
 
-    #print(template.render(config_data))
+    # print(template.render(config_data))
     output = template.render(config_data)
 
 with open(CLI_SCRIPT, 'w') as f:

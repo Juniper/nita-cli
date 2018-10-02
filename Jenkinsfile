@@ -32,6 +32,10 @@ node('master') {
                     sh 'pip3 install .'
                     ciSkip action: 'check'
                 }
+                stage('Autocomplete'){
+                    echo 'Generate autocomplete'
+                    sh 'autocomplete'
+                }
                 stage('Publish'){
                     if (env.SOURCE_BRANCH == 'refs/heads/master') {
                         echo 'Push to Artifactory'
