@@ -22,7 +22,7 @@ node('master') {
                     sh 'rm -rf dist'
                     sh 'rm -rf .pypirc'
                 }
-                stage('Test'){
+                stage('Unit tests'){
                     echo 'Running unit tests'
                     sh 'python3 setup.py test'
                     ciSkip action: 'check'
@@ -35,6 +35,11 @@ node('master') {
                 stage('Autocomplete'){
                     echo 'Generate autocomplete'
                     sh 'python3 autocomplete'
+                }
+                stage('Test'){
+                    echo 'Testing help and version'
+                    sh 'nita ?'
+                    sh 'nita cli version'
                 }
                 stage('Publish'){
                     if (env.SOURCE_BRANCH == 'refs/heads/master') {
