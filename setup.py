@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # <*******************
 #
 # Copyright 2018 Juniper Networks, Inc. All rights reserved.
@@ -63,7 +64,7 @@ def run_autocomplete():
     """
     Run script that Generate file nita autocompletion.
     """
-    cmd = 'python autocomplete'
+    cmd = 'python3 autocomplete'
     proc = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()
