@@ -20,7 +20,7 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI master branch - $(pip list --format=columns | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI master branch - $(pip3 list --format=columns | grep nita-cli | awk '{print $2}')",
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',

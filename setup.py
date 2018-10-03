@@ -41,7 +41,8 @@ def get_env_prefix():
             'brew --prefix', shell=True, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         stdout, stderr = proc.communicate()
-        brew_prefix = "{0}/etc/bash_completion.d/".format(stdout.rstrip())
+        brew_prefix = "{0}/etc/bash_completion.d/".format(
+            stdout.rstrip().decode("utf-8"))
         TARGET_COMPLETION_PATH = brew_prefix
 
     # Return true if CYGWIN or cygwin there in os type string
