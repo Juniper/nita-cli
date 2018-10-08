@@ -51,8 +51,8 @@ COMMANDS = {
             'jobs': {
                 'ls'    : 'docker exec -it jenkins list_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
-                'import': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp registry.juniper.net/nita/jenkins:latest import_jenkins_jobs.sh {0} {1}",
-                'export': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp registry.juniper.net/nita/jenkins:latest export_jenkins_jobs.sh {0} {1}",
+                'import': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.2 import_jenkins_jobs.sh {0} {1}",
+                'export': "docker run --rm -it --network virtual-network_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.2 export_jenkins_jobs.sh {0} {1}",
             },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
@@ -69,15 +69,15 @@ COMMANDS = {
         },
         'ansible': {
             'run': {
-                'noob' : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./noob.sh',
-                'build': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest ./build.sh',
+                'noob' : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./noob.sh',
+                'build': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./build.sh',
             },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
             'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project registry.juniper.net/nita/ansible:latest /bin/sh ; docker attach ansible',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest /bin/sh ; docker attach ansible',
         },
         'test': {
             'run': {
@@ -86,7 +86,7 @@ COMMANDS = {
                     { 
                     'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
                     'switch'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
-                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot'
+                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
                     },
                 'specific' : 
                     {
@@ -100,12 +100,14 @@ COMMANDS = {
                     'ntp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                     'ospf'     : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
                     'bgp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
-                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"'
+#                    2.9.2 toby container breaks RADIUS & TACACS tests
+#                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"',
+                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"',
                     },                   
                 },
             'pull': {
                 'static'  : 'python inventory2toby.py --static',
-                'dynamic' : 'python inventory2toby.py --dynamic'
+                'dynamic' : 'python inventory2toby.py --dynamic',
                 },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
             'labels':  """containerlabel() { docker inspect -f '
