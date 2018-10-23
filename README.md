@@ -254,9 +254,9 @@ In order to install NITA CLI, use pip command and specifiy nita_cli repository w
 
 If you are a developer and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
-`sudo pip3 install -I nita-cli/`
+`sudo pip3 install -I nita-cli/ --no-binary :all:`
 
-    $ sudo pip3 install -I nita-cli/
+    $ sudo pip3 install -I nita-cli/ --no-binary :all:
     
     Processing ./nita-cli
     Collecting pyyaml (from nita-cli==0.0.3)
