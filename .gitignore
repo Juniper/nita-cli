@@ -6,3 +6,4 @@ tmp/vars.yml*
 build
 dist
 nita_cli.egg-info
+.vscode

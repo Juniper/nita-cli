@@ -296,13 +296,14 @@ NITA CLI command | Description
 -----------------|-------------------
    nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
    nita ansible labels | Returns labels information on ansible container.
-   nita ansible run build | Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.
-   nita ansible run noob | Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.
+   nita ansible run build console | Runs BUILD process and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita ansible run build gui | Triggers BUILD Jenkins job.
+   nita ansible run noob console | Runs NOOB process and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita ansible run noob gui | Triggers NOOB Jenkins job.
    nita ansible volumes | Returns shared volumes information on ansible container.
    nita cli version | Shows NITA CLI current version.
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
-   nita create inventory | Creates a new Inventory scaffolding.
    nita demo laptop | Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.
    nita demo vmm | Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.
    nita dns cli | Attaches local standard input, output, and error streams to dns running container.
@@ -314,7 +315,8 @@ NITA CLI command | Description
    nita down | Stops and removes NITA containers (both Core and CaaS) and networks.
    nita images ls | Lists all NITA images.
    nita images versions | Displays NITA images versions.
-   nita inventory populate | Populates a NITA inventory data.
+   nita inventory create | Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.
+   nita inventory populate | Populates virtual DC dynamic inventory with data related to NITA demo.
    nita ips | Shows all NITA containers IPs.
    nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
    nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
@@ -349,6 +351,7 @@ NITA CLI command | Description
    nita rsyslog ports | Returns mapped ports information on rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
+   nita status | Shows the status of the NITA containers.
    nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
    nita tacacs ip | Returns IPs information on tacacs container.
    nita tacacs labels | Returns labels information on tacacs container.
@@ -359,20 +362,28 @@ NITA CLI command | Description
    nita test labels | Returns labels information on test container.
    nita test pull dynamic | Creates topology object from dynamic inventory.
    nita test pull static | Creates topology object from static inventory.
-   nita test run common firewall | Executes common test suite on firewall.
-   nita test run common router | Executes common test suite on Router.
-   nita test run common switch | Executes common test suite on switch.
-   nita test run specific bgp | Executes BGP test suite on Router.
-   nita test run specific dns | Executes DNS test suite on Router.
-   nita test run specific firewall | Executes firewall test suite on firewall.
-   nita test run specific ntp | Executes NTP test suite on Router.
-   nita test run specific ospf | Executes OSPF test suite on Router.
-   nita test run specific radius | Executes Radius test suite on Router.
-   nita test run specific router | Executes router test suite on Router.
-   nita test run specific switch | Executes switch test suite on switch.
-   nita test run specific syslog | Executes Syslog test suite on Router.
-   nita test run specific tacacs | Executes TACACS test suite on Router.
-   nita test run test | Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.
+   nita test run common firewall console | Executes common test suite on firewall writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common firewall gui | Triggers vDC_FW_Common_Tests Jenkins job.
+   nita test run common router console | Executes common test suite on router writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common router gui | Triggers vDC_RX_Common_Tests Jenkins job.
+   nita test run common switch console | Executes common test suite on switch writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common switch gui | Triggers vDC_SW_Common_Tests Jenkins job.
+   nita test run specific dns console | Executes specific DNS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific dns gui | Triggers vDC_DNS_Tests Jenkins job.
+   nita test run specific firewall console | Executes specific firewall tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific firewall gui | Triggers vDC_FW_Tests Jenkins job.
+   nita test run specific ntp console | Executes specific NTP tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific ntp gui | Triggers vDC_NTP_Tests Jenkins job.
+   nita test run specific radius console | Executes specific RADIUS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific radius gui | Triggers vDC_RADIUS_Tests Jenkins job.
+   nita test run specific router console | Executes specific router tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific router gui | Triggers vDC_RX_Tests Jenkins job.
+   nita test run specific switch console | Executes specific switch tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific switch gui | Triggers vDC_SW_Tests Jenkins job.
+   nita test run specific syslog console | Executes specific SYSLOG tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific syslog gui | Triggers vDC_SYSLOG_Tests Jenkins job.
+   nita test run specific tacacs console | Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS) and networks.
    nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.

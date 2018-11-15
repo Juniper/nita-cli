@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
-# <*******************
-#
-# Copyright 2018 Juniper Networks, Inc. All rights reserved.
-# Licensed under the Juniper Networks Script Software License (the "License").
-# You may not use this script file except in compliance with the License, which is located at
-# http://www.juniper.net/support/legal/scriptlicense/
-# Unless required by applicable law or otherwise agreed to in writing by the parties, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-# *******************>
+
 """
     Python module containing NITA CLI commands and help.
 """
@@ -26,8 +16,8 @@ COMMANDS = {
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'status':   'docker-compose -f nita-core.yml -f nita-caas.yml ps',
         'demo': {
-            'vmm'   : 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob ; sleep 60 ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router ; sleep 10 ; nita -d test run common firewall ; sleep 10 ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""',
-            'laptop': 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 10 ; nita -d ansible run noob ; sleep 5  ; nita -d ansible run build ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router ; sleep 5  ; nita -d test run common firewall ; sleep 5  ; nita -d test run common switch ; sleep 10 ; nita -d test run specific 3rd-party ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""', 
+            'vmm'   : 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob console ; sleep 60 ; nita -d ansible run build console ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router console ; sleep 10 ; nita -d test run common firewall console ; sleep 10 ; nita -d test run common switch console ; sleep 10 ; nita -d test run specific dns console ; nita -d test run specific ntp console ; nita -d test run specific syslog console ; nita -d test run specific tacacs console ; nita -d test run specific radius console ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""',
+            'laptop': 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 10 ; nita -d ansible run noob console ; sleep 5  ; nita -d ansible run build console ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router console ; sleep 5  ; nita -d test run common firewall console ; sleep 5  ; nita -d test run common switch console ; sleep 10 ; nita -d test run specific dns console ; nita -d test run specific ntp console ; nita -d test run specific syslog console ; nita -d test run specific tacacs console ; nita -d test run specific radius console ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""', 
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
@@ -69,8 +59,14 @@ COMMANDS = {
         },
         'ansible': {
             'run': {
-                'noob' : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./noob.sh',
-                'build': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./build.sh',
+                'noob' : {
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./noob.sh',
+                    'gui' :    'curl -X POST http://localhost:8080/job/vDC_NOOB/build',
+                },
+                'build': {
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./build.sh',
+                    'gui':     'curl -X POST http://localhost:8080/job/vDC_Build/build',
+                },
             },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
             'labels' :  """containerlabel() { docker inspect -f '
@@ -81,28 +77,62 @@ COMMANDS = {
         },
         'test': {
             'run': {
-                'test': 'docker run --rm --name test --volumes-from jenkins -v %s:/project registry.juniper.net/nita/robot:latest ./test.sh',
-                'common': 
-                    { 
-                    'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
-                    'switch'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
-                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
-                    },
+                'common': { 
+                    'firewall' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Common_Tests/build',
+                    }, 
+                    'switch' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Common_Tests/build',
+                    }, 
+                    'router': {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Common_Tests/build',
+                    },    
+                },
                 'specific' : 
                     {
-                    'firewall' : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
-                    'switch'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
-                    'router'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
-                    'tacacs'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
-                    'radius'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
-                    'syslog'   : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
-                    'dns'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
-                    'ntp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
-                    'ospf'     : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
-                    'bgp'      : 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
-#                    2.9.2 toby container breaks RADIUS & TACACS tests
-#                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"',
-                    '3rd-party': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest bash -c "toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot && toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot"',
+                    'firewall' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Tests/build',
+                        },
+                    'switch'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Tests/build',
+                        },
+                    'router'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Tests/build',
+                        },
+                    'tacacs'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_TACACS_Tests/build',
+                        },
+                    'radius'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RADIUS_Tests/build',
+                        },
+                    'syslog'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SYSLOG_Tests/build',
+                        },
+                    'dns'      : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_DNS_Tests/build',
+                        },
+                    'ntp'      : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
+                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_NTP_Tests/build',
+                        },
+                    # 'ospf'     : {
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
+                    #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_OSPF_Tests/build',
+                    #     },
+                    # 'bgp'      : {
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita registry.juniper.net/nita/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
+                    #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_BGP_Tests/build',
+                    #     },
                     },                   
                 },
             'pull': {
@@ -236,8 +266,14 @@ HELP = {
         },
         'ansible': {
             'run': {
-                'noob' : 'Runs NOOB process (./noob.sh script) on /project located at $PROJECT_PATH.',
-                'build': 'Runs Build process (./build.sh script) on /project located at $PROJECT_PATH.',
+                'noob' : {
+                    'console': 'Runs NOOB process and writes its output to console. -- It does not trigger any Jenkins job! --',
+                    'gui' :    'Triggers NOOB Jenkins job.',
+                }, 
+                'build': {
+                    'console': 'Runs BUILD process and writes its output to console. -- It does not trigger any Jenkins job! --',
+                    'gui' :    'Triggers BUILD Jenkins job.',
+                },
             },
             'volumes': 'Returns shared volumes information on ansible container.',
             'labels' : 'Returns labels information on ansible container.',
@@ -245,24 +281,61 @@ HELP = {
         },
         'test': {
             'run': {
-                'test': 'Runs Test process (./test.sh script) on /project located at $PROJECT_PATH.',
-                'common': { 
-                    'firewall': 'Executes common test suite on firewall.',
-                    'switch'  : 'Executes common test suite on switch.',
-                    'router'  : 'Executes common test suite on router.',
+                'common': {
+                    'firewall': {
+                        'console': 'Executes common test suite on firewall writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_FW_Common_Tests Jenkins job.',
+                    },
+                    'switch'  : {
+                        'console': 'Executes common test suite on switch writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_SW_Common_Tests Jenkins job.',
+                    },
+                    'router'  : {
+                        'console': 'Executes common test suite on router writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_RX_Common_Tests Jenkins job.',
+                    },
                 },
                 'specific' : { 
-                    'firewall' : 'Executes firewall test suite on firewall.',
-                    'switch'   : 'Executes switch test suite on switch.',
-                    'router'   : 'Executes router test suite on router.',
-                    'tacacs'   : 'Executes TACACS test suite on router.',
-                    'radius'   : 'Executes Radius test suite on router.',
-                    'syslog'   : 'Executes Syslog test suite on router.',
-                    'dns'      : 'Executes DNS test suite on router.',
-                    'ntp'      : 'Executes NTP test suite on router.',
-                    'ospf'     : 'Executes OSPF test suite on router.',
-                    'bgp'      : 'Executes BGP test suite on router.',
-                    '3rd-party': 'Executes all 3rd party test suites on router.',
+                    'firewall' : {
+                        'console': 'Executes specific firewall tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_FW_Tests Jenkins job.',
+                    },
+                    'switch'   : {
+                        'console': 'Executes specific switch tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_SW_Tests Jenkins job.',
+                    },
+                    'router'   : {
+                        'console': 'Executes specific router tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_RX_Tests Jenkins job.',
+                    },
+                    'tacacs'   : {
+                        'console': 'Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_TACACS_Tests Jenkins job.',
+                    },
+                    'radius'   : {
+                        'console': 'Executes specific RADIUS tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_RADIUS_Tests Jenkins job.',
+                    },
+                    'syslog'   : {
+                        'console': 'Executes specific SYSLOG tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_SYSLOG_Tests Jenkins job.',
+                    },
+                    'dns'      : {
+                        'console': 'Executes specific DNS tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_DNS_Tests Jenkins job.',
+                    },
+                    'ntp'      : {
+                        'console': 'Executes specific NTP tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'gui' :    'Triggers vDC_NTP_Tests Jenkins job.',
+                    },
+                    # 'ospf'     : {
+                    #     'console': 'Executes specific OSPF tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                    #     'gui' :    'Triggers vDC_OSPF_Tests Jenkins job.',
+                    # },
+                    # 'bgp'      : {
+                    #     'console': 'Executes specific BGP tests and writes its output to console. -- It does not trigger any Jenkins job! --',
+                    #     'gui' :    'Triggers vDC_BGP_Tests Jenkins job.',
+                    # },
                 },
             },
             'pull': {

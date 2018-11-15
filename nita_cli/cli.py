@@ -1,15 +1,5 @@
 #!/usr/bin/env python
-# <*******************
-#
-# Copyright 2018 Juniper Networks, Inc. All rights reserved.
-# Licensed under the Juniper Networks Script Software License (the "License").
-# You may not use this script file except in compliance with the License, which is located at
-# http://www.juniper.net/support/legal/scriptlicense/
-# Unless required by applicable law or otherwise agreed to in writing by the parties, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-# *******************>
+
 """
     Wrapper script for all NITA commands
 """
@@ -17,7 +7,12 @@ import sys
 import os
 
 KEY_SEPARATOR = ' '
+
+# If True (-d option), prints and executes mapped command.
 DEBUG = False
+# If True (-e option), only prints mapped command.
+ECHO  = False
+
 # Red color to debug command mapped
 CRED = '\033[91m'
 CEND = '\033[0m'
@@ -79,10 +74,14 @@ def cli2command(cli, translator):
     try:
         for k in cli:
             translator = translator[str(k)]
-    except KeyError as err:
-        print("\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in cli)))
-        print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
-        sys.exit(1)
+    except KeyError as kerr:
+        try:
+            print("\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(kerr.message, ' '.join(str(k) for k in cli)))
+            print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
+            sys.exit(1)
+        except AttributeError:
+            print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
+            sys.exit(1)
 
     if ' %s' in translator:
         # nita stats => Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS]
@@ -184,7 +183,7 @@ def main(commands, documentation):
     """
     Process commmand line and execute resultant command
     """
-    global DEBUG
+    global DEBUG, ECHO
     commands_vs_help_trees(commands, documentation)
 
     # Remove /usr/local/bin/ from first argument (/usr/local/bin/nita)
@@ -195,6 +194,9 @@ def main(commands, documentation):
         if cli[1] == '-d':
             cli.pop(1)
             DEBUG = True
+        if cli[1] == '-e':
+            cli.pop(1)
+            ECHO = True
     except IndexError:
         # If cli[1] does not exist 
         # (e.g. command = 'nita', do nothing!
@@ -221,6 +223,9 @@ def main(commands, documentation):
             subcli = cli[:-1]
             raw = cli2command(subcli, commands)
             command = raw.format(name)
+            if ECHO:
+                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                sys.exit(0)
             if DEBUG:
                 print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
@@ -235,6 +240,9 @@ def main(commands, documentation):
             subcli = cli[:-2]
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
+            if ECHO:
+                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                sys.exit(0)
             if DEBUG:
                 print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
             os.system(command)
@@ -248,6 +256,9 @@ def main(commands, documentation):
             # if command is not a leaf in the dictionary (string),
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
+                if ECHO:
+                    print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                    sys.exit(0)
                 if DEBUG:
                     print((CRED + "\n  >>>> command: {}\n".format(command) + CEND))
                 os.system(command)
