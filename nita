@@ -283,15 +283,15 @@ HELP = {
             'run': {
                 'common': {
                     'firewall': {
-                        'console': 'Executes common test suite on firewall writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'console': 'Executes common test suite on firewall and writes its output to console. -- It does not trigger any Jenkins job! --',
                         'gui' :    'Triggers vDC_FW_Common_Tests Jenkins job.',
                     },
                     'switch'  : {
-                        'console': 'Executes common test suite on switch writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'console': 'Executes common test suite on switch and writes its output to console. -- It does not trigger any Jenkins job! --',
                         'gui' :    'Triggers vDC_SW_Common_Tests Jenkins job.',
                     },
                     'router'  : {
-                        'console': 'Executes common test suite on router writes its output to console. -- It does not trigger any Jenkins job! --',
+                        'console': 'Executes common test suite on router and writes its output to console. -- It does not trigger any Jenkins job! --',
                         'gui' :    'Triggers vDC_RX_Common_Tests Jenkins job.',
                     },
                 },
