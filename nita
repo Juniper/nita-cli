@@ -16,8 +16,57 @@ COMMANDS = {
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'status':   'docker-compose -f nita-core.yml -f nita-caas.yml ps',
         'demo': {
-            'vmm'   : 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 60 ; nita -d ansible run noob console ; sleep 60 ; nita -d ansible run build console ; nita -d test pull dynamic ; sleep 10 ; nita -d test run common router console ; sleep 10 ; nita -d test run common firewall console ; sleep 10 ; nita -d test run common switch console ; sleep 10 ; nita -d test run specific dns console ; nita -d test run specific ntp console ; nita -d test run specific syslog console ; nita -d test run specific tacacs console ; nita -d test run specific radius console ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""',
-            'laptop': 'nita -d inventory create ; sleep 10 ; nita -d inventory populate ; sleep 10 ; nita -d ansible run noob console ; sleep 5  ; nita -d ansible run build console ; nita -d test pull dynamic ; sleep 5  ; nita -d test run common router console ; sleep 5  ; nita -d test run common firewall console ; sleep 5  ; nita -d test run common switch console ; sleep 10 ; nita -d test run specific dns console ; nita -d test run specific ntp console ; nita -d test run specific syslog console ; nita -d test run specific tacacs console ; nita -d test run specific radius console ; echo " \n# IMAGE VERSIONS #\n" ; nita images versions ; echo " \n# CONTAINER VERSIONS #\n" ; nita containers versions ; echo " \n# NITA CLI VERSION #\n" ; nita cli version ; echo ""', 
+            'vmm'   : 'nita -d inventory create ; \
+                       sleep 10 ; \
+                       nita -d inventory populate ; \
+                       sleep 60 ; nita -d ansible run noob console ; \
+                       sleep 60 ; \
+                       nita -d ansible run build console ; \
+                       nita -d test pull dynamic ; \
+                       sleep 10 ; \
+                       nita -d test run common router console ; \
+                       sleep 10 ; \
+                       nita -d test run common firewall console ; \
+                       sleep 10 ; \
+                       nita -d test run common switch console ; \
+                       sleep 10 ; \
+                       nita -d test run specific dns console ; \
+                       nita -d test run specific ntp console ; \
+                       nita -d test run specific syslog console ; \
+                       nita -d test run specific tacacs console ; \
+                       nita -d test run specific radius console ; \
+                       echo " \n# IMAGE VERSIONS #\n" ; \
+                       nita images versions ; \
+                       echo " \n# CONTAINER VERSIONS #\n" ; \
+                       nita containers versions ; \
+                       echo " \n# NITA CLI VERSION #\n" ; \
+                       nita cli version ; echo ""',
+            # laptop demo has NTP test removed
+            'laptop': 'nita -d inventory create ; \
+                       sleep 10 ; \
+                       nita -d inventory populate ; \
+                       sleep 10 ; \
+                       nita -d ansible run noob console ; \
+                       sleep 5  ; \
+                       nita -d ansible run build console ; \
+                       nita -d test pull dynamic ; \
+                       sleep 5  ; \
+                       nita -d test run common router console ; \
+                       sleep 5  ; \
+                       nita -d test run common firewall console ; \
+                       sleep 5  ; \
+                       nita -d test run common switch console ; \
+                       sleep 10 ; \
+                       nita -d test run specific dns console ; \
+                       nita -d test run specific syslog console ; \
+                       nita -d test run specific tacacs console ; \
+                       nita -d test run specific radius console ; \
+                       echo " \n# IMAGE VERSIONS #\n" ; \
+                       nita images versions ; \
+                       echo " \n# CONTAINER VERSIONS #\n" ; \
+                       nita containers versions ; \
+                       echo " \n# NITA CLI VERSION #\n" ; \
+                       nita cli version ; echo ""', 
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
