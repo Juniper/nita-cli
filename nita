@@ -14,6 +14,8 @@ COMMANDS = {
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
+        'start':    'docker-compose -f nita-core.yml -f nita-caas.yml start',
+        'stop':     'docker-compose -f nita-core.yml -f nita-caas.yml stop',
         'status':   'docker-compose -f nita-core.yml -f nita-caas.yml ps',
         'demo': {
             'vmm'   : 'nita -d inventory create ; \
@@ -271,8 +273,10 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
-        'up'  : 'Creates and starts NITA containers (both Core and CaaS) and networks.',
-        'down': 'Stops and removes NITA containers (both Core and CaaS) and networks.',
+        'up'  :   'Creates and starts NITA containers (both Core and CaaS) and networks.',
+        'down':   'Stops and removes NITA containers (both Core and CaaS) and networks.',
+        'start':  'Starts NITA containers (both Core and CaaS) and networks.',
+        'stop':   'Stops NITA containers (both Core and CaaS) and networks.',
         'status': 'Shows the status of the NITA containers.',
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
