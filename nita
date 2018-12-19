@@ -273,11 +273,11 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
-        'up'  :   'Creates and starts NITA containers (both Core and CaaS) and networks.',
-        'down':   'Stops and removes NITA containers (both Core and CaaS) and networks.',
-        'start':  'Starts NITA containers (both Core and CaaS) and networks.',
-        'stop':   'Stops NITA containers (both Core and CaaS) and networks.',
-        'status': 'Shows the status of the NITA containers.',
+        'up'  :   'Creates and starts NITA containers (both Core and CaaS).',
+        'down':   'Stops and removes NITA containers (both Core and CaaS).',
+        'start':  'Starts NITA containers (both Core and CaaS).',
+        'stop':   'Stops NITA containers (both Core and CaaS).',
+        'status': 'Shows the status of every NITA containers.',
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
             'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
