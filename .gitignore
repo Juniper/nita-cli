@@ -1,4 +1,5 @@
 **.pyc
+**.DS_Store
 launch.json
 nitac
 bash_completion.d/nita*
