@@ -82,16 +82,17 @@ for file in os.listdir('bash_completion.d/'):
         data_files_list.append((TARGET_COMPLETION_PATH, [f1]))
 setup(
     name='nita_cli',
-    version='0.0.3',
+    version='0.0.4',
     description='NITA CLI',
     long_description='NITA command line wrapper',
     author='Jose Miguel Izquierdo',
     author_email='jizquierdo@juniper.net',
     include_package_data=True,
-    install_requires=['pyyaml', 'jinja2'],
+    install_requires=['pyyaml <4, >=3.10', 'jinja2'],
     url='',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
     data_files=data_files_list,
     zip_safe=False
 )
+
