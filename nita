@@ -195,7 +195,7 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel test """,
-            'cli':     'docker run -d --rm --name test --volumes-from jenkins -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/test:latest /bin/bash ; docker attach test',
+            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/test:latest /bin/bash ; docker attach test',
         },
         'webapp': {
             'logs'   : 'docker logs webapp --tail 200',
