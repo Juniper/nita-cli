@@ -20,7 +20,7 @@ node() {
                 }
                 stage('Install'){
                     echo 'Running a test installation'
-                    sh 'pip3 install .'
+                    sh 'pip3 install --no-binary :all: .'
                 }
                 stage('Autocomplete'){
                     echo 'Generate autocomplete'
@@ -35,7 +35,7 @@ node() {
                     if (env.SOURCE_BRANCH == 'refs/heads/master') {
                         echo 'Push to Artifactory'
                         sh 'python3 setup.py sdist'
-                        withCredentials([file(credentialsId:'pypirc', variable: 'PYPIRC')]) {
+                        withCredentials([file(credentialsId:'f1503ca7-3285-4ac6-ae55-5a660658c075', variable: 'PYPIRC')]) {
                             sh 'ln -s $PYPIRC $HOME/.pypirc'
                             sh 'python3 setup.py sdist upload -r artifactory'
                         }
