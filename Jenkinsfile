@@ -17,12 +17,10 @@ node() {
                 stage('Unit tests'){
                     echo 'Running unit tests'
                     sh 'python3 setup.py test'
-                    ciSkip action: 'check'
                 }
                 stage('Install'){
                     echo 'Running a test installation'
                     sh 'pip3 install .'
-                    ciSkip action: 'check'
                 }
                 stage('Autocomplete'){
                     echo 'Generate autocomplete'
