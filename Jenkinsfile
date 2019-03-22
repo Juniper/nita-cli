@@ -2,7 +2,7 @@
 
 @Library('PS-Shared-libs') _
 
-node('master') {
+node() {
     try {
         stage('Checkout'){
             checkout scm
