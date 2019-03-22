@@ -28,7 +28,7 @@ steps:
 - task: JenkinsQueueJob@2
   displayName: 'Queue Jenkins job'
   inputs:
-    serverEndpoint: 'jenkins.juniper.net'
+    serverEndpoint: 'ps-jenkins.aslab.juniper.net'
     # TODO: (If copied) -- Specify the new job on Jenkins (copy from api-gateway and update).
     #       Remember to correct this name too!
     jobName: 'nita-cli'
