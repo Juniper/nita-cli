@@ -37,7 +37,7 @@ node() {
                         sh 'python3 setup.py sdist'
                         withCredentials([file(credentialsId:'f1503ca7-3285-4ac6-ae55-5a660658c075', variable: 'PYPIRC')]) {
                             sh 'ln -s $PYPIRC $HOME/.pypirc'
-                            sh 'python3 setup.py sdist upload -r artifactory'
+                            sh 'python3 setup.py sdist upload -r local'
                         }
                     }
                     else {
