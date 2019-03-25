@@ -111,11 +111,11 @@ COMMANDS = {
         'ansible': {
             'run': {
                 'noob' : {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./noob.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 ./noob.sh',
                     'gui' :    'curl -X POST http://localhost:8080/job/vDC_NOOB/build',
                 },
                 'build': {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest ./build.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 ./build.sh',
                     'gui':     'curl -X POST http://localhost:8080/job/vDC_Build/build',
                 },
             },
@@ -124,7 +124,7 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:latest /bin/sh ; docker attach ansible',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 /bin/sh ; docker attach ansible',
         },
         'test': {
             'run': {
