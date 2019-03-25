@@ -92,8 +92,8 @@ COMMANDS = {
             'jobs': {
                 'ls'    : 'docker exec -it jenkins list_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
-                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.2 import_jenkins_jobs.sh {0} {1}",
-                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.2 export_jenkins_jobs.sh {0} {1}",
+                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.3 import_jenkins_jobs.sh {0} {1}",
+                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.3 export_jenkins_jobs.sh {0} {1}",
             },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
