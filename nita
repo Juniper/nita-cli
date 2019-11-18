@@ -107,15 +107,16 @@ COMMANDS = {
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs'   : 'docker logs jenkins --tail 200',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart jenkins',
         },
         'ansible': {
             'run': {
                 'noob' : {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project nita/ansible:2.8.2 ./noob.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project nita/ansible:2.8.6 ./noob.sh',
                     'gui' :    'curl -X POST http://localhost:8080/job/vDC_NOOB/build',
                 },
                 'build': {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project nita/ansible:2.8.2 ./build.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project nita/ansible:2.8.6 ./build.sh',
                     'gui':     'curl -X POST http://localhost:8080/job/vDC_Build/build',
                 },
             },
@@ -124,7 +125,7 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project nita/ansible:2.8.2 /bin/sh ; docker attach ansible',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project nita/ansible:2.8.6 /bin/sh ; docker attach ansible',
         },
         'test': {
             'run': {
@@ -197,17 +198,17 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel test """,
             'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/test:3.4.1 /bin/bash ; docker attach test',
         },
-        'webapp': {
-            'logs'   : 'docker logs webapp --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
-            'ports'  : 'docker port webapp',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel webapp """,
-            'cli':     'docker exec -it webapp /bin/bash',
-        },
+    #     'webapp': {
+    #         'logs'   : 'docker logs webapp --tail 200',
+    #         'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
+    #         'ports'  : 'docker port webapp',
+    #         'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
+    #         'labels' :  """containerlabel() { docker inspect -f '
+    # {{ range $k, $v := .Config.Labels -}}
+    # {{ $k }} = {{ $v }}
+    # {{ end -}}' $1 ; } ; containerlabel webapp """,
+    #         'cli':     'docker exec -it webapp /bin/bash',
+    #     },
         'tacacs': {
             'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
@@ -218,6 +219,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel tacacs """,
             'cli':     'docker exec -it tacacs /bin/bash',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart tacacs',
         },
         'radius': {
             'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
@@ -229,6 +231,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel radius """,
             'cli':     'docker exec -it radius /bin/bash',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart radius',
         },
         'ntp': {
             'logs'   : 'docker logs ntp --tail 200',
@@ -240,6 +243,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ntp """,
             'cli':     'docker exec -it ntp /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart ntp',
         },
         'dns': {
             'logs'   : 'docker logs dns --tail 200',
@@ -251,6 +255,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel dns """,
             'cli':     'docker exec -it dns /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart dns',
         },
         'rsyslog': {
             'logs'   : 'docker logs rsyslog --tail 200',
@@ -262,8 +267,9 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel rsyslog """,
             'cli':     'docker exec -it rsyslog /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart rsyslog',
         },
-        'license': 'echo "# <*******************\n#\n# Copyright 2018 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
+        'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
     },
 }
 
@@ -316,6 +322,7 @@ HELP = {
             'ports'  : 'Returns mapped ports information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
             'logs'   : 'Fetches the logs of jenkins container.',
+            'restart': 'Restarts jenkins container.',
         },
         'ansible': {
             'run': {
@@ -399,14 +406,14 @@ HELP = {
             'labels' : 'Returns labels information on test container.',
             'cli'    : 'Attaches local standard input, output, and error streams to test running container.',
         },
-        'webapp': {
-            'logs'   : 'Fetches the logs of webapp container.',
-            'ip'     : 'Returns IPs information on webapp container.',
-            'ports'  : 'Returns mapped ports information on webapp container.',
-            'volumes': 'Returns shared volumes information on webapp container.',
-            'labels' : 'Returns labels information on webapp container.',
-            'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
-        },
+        # 'webapp': {
+        #     'logs'   : 'Fetches the logs of webapp container.',
+        #     'ip'     : 'Returns IPs information on webapp container.',
+        #     'ports'  : 'Returns mapped ports information on webapp container.',
+        #     'volumes': 'Returns shared volumes information on webapp container.',
+        #     'labels' : 'Returns labels information on webapp container.',
+        #     'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
+        # },
         'tacacs': {
             'logs'   : 'Fetches the logs of tacacs container.',
             'ip'     : 'Returns IPs information on tacacs container.',
@@ -414,6 +421,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on tacacs container.',
             'labels' : 'Returns labels information on tacacs container.',
             'cli'    : 'Attaches local standard input, output, and error streams to tacacs running container.',
+            'restart': 'Restarts tacacs container.',
         },
         'radius': {
             'logs'   : 'Fetches the logs of radius container.',
@@ -422,6 +430,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on radius container.',
             'labels' : 'Returns labels information on radius container.',
             'cli'    : 'Attaches local standard input, output, and error streams to radius running container.',
+            'restart': 'Restarts radius container.',
         },
         'ntp': {
             'logs'   : 'Fetches the logs of ntp container.',
@@ -430,6 +439,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on ntp container.',
             'labels' : 'Returns labels information on ntp container.',
             'cli'    : 'Attaches local standard input, output, and error streams to ntp running container.',
+            'restart': 'Restarts ntp container.',
         },
         'dns': {
             'logs'   : 'Fetches the logs of dns container.',
@@ -438,6 +448,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on dns container.',
             'labels' : 'Returns labels information on dns container.',
             'cli'    : 'Attaches local standard input, output, and error streams to dns running container.',
+            'restart': 'Restarts dns container.',
         },
         'rsyslog': {
             'logs'   : 'Fetches the logs of rsyslog container.',
@@ -446,6 +457,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on rsyslog container.',
             'labels' : 'Returns labels information on rsyslog container.',
             'cli'    : 'Attaches local standard input, output, and error streams to rsyslog running container.',
+            'restart': 'Restarts rsyslog container.',
         },
         'license': 'Displays the NITA License.',
     },
