@@ -11,6 +11,7 @@ COMMANDS = {
     'nita': {
         'cli': {
             'version': "echo NITA CLI hibernate branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+#            'select' : 'oPS3=$PS3 ; PS3="\nPlease choose a task (ENTER to list options): "; select movie in one two three ; do case $REPLY in "1") echo "it was one" ;; "2") echo "it was two" ;; "3") echo "it was three" ;; esac; done ; PS3=$oPS3'
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
@@ -75,7 +76,7 @@ COMMANDS = {
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
         },
         'containers': {
-            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA"',
+            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
             'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .Name }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'images': {
@@ -278,6 +279,8 @@ HELP = {
     'nita': {
         'cli': {
             'version': 'Shows NITA CLI current version.',
+#            'select' : 'Test select option in bash. DELETE ME!'
+
         },
         'up'  :   'Creates and starts NITA containers (both Core and CaaS).',
         'down':   'Stops and removes NITA containers (both Core and CaaS).',
