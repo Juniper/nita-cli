@@ -11,7 +11,12 @@ COMMANDS = {
     'nita': {
         'cli': {
             'version': "echo NITA CLI hibernate branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
-#            'select' : 'oPS3=$PS3 ; PS3="\nPlease choose a task (ENTER to list options): "; select movie in one two three ; do case $REPLY in "1") echo "it was one" ;; "2") echo "it was two" ;; "3") echo "it was three" ;; esac; done ; PS3=$oPS3'
+        },
+        'setup': {
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose a environment: "; select env in laptop vmm ; do case $REPLY in "1") ./setup_demo.sh ;; "2") echo "Deprecated! Sorry..." ;; "*") echo "That is not a valid option! " ;; esac; done ; break ; PS3=$oPS3',
+        },
+        'destroy': {
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose a environment: "; select env in laptop vmm ; do case $REPLY in "1") ./destroy_demo.sh ;; "2") echo "Deprecated! Sorry..." ;; "*") echo "That is not a valid option! " ; break ;; esac; done ; PS3=$oPS3',
         },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
@@ -279,8 +284,12 @@ HELP = {
     'nita': {
         'cli': {
             'version': 'Shows NITA CLI current version.',
-#            'select' : 'Test select option in bash. DELETE ME!'
-
+        },
+        'setup': {
+            'environment': 'Sets up either your virtual DC running on your laptop or VMM environment to run the demo.',
+        },
+        'destroy': {
+            'environment': 'Destroys either your virtual DC running on your laptop or VMM environment to run the demo.',
         },
         'up'  :   'Creates and starts NITA containers (both Core and CaaS).',
         'down':   'Stops and removes NITA containers (both Core and CaaS).',
