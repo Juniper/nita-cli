@@ -297,8 +297,8 @@ HELP = {
         'stop':   'Stops NITA containers (both Core and CaaS).',
         'status': 'Shows the status of every NITA containers.',
         'demo': {
-            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
-            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
+            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
+            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.',
         },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
