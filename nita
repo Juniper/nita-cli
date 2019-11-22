@@ -12,6 +12,12 @@ COMMANDS = {
         'cli': {
             'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
+        'setup': {
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+        },
+        'destroy': {
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+        },
         'up'  :     'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
         'down':     'docker-compose -f nita-core.yml -f nita-caas.yml down',
         'start':    'docker-compose -f nita-core.yml -f nita-caas.yml start',
@@ -75,7 +81,7 @@ COMMANDS = {
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
         },
         'containers': {
-            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA"',
+            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
             'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .Name }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'images': {
@@ -92,8 +98,8 @@ COMMANDS = {
             'jobs': {
                 'ls'    : 'docker exec -it jenkins list_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
-                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.3 import_jenkins_jobs.sh {0} {1}",
-                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.3 export_jenkins_jobs.sh {0} {1}",
+                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.4 import_jenkins_jobs.sh {0} {1}",
+                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.4 export_jenkins_jobs.sh {0} {1}",
             },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
@@ -107,15 +113,16 @@ COMMANDS = {
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs'   : 'docker logs jenkins --tail 200',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart jenkins',
         },
         'ansible': {
             'run': {
                 'noob' : {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 ./noob.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./noob.sh',
                     'gui' :    'curl -X POST http://localhost:8080/job/vDC_NOOB/build',
                 },
                 'build': {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 ./build.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./build.sh',
                     'gui':     'curl -X POST http://localhost:8080/job/vDC_Build/build',
                 },
             },
@@ -124,64 +131,64 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:3.4.5 /bin/sh ; docker attach ansible',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
         },
         'test': {
             'run': {
                 'common': { 
                     'firewall' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Common_Tests/build',
                     }, 
                     'switch' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Common_Tests/build',
                     }, 
                     'router': {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Common_Tests/build',
                     },    
                 },
                 'specific' : 
                     {
                     'firewall' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Tests/build',
                         },
                     'switch'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Tests/build',
                         },
                     'router'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Tests/build',
                         },
                     'tacacs'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_TACACS_Tests/build',
                         },
                     'radius'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_RADIUS_Tests/build',
                         },
                     'syslog'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_SYSLOG_Tests/build',
                         },
                     'dns'      : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_DNS_Tests/build',
                         },
                     'ntp'      : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                         'gui' :    'curl -X POST http://localhost:8080/job/vDC_NTP_Tests/build',
                         },
                     # 'ospf'     : {
-                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
                     #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_OSPF_Tests/build',
                     #     },
                     # 'bgp'      : {
-                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/test:latest toby -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
                     #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_BGP_Tests/build',
                     #     },
                     },                   
@@ -195,19 +202,19 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel test """,
-            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/test:latest /bin/bash ; docker attach test',
+            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 ; docker attach test',
         },
-        'webapp': {
-            'logs'   : 'docker logs webapp --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
-            'ports'  : 'docker port webapp',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel webapp """,
-            'cli':     'docker exec -it webapp /bin/bash',
-        },
+    #     'webapp': {
+    #         'logs'   : 'docker logs webapp --tail 200',
+    #         'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
+    #         'ports'  : 'docker port webapp',
+    #         'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
+    #         'labels' :  """containerlabel() { docker inspect -f '
+    # {{ range $k, $v := .Config.Labels -}}
+    # {{ $k }} = {{ $v }}
+    # {{ end -}}' $1 ; } ; containerlabel webapp """,
+    #         'cli':     'docker exec -it webapp /bin/bash',
+    #     },
         'tacacs': {
             'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
@@ -218,6 +225,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel tacacs """,
             'cli':     'docker exec -it tacacs /bin/bash',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart tacacs',
         },
         'radius': {
             'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
@@ -229,6 +237,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel radius """,
             'cli':     'docker exec -it radius /bin/bash',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart radius',
         },
         'ntp': {
             'logs'   : 'docker logs ntp --tail 200',
@@ -240,6 +249,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ntp """,
             'cli':     'docker exec -it ntp /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart ntp',
         },
         'dns': {
             'logs'   : 'docker logs dns --tail 200',
@@ -251,6 +261,7 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel dns """,
             'cli':     'docker exec -it dns /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart dns',
         },
         'rsyslog': {
             'logs'   : 'docker logs rsyslog --tail 200',
@@ -262,8 +273,9 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel rsyslog """,
             'cli':     'docker exec -it rsyslog /bin/sh',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart rsyslog',
         },
-        'license': 'echo "# <*******************\n#\n# Copyright 2018 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
+        'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
     },
 }
 
@@ -273,14 +285,20 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
+        'setup': {
+            'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+        },
+        'destroy': {
+            'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
+        },
         'up'  :   'Creates and starts NITA containers (both Core and CaaS).',
         'down':   'Stops and removes NITA containers (both Core and CaaS).',
         'start':  'Starts NITA containers (both Core and CaaS).',
         'stop':   'Stops NITA containers (both Core and CaaS).',
         'status': 'Shows the status of every NITA containers.',
         'demo': {
-            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.',
-            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.',
+            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
+            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.',
         },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
@@ -316,6 +334,7 @@ HELP = {
             'ports'  : 'Returns mapped ports information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
             'logs'   : 'Fetches the logs of jenkins container.',
+            'restart': 'Restarts jenkins container.',
         },
         'ansible': {
             'run': {
@@ -399,14 +418,14 @@ HELP = {
             'labels' : 'Returns labels information on test container.',
             'cli'    : 'Attaches local standard input, output, and error streams to test running container.',
         },
-        'webapp': {
-            'logs'   : 'Fetches the logs of webapp container.',
-            'ip'     : 'Returns IPs information on webapp container.',
-            'ports'  : 'Returns mapped ports information on webapp container.',
-            'volumes': 'Returns shared volumes information on webapp container.',
-            'labels' : 'Returns labels information on webapp container.',
-            'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
-        },
+        # 'webapp': {
+        #     'logs'   : 'Fetches the logs of webapp container.',
+        #     'ip'     : 'Returns IPs information on webapp container.',
+        #     'ports'  : 'Returns mapped ports information on webapp container.',
+        #     'volumes': 'Returns shared volumes information on webapp container.',
+        #     'labels' : 'Returns labels information on webapp container.',
+        #     'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
+        # },
         'tacacs': {
             'logs'   : 'Fetches the logs of tacacs container.',
             'ip'     : 'Returns IPs information on tacacs container.',
@@ -414,6 +433,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on tacacs container.',
             'labels' : 'Returns labels information on tacacs container.',
             'cli'    : 'Attaches local standard input, output, and error streams to tacacs running container.',
+            'restart': 'Restarts tacacs container.',
         },
         'radius': {
             'logs'   : 'Fetches the logs of radius container.',
@@ -422,6 +442,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on radius container.',
             'labels' : 'Returns labels information on radius container.',
             'cli'    : 'Attaches local standard input, output, and error streams to radius running container.',
+            'restart': 'Restarts radius container.',
         },
         'ntp': {
             'logs'   : 'Fetches the logs of ntp container.',
@@ -430,6 +451,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on ntp container.',
             'labels' : 'Returns labels information on ntp container.',
             'cli'    : 'Attaches local standard input, output, and error streams to ntp running container.',
+            'restart': 'Restarts ntp container.',
         },
         'dns': {
             'logs'   : 'Fetches the logs of dns container.',
@@ -438,6 +460,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on dns container.',
             'labels' : 'Returns labels information on dns container.',
             'cli'    : 'Attaches local standard input, output, and error streams to dns running container.',
+            'restart': 'Restarts dns container.',
         },
         'rsyslog': {
             'logs'   : 'Fetches the logs of rsyslog container.',
@@ -446,6 +469,7 @@ HELP = {
             'volumes': 'Returns shared volumes information on rsyslog container.',
             'labels' : 'Returns labels information on rsyslog container.',
             'cli'    : 'Attaches local standard input, output, and error streams to rsyslog running container.',
+            'restart': 'Restarts rsyslog container.',
         },
         'license': 'Displays the NITA License.',
     },

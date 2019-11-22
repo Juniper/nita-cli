@@ -14,8 +14,11 @@ DEBUG = False
 ECHO  = False
 
 # Red color to debug command mapped
-CRED = '\033[91m'
-CEND = '\033[0m'
+CRED   = '\033[91m' # red
+CBLUE  = '\033[34m' # blue
+CPURP  = '\033[94m' # purple
+CWHITE = '\033[37m' # white
+CEND   = '\033[0m'  # end
 
 def nested_keys(dictionary, path=None):
     """
@@ -56,7 +59,7 @@ def print_nested_keys(dictionary):
     """
     dictionary.pop('license', None)
     for cli, command in nested_keys(dictionary):
-        print("   {} => {}".format(cli, command))
+        print("   {}".format(cli) + CPURP + " => " + CWHITE + " {}".format(command) + CEND)
 
 def print_nested_keys_from(dictionary, *subkeys):
     """
@@ -65,7 +68,7 @@ def print_nested_keys_from(dictionary, *subkeys):
     """
     dictionary.pop('license', None)
     for cli, command in nested_keys_from(dictionary, subkeys[0]):
-        print("   {} => {}".format(cli, command))
+        print("   {}".format(cli) + CPURP + " => " + CWHITE + " {}".format(command) + CEND)
 
 def cli2command(cli, translator):
     """
