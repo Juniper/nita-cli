@@ -10,10 +10,40 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI Sergio branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            'all': './setup_demo.sh ; \
+                    sleep 5  ; \
+                    nita -d inventory create ; \
+                    sleep 10 ; \
+                    nita -d inventory populate ; \
+                    sleep 10 ; \
+                    nita -d ansible run noob console ; \
+                    sleep 5  ; \
+                    nita -d ansible run build console ; \
+                    nita -d test pull dynamic ; \
+                    sleep 5  ; \
+                    nita -d test run common router console ; \
+                    sleep 5  ; \
+                    nita -d test run common firewall console ; \
+                    sleep 5  ; \
+                    nita -d test run common switch console ; \
+                    sleep 10 ; \
+                    nita -d test run specific dns console ; \
+                    nita -d test run specific syslog console ; \
+                    nita -d test run specific tacacs console ; \
+                    nita -d test run specific radius console ; \
+                    nita -d test run specific router console ; \
+                    nita -d test run specific firewall console ; \
+                    nita -d test run specific switch console ; \
+                    echo " \n# IMAGE VERSIONS #\n" ; \
+                    nita images versions ; \
+                    echo " \n# CONTAINER VERSIONS #\n" ; \
+                    nita containers versions ; \
+                    echo " \n# NITA CLI VERSION #\n" ; \
+                    nita cli version ; '
         },
         'destroy': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
@@ -50,31 +80,65 @@ COMMANDS = {
                        echo " \n# NITA CLI VERSION #\n" ; \
                        nita cli version ; echo ""',
             # laptop demo has NTP test removed
-            'laptop': 'nita -d inventory create ; \
-                       sleep 10 ; \
-                       nita -d inventory populate ; \
-                       sleep 10 ; \
-                       nita -d ansible run noob console ; \
-                       sleep 5  ; \
-                       nita -d ansible run build console ; \
-                       nita -d test pull dynamic ; \
-                       sleep 5  ; \
-                       nita -d test run common router console ; \
-                       sleep 5  ; \
-                       nita -d test run common firewall console ; \
-                       sleep 5  ; \
-                       nita -d test run common switch console ; \
-                       sleep 10 ; \
-                       nita -d test run specific dns console ; \
-                       nita -d test run specific syslog console ; \
-                       nita -d test run specific tacacs console ; \
-                       nita -d test run specific radius console ; \
-                       echo " \n# IMAGE VERSIONS #\n" ; \
-                       nita images versions ; \
-                       echo " \n# CONTAINER VERSIONS #\n" ; \
-                       nita containers versions ; \
-                       echo " \n# NITA CLI VERSION #\n" ; \
-                       nita cli version ; echo ""', 
+            'laptop': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in console gui ; do case $REPLY in "1") \
+                        nita -d inventory create ; \
+                        sleep 10 ; \
+                        nita -d inventory populate ; \
+                        sleep 10 ; \
+                        nita -d ansible run noob console ; \
+                        sleep 5  ; \
+                        nita -d ansible run build console ; \
+                        nita -d test pull dynamic ; \
+                        sleep 5  ; \
+                        nita -d test run common router console ; \
+                        sleep 5  ; \
+                        nita -d test run common firewall console ; \
+                        sleep 5  ; \
+                        nita -d test run common switch console ; \
+                        sleep 10 ; \
+                        nita -d test run specific dns console ; \
+                        nita -d test run specific syslog console ; \
+                        nita -d test run specific tacacs console ; \
+                        nita -d test run specific radius console ; \
+                        nita -d test run specific router console ; \
+                        nita -d test run specific firewall console ; \
+                        nita -d test run specific switch console ; \
+                        echo " \n# IMAGE VERSIONS #\n" ; \
+                        nita images versions ; \
+                        echo " \n# CONTAINER VERSIONS #\n" ; \
+                        nita containers versions ; \
+                        echo " \n# NITA CLI VERSION #\n" ; \
+                        nita cli version ; \
+                        break ;; "2")  \
+                        nita -d inventory create ; \
+                        sleep 10 ; \
+                        nita -d inventory populate ; \
+                        sleep 10 ; \
+                        nita -d ansible run noob gui ; \
+                        sleep 5  ; \
+                        nita -d ansible run build gui ; \
+                        nita -d test pull dynamic ; \
+                        sleep 5  ; \
+                        nita -d test run common router gui ; \
+                        sleep 5  ; \
+                        nita -d test run common firewall gui ; \
+                        sleep 5  ; \
+                        nita -d test run common switch gui ; \
+                        sleep 10 ; \
+                        nita -d test run specific dns gui ; \
+                        nita -d test run specific syslog gui ; \
+                        nita -d test run specific tacacs gui ; \
+                        nita -d test run specific radius gui ; \
+                        nita -d test run specific router gui ; \
+                        nita -d test run specific firewall gui ; \
+                        nita -d test run specific switch gui ; \
+                        echo " \n# IMAGE VERSIONS #\n" ; \
+                        nita images versions ; \
+                        echo " \n# CONTAINER VERSIONS #\n" ; \
+                        nita containers versions ; \
+                        echo " \n# NITA CLI VERSION #\n" ; \
+                        nita cli version ; \
+                        break ;; esac; done ; PS3=$oPS3',
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
@@ -287,6 +351,7 @@ HELP = {
         },
         'setup': {
             'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            'all': 'Execute all demo',
         },
         'destroy': {
             'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
