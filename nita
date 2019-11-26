@@ -14,6 +14,7 @@ COMMANDS = {
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            'all': 'nita setup environment ; nita demo laptop ; '
         },
         'destroy': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
@@ -51,30 +52,33 @@ COMMANDS = {
                        nita cli version ; echo ""',
             # laptop demo has NTP test removed
             'laptop': 'nita -d inventory create ; \
-                       sleep 10 ; \
-                       nita -d inventory populate ; \
-                       sleep 10 ; \
-                       nita -d ansible run noob console ; \
-                       sleep 5  ; \
-                       nita -d ansible run build console ; \
-                       nita -d test pull dynamic ; \
-                       sleep 5  ; \
-                       nita -d test run common router console ; \
-                       sleep 5  ; \
-                       nita -d test run common firewall console ; \
-                       sleep 5  ; \
-                       nita -d test run common switch console ; \
-                       sleep 10 ; \
-                       nita -d test run specific dns console ; \
-                       nita -d test run specific syslog console ; \
-                       nita -d test run specific tacacs console ; \
-                       nita -d test run specific radius console ; \
-                       echo " \n# IMAGE VERSIONS #\n" ; \
-                       nita images versions ; \
-                       echo " \n# CONTAINER VERSIONS #\n" ; \
-                       nita containers versions ; \
-                       echo " \n# NITA CLI VERSION #\n" ; \
-                       nita cli version ; echo ""', 
+                        sleep 10 ; \
+                        nita -d inventory populate ; \
+                        sleep 10 ; \
+                        nita -d ansible run noob console ; \
+                        sleep 5  ; \
+                        nita -d ansible run build console ; \
+                        nita -d test pull dynamic ; \
+                        sleep 5  ; \
+                        nita -d test run common router console ; \
+                        sleep 5  ; \
+                        nita -d test run common firewall console ; \
+                        sleep 5  ; \
+                        nita -d test run common switch console ; \
+                        sleep 10 ; \
+                        nita -d test run specific dns console ; \
+                        nita -d test run specific syslog console ; \
+                        nita -d test run specific tacacs console ; \
+                        nita -d test run specific radius console ; \
+                        nita -d test run specific router console ; \
+                        nita -d test run specific firewall console ; \
+                        nita -d test run specific switch console ; \
+                        echo " \n# IMAGE VERSIONS #\n" ; \
+                        nita images versions ; \
+                        echo " \n# CONTAINER VERSIONS #\n" ; \
+                        nita containers versions ; \
+                        echo " \n# NITA CLI VERSION #\n" ; \
+                        nita cli version ; echo ""',
         },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
@@ -287,6 +291,7 @@ HELP = {
         },
         'setup': {
             'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            'all': 'Execute all demo',
         },
         'destroy': {
             'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
