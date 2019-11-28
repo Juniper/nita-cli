@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # <*******************
 #
-# Copyright 2018 Juniper Networks, Inc. All rights reserved.
+# Copyright 2016-2019 Juniper Networks, Inc. All rights reserved.
 # Licensed under the Juniper Networks Script Software License (the "License").
 # You may not use this script file except in compliance with the License, which is located at
 # http://www.juniper.net/support/legal/scriptlicense/
