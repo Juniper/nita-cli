@@ -78,8 +78,8 @@ Furthermore, the way it is designed allows a user to reuse it in a different pla
 
 Another cool feature it has is `autocompletion`. So far, it has been tested in the following Operating Systems:
 
- - `Linux` (Ubuntu 16.04.4 LTS) 
- - `OS X` (Sierra and High Sierra)
+ - `Linux` (Ubuntu 16 LTS and Ubutu 18 LTS) 
+ - `OS X` (Sierra, High Sierra and Mojave)
  - `Windows 10` (with [Cygwin](https://www.cygwin.com/)).
 
 It makes use of the following links:
@@ -210,10 +210,10 @@ It can be installed from:
 ### Autocomplete
 Following packages are needed to make use of autocompletion:
 
-- python
-- python-pip
-- pyYAML (pip package)
-- Jinja2 (pip package)
+- python3
+- python3-pip
+- pyYAML (pip3 package)
+- Jinja2 (pip3 package)
 - brew _or_ cygwin (if OS X or Windows machines)
 
 If in `OS X`:
@@ -243,14 +243,14 @@ In order to install NITA CLI, use pip command and specifiy nita_cli repository w
     $ pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli
 
     Collecting nita-cli
-    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/0.0.3/nita_cli-0.0.3.tar.gz
+    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/0.0.4/nita_cli-0.0.4.tar.gz
     Requirement already satisfied (use --upgrade to upgrade): pyyaml in /usr/local/lib/python3.5/dist-packages (from nita-cli)
     Requirement already satisfied (use --upgrade to upgrade): jinja2 in /usr/local/lib/python3.5/dist-packages (from nita-cli)
     Requirement already satisfied (use --upgrade to upgrade): MarkupSafe>=0.23 in /usr/local/lib/python3.5/dist-packages (from jinja2->nita-cli)
     Skipping bdist_wheel for nita-cli, due to binaries being disabled for it.
     Installing collected packages: nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-0.0.3
+    Successfully installed nita-cli-0.0.4
 
 If you are a **developer** and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
@@ -259,14 +259,14 @@ If you are a **developer** and want to test your changes on NITA CLI local, then
     $ sudo pip3 install -I nita-cli/ --no-binary :all:
     
     Processing ./nita-cli
-    Collecting pyyaml (from nita-cli==0.0.3)
-    Collecting jinja2 (from nita-cli==0.0.3)
+    Collecting pyyaml (from nita-cli==0.0.4)
+    Collecting jinja2 (from nita-cli==0.0.4)
       Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
         100% |████████████████████████████████| 133kB 424kB/s 
-    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.3)
+    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.4)
     Installing collected packages: pyyaml, MarkupSafe, jinja2, nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.3 pyyaml-3.13
+    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.4 pyyaml-3.13
 
 ## About NITA CLI
 
@@ -294,105 +294,110 @@ There is a `help` implemented at each level of the script which basically shows 
 
 NITA CLI command | Description
 -----------------|-------------------
-   nita ansible cli | Attaches local standard input, output, and error streams to ansible running container.
-   nita ansible labels | Returns labels information on ansible container.
-   nita ansible run build console | Runs BUILD process and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita ansible run build gui | Triggers BUILD Jenkins job.
-   nita ansible run noob console | Runs NOOB process and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita ansible run noob gui | Triggers NOOB Jenkins job.
-   nita ansible volumes | Returns shared volumes information on ansible container.
-   nita cli version | Shows NITA CLI current version.
-   nita containers ls | Lists all running NITA containers.
-   nita containers versions | Lists all running NITA containers versions.
-   nita demo laptop | Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from virtualdc/ folder.
-   nita demo vmm | Runs the whole NITA demo with a single script on VMM environment. It needs to be run from virtualdc/ folder.
-   nita dns cli | Attaches local standard input, output, and error streams to dns running container.
-   nita dns ip | Returns IPs information on dns container.
-   nita dns labels | Returns labels information on dns container.
-   nita dns logs | Fetches the logs of dns container.
-   nita dns ports | Returns mapped ports information on dns container.
-   nita dns volumes | Returns shared volumes information on dns container.
-   nita down | Stops and removes NITA containers (both Core and CaaS) and networks.
-   nita images ls | Lists all NITA images.
-   nita images versions | Displays NITA images versions.
-   nita inventory create | Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.
-   nita inventory populate | Populates virtual DC dynamic inventory with data related to NITA demo.
-   nita ips | Shows all NITA containers IPs.
-   nita jenkins cli jenkins | Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
-   nita jenkins cli root | Attaches local standard input, output, and error streams to jenkins running container with "root" user.
-   nita jenkins ip | Returns IPs information on jenkins container.
-   nita jenkins jobs export | Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
-   nita jenkins jobs import | Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
-   nita jenkins jobs ls | Lists all Jenkins jobs.
-   nita jenkins jobs remove | Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
-   nita jenkins labels | Returns labels information on jenkins container.
-   nita jenkins logs | Fetches the logs of jenkins container.
-   nita jenkins ports | Returns mapped ports information on jenkins container.
-   nita jenkins volumes | Returns shared volumes information on jenkins container.
-   nita license | Displays the NITA License.
-   nita new project | Creates a new NITA project scaffolding.
-   nita new role | Creates a new Ansible role scaffolding.
-   nita ntp cli | Attaches local standard input, output, and error streams to ntp running container.
-   nita ntp ip | Returns IPs information on ntp container.
-   nita ntp labels | Returns labels information on ntp container.
-   nita ntp logs | Fetches the logs of ntp container.
-   nita ntp ports | Returns mapped ports information on ntp container.
-   nita ntp volumes | Returns shared volumes information on ntp container.
-   nita radius cli | Attaches local standard input, output, and error streams to radius running container.
-   nita radius ip | Returns IPs information on radius container.
-   nita radius labels | Returns labels information on radius container.
-   nita radius logs | Fetches the logs of radius container.
-   nita radius ports | Returns mapped ports information on radius container.
-   nita radius volumes | Returns shared volumes information on radius container.
-   nita rsyslog cli | Attaches local standard input, output, and error streams to rsyslog running container.
-   nita rsyslog ip | Returns IPs information on rsyslog container.
-   nita rsyslog labels | Returns labels information on rsyslog container.
-   nita rsyslog logs | Fetches the logs of rsyslog container.
-   nita rsyslog ports | Returns mapped ports information on rsyslog container.
-   nita rsyslog volumes | Returns shared volumes information on rsyslog container.
-   nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
-   nita status | Shows the status of the NITA containers.
-   nita tacacs cli | Attaches local standard input, output, and error streams to tacacs running container.
-   nita tacacs ip | Returns IPs information on tacacs container.
-   nita tacacs labels | Returns labels information on tacacs container.
-   nita tacacs logs | Fetches the logs of tacacs container.
-   nita tacacs ports | Returns mapped ports information on tacacs container.
-   nita tacacs volumes | Returns shared volumes information on tacacs container.
-   nita test cli | Attaches local standard input, output, and error streams to test running container.
-   nita test labels | Returns labels information on test container.
-   nita test pull dynamic | Creates topology object from dynamic inventory.
-   nita test pull static | Creates topology object from static inventory.
-   nita test run common firewall console | Executes common test suite on firewall writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run common firewall gui | Triggers vDC_FW_Common_Tests Jenkins job.
-   nita test run common router console | Executes common test suite on router writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run common router gui | Triggers vDC_RX_Common_Tests Jenkins job.
-   nita test run common switch console | Executes common test suite on switch writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run common switch gui | Triggers vDC_SW_Common_Tests Jenkins job.
-   nita test run specific dns console | Executes specific DNS tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific dns gui | Triggers vDC_DNS_Tests Jenkins job.
-   nita test run specific firewall console | Executes specific firewall tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific firewall gui | Triggers vDC_FW_Tests Jenkins job.
-   nita test run specific ntp console | Executes specific NTP tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific ntp gui | Triggers vDC_NTP_Tests Jenkins job.
-   nita test run specific radius console | Executes specific RADIUS tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific radius gui | Triggers vDC_RADIUS_Tests Jenkins job.
-   nita test run specific router console | Executes specific router tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific router gui | Triggers vDC_RX_Tests Jenkins job.
-   nita test run specific switch console | Executes specific switch tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific switch gui | Triggers vDC_SW_Tests Jenkins job.
-   nita test run specific syslog console | Executes specific SYSLOG tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific syslog gui | Triggers vDC_SYSLOG_Tests Jenkins job.
-   nita test run specific tacacs console | Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --
-   nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
-   nita test volumes | Returns shared volumes information on test container.
-   nita up | Creates and starts NITA containers (both Core and CaaS) and networks.
-   nita webapp cli | Attaches local standard input, output, and error streams to webapp running container.
-   nita webapp ip | Returns IPs information on webapp container.
-   nita webapp labels | Returns labels information on webapp container.
-   nita webapp logs | Fetches the logs of webapp container.
-   nita webapp ports | Returns mapped ports information on webapp container.
-   nita webapp volumes | Returns shared volumes information on webapp container.
- |
+   nita ansible cli |  Attaches local standard input, output, and error streams to ansible running container.
+   nita ansible labels |  Returns labels information on ansible container.
+   nita ansible run build console |  Runs BUILD process and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita ansible run build gui |  Triggers BUILD Jenkins job.
+   nita ansible run noob console |  Runs NOOB process and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita ansible run noob gui |  Triggers NOOB Jenkins job.
+   nita ansible volumes |  Returns shared volumes information on ansible container.
+   nita cli version |  Shows NITA CLI current version.
+   nita containers ls |  Lists all running NITA containers.
+   nita containers versions |  Lists all running NITA containers versions.
+   nita demo laptop |  Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.
+   nita demo vmm |  Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.
+   nita destroy environment |  Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita dns cli |  Attaches local standard input, output, and error streams to dns running container.
+   nita dns ip |  Returns IPs information on dns container.
+   nita dns labels |  Returns labels information on dns container.
+   nita dns logs |  Fetches the logs of dns container.
+   nita dns ports |  Returns mapped ports information on dns container.
+   nita dns restart |  Restarts dns container.
+   nita dns volumes |  Returns shared volumes information on dns container.
+   nita down |  Stops and removes NITA containers (both Core and CaaS).
+   nita images ls |  Lists all NITA images.
+   nita images versions |  Displays NITA images versions.
+   nita inventory create |  Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.
+   nita inventory populate |  Populates virtual DC dynamic inventory with data related to NITA demo.
+   nita ips |  Shows all NITA containers IPs.
+   nita jenkins cli jenkins |  Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
+   nita jenkins cli root |  Attaches local standard input, output, and error streams to jenkins running container with "root" user.
+   nita jenkins ip |  Returns IPs information on jenkins container.
+   nita jenkins jobs export |  Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
+   nita jenkins jobs import |  Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
+   nita jenkins jobs ls |  Lists all Jenkins jobs.
+   nita jenkins jobs remove |  Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
+   nita jenkins labels |  Returns labels information on jenkins container.
+   nita jenkins logs |  Fetches the logs of jenkins container.
+   nita jenkins ports |  Returns mapped ports information on jenkins container.
+   nita jenkins restart |  Restarts jenkins container.
+   nita jenkins volumes |  Returns shared volumes information on jenkins container.
+   nita license |  Displays the NITA License.
+   nita new project |  Creates a new NITA project scaffolding.
+   nita new role |  Creates a new Ansible role scaffolding.
+   nita ntp cli |  Attaches local standard input, output, and error streams to ntp running container.
+   nita ntp ip |  Returns IPs information on ntp container.
+   nita ntp labels |  Returns labels information on ntp container.
+   nita ntp logs |  Fetches the logs of ntp container.
+   nita ntp ports |  Returns mapped ports information on ntp container.
+   nita ntp restart |  Restarts ntp container.
+   nita ntp volumes |  Returns shared volumes information on ntp container.
+   nita radius cli |  Attaches local standard input, output, and error streams to radius running container.
+   nita radius ip |  Returns IPs information on radius container.
+   nita radius labels |  Returns labels information on radius container.
+   nita radius logs |  Fetches the logs of radius container.
+   nita radius ports |  Returns mapped ports information on radius container.
+   nita radius restart |  Restarts radius container.
+   nita radius volumes |  Returns shared volumes information on radius container.
+   nita rsyslog cli |  Attaches local standard input, output, and error streams to rsyslog running container.
+   nita rsyslog ip |  Returns IPs information on rsyslog container.
+   nita rsyslog labels |  Returns labels information on rsyslog container.
+   nita rsyslog logs |  Fetches the logs of rsyslog container.
+   nita rsyslog ports |  Returns mapped ports information on rsyslog container.
+   nita rsyslog restart |  Restarts rsyslog container.
+   nita rsyslog volumes |  Returns shared volumes information on rsyslog container.
+   nita setup all |  Execute all demo
+   nita setup environment |  Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita start |  Starts NITA containers (both Core and CaaS).
+   nita stats |  Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
+   nita status |  Shows the status of every NITA containers.
+   nita stop |  Stops NITA containers (both Core and CaaS).
+   nita tacacs cli |  Attaches local standard input, output, and error streams to tacacs running container.
+   nita tacacs ip |  Returns IPs information on tacacs container.
+   nita tacacs labels |  Returns labels information on tacacs container.
+   nita tacacs logs |  Fetches the logs of tacacs container.
+   nita tacacs ports |  Returns mapped ports information on tacacs container.
+   nita tacacs restart |  Restarts tacacs container.
+   nita tacacs volumes |  Returns shared volumes information on tacacs container.
+   nita test cli |  Attaches local standard input, output, and error streams to test running container.
+   nita test labels |  Returns labels information on test container.
+   nita test pull dynamic |  Creates topology object from dynamic inventory.
+   nita test pull static |  Creates topology object from static inventory.
+   nita test run common firewall console |  Executes common test suite on firewall and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common firewall gui |  Triggers vDC_FW_Common_Tests Jenkins job.
+   nita test run common router console |  Executes common test suite on router and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common router gui |  Triggers vDC_RX_Common_Tests Jenkins job.
+   nita test run common switch console |  Executes common test suite on switch and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run common switch gui |  Triggers vDC_SW_Common_Tests Jenkins job.
+   nita test run specific dns console |  Executes specific DNS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific dns gui |  Triggers vDC_DNS_Tests Jenkins job.
+   nita test run specific firewall console |  Executes specific firewall tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific firewall gui |  Triggers vDC_FW_Tests Jenkins job.
+   nita test run specific ntp console |  Executes specific NTP tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific ntp gui |  Triggers vDC_NTP_Tests Jenkins job.
+   nita test run specific radius console |  Executes specific RADIUS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific radius gui |  Triggers vDC_RADIUS_Tests Jenkins job.
+   nita test run specific router console |  Executes specific router tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific router gui |  Triggers vDC_RX_Tests Jenkins job.
+   nita test run specific switch console |  Executes specific switch tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific switch gui |  Triggers vDC_SW_Tests Jenkins job.
+   nita test run specific syslog console |  Executes specific SYSLOG tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific syslog gui |  Triggers vDC_SYSLOG_Tests Jenkins job.
+   nita test run specific tacacs console |  Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --
+   nita test run specific tacacs gui |  Triggers vDC_TACACS_Tests Jenkins job.
+   nita test volumes |  Returns shared volumes information on test container.
+   nita up |  Creates and starts NITA containers (both Core and CaaS). 
+   |
 
 ## Customisation
 
@@ -555,15 +560,15 @@ During the demo both the NITA CLI command and its unix/docker/etc mapped command
 Without debugging option:
 
     $ nita cli version
-    NITA CLI v4.0 branch
+    NITA CLI master branch - 0.0.4
 
 With (`-d`) debugging option, mapped command is shown on `>>>> command`:
 
     $ nita -d cli version
 
-    >>>> command: echo NITA CLI v4.0 branch
+    >>>> command: echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')
 
-    NITA CLI v4.0 branch
+    NITA CLI master branch - 0.0.4
 
 Here they are some commands as an example:
 
@@ -702,8 +707,6 @@ Contact Name | e-mail
 ---------|----------
 Jose Miguel Izquierdo | jizquierdo@juniper.net
 Ignacio Suarez | inavas@juniper.net
-David Gethings | dgethings@juniper.net
 Andrew Sharp | asharp@juniper.net
  |
 Thanks for using NITA!
-
