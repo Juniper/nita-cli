@@ -22,6 +22,7 @@ Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an examp
     - [About NITA CLI](#about-nita-cli)
         - [`cli.py`](#clipy)
         - [`nita`](#nita)
+        - [Documentation](#documentation)
     - [Customisation](#customisation)
     - [Continuos integration (CI)](#continuos-integration-ci)
     - [Troubleshooting](#troubleshooting)
@@ -292,6 +293,8 @@ See both files on the repo for a deeper understanding:
 
 There is a `help` implemented at each level of the script which basically shows the commands mapped and what they do. Here it is the `nita help` command output (top level):
 
+### Documentation
+
 NITA CLI command | Description
 -----------------|-------------------
    nita ansible cli |  Attaches local standard input, output, and error streams to ansible running container.
@@ -313,6 +316,9 @@ NITA CLI command | Description
    nita dns logs |  Fetches the logs of dns container.
    nita dns ports |  Returns mapped ports information on dns container.
    nita dns restart |  Restarts dns container.
+   nita dns start |  Starts dns container.
+   nita dns stop |  Stops dns container.
+   nita dns up |  Creates and starts dns container.
    nita dns volumes |  Returns shared volumes information on dns container.
    nita down |  Stops and removes NITA containers (both Core and CaaS).
    nita images ls |  Lists all NITA images.
@@ -331,6 +337,9 @@ NITA CLI command | Description
    nita jenkins logs |  Fetches the logs of jenkins container.
    nita jenkins ports |  Returns mapped ports information on jenkins container.
    nita jenkins restart |  Restarts jenkins container.
+   nita jenkins start |  Starts jenkins container.
+   nita jenkins stop |  Stops jenkins container.
+   nita jenkins up |  Creates and starts jenkins container.
    nita jenkins volumes |  Returns shared volumes information on jenkins container.
    nita license |  Displays the NITA License.
    nita new project |  Creates a new NITA project scaffolding.
@@ -341,6 +350,9 @@ NITA CLI command | Description
    nita ntp logs |  Fetches the logs of ntp container.
    nita ntp ports |  Returns mapped ports information on ntp container.
    nita ntp restart |  Restarts ntp container.
+   nita ntp start |  Starts ntp container.
+   nita ntp stop |  Stops ntp container.
+   nita ntp up |  Creates and starts ntp container.
    nita ntp volumes |  Returns shared volumes information on ntp container.
    nita radius cli |  Attaches local standard input, output, and error streams to radius running container.
    nita radius ip |  Returns IPs information on radius container.
@@ -348,6 +360,9 @@ NITA CLI command | Description
    nita radius logs |  Fetches the logs of radius container.
    nita radius ports |  Returns mapped ports information on radius container.
    nita radius restart |  Restarts radius container.
+   nita radius start |  Starts radius container.
+   nita radius stop |  Stops radius container.
+   nita radius up |  Creates and starts radius container.
    nita radius volumes |  Returns shared volumes information on radius container.
    nita rsyslog cli |  Attaches local standard input, output, and error streams to rsyslog running container.
    nita rsyslog ip |  Returns IPs information on rsyslog container.
@@ -355,6 +370,9 @@ NITA CLI command | Description
    nita rsyslog logs |  Fetches the logs of rsyslog container.
    nita rsyslog ports |  Returns mapped ports information on rsyslog container.
    nita rsyslog restart |  Restarts rsyslog container.
+   nita rsyslog start |  Starts rsyslog container.
+   nita rsyslog stop |  Stops rsyslog container.
+   nita rsyslog up |  Creates and starts rsyslog container.
    nita rsyslog volumes |  Returns shared volumes information on rsyslog container.
    nita setup all |  Execute all demo
    nita setup environment |  Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
@@ -368,6 +386,9 @@ NITA CLI command | Description
    nita tacacs logs |  Fetches the logs of tacacs container.
    nita tacacs ports |  Returns mapped ports information on tacacs container.
    nita tacacs restart |  Restarts tacacs container.
+   nita tacacs start |  Starts tacacs container.
+   nita tacacs stop |  Stops tacacs container.
+   nita tacacs up |  Creates and starts tacacs container.
    nita tacacs volumes |  Returns shared volumes information on tacacs container.
    nita test cli |  Attaches local standard input, output, and error streams to test running container.
    nita test labels |  Returns labels information on test container.
@@ -396,7 +417,7 @@ NITA CLI command | Description
    nita test run specific tacacs console |  Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --
    nita test run specific tacacs gui |  Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes |  Returns shared volumes information on test container.
-   nita up |  Creates and starts NITA containers (both Core and CaaS). 
+   nita up |  Creates and starts NITA containers (both Core and CaaS).
    |
 
 ## Customisation
