@@ -118,6 +118,8 @@ COMMANDS = {
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs'   : 'docker logs jenkins --tail 200',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart jenkins',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up jenkins -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop jenkins',
         },
         'ansible': {
             'run': {
@@ -230,6 +232,8 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel tacacs """,
             'cli':     'docker exec -it tacacs /bin/bash',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart tacacs',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up tacacs -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop tacacs',
         },
         'radius': {
             'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
@@ -242,6 +246,8 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel radius """,
             'cli':     'docker exec -it radius /bin/bash',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart radius',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up radius -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop radius',
         },
         'ntp': {
             'logs'   : 'docker logs ntp --tail 200',
@@ -254,6 +260,8 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel ntp """,
             'cli':     'docker exec -it ntp /bin/sh',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart ntp',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up ntp -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop ntp',
         },
         'dns': {
             'logs'   : 'docker logs dns --tail 200',
@@ -266,6 +274,8 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel dns """,
             'cli':     'docker exec -it dns /bin/sh',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart dns',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up dns -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop dns',
         },
         'rsyslog': {
             'logs'   : 'docker logs rsyslog --tail 200',
@@ -278,6 +288,8 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; containerlabel rsyslog """,
             'cli':     'docker exec -it rsyslog /bin/sh',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart rsyslog',
+            'start':   'docker-compose -f nita-core.yml -f nita-caas.yml up rsyslog -d',
+            'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml rsyslog dns',
         },
         'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
     },
@@ -340,6 +352,8 @@ HELP = {
             'volumes': 'Returns shared volumes information on jenkins container.',
             'logs'   : 'Fetches the logs of jenkins container.',
             'restart': 'Restarts jenkins container.',
+            'start':   'Starts jenkins container.',
+            'stop':    'Stops jenkins container.',
         },
         'ansible': {
             'run': {
@@ -439,6 +453,8 @@ HELP = {
             'labels' : 'Returns labels information on tacacs container.',
             'cli'    : 'Attaches local standard input, output, and error streams to tacacs running container.',
             'restart': 'Restarts tacacs container.',
+            'start':   'Starts tacacs container.',
+            'stop':    'Stops tacacs container.',
         },
         'radius': {
             'logs'   : 'Fetches the logs of radius container.',
@@ -448,6 +464,8 @@ HELP = {
             'labels' : 'Returns labels information on radius container.',
             'cli'    : 'Attaches local standard input, output, and error streams to radius running container.',
             'restart': 'Restarts radius container.',
+            'start':   'Starts radius container.',
+            'stop':    'Stops radius container.',
         },
         'ntp': {
             'logs'   : 'Fetches the logs of ntp container.',
@@ -457,6 +475,8 @@ HELP = {
             'labels' : 'Returns labels information on ntp container.',
             'cli'    : 'Attaches local standard input, output, and error streams to ntp running container.',
             'restart': 'Restarts ntp container.',
+            'start':   'Starts ntp container.',
+            'stop':    'Stops ntp container.',
         },
         'dns': {
             'logs'   : 'Fetches the logs of dns container.',
@@ -466,6 +486,8 @@ HELP = {
             'labels' : 'Returns labels information on dns container.',
             'cli'    : 'Attaches local standard input, output, and error streams to dns running container.',
             'restart': 'Restarts dns container.',
+            'start':   'Starts dns container.',
+            'stop':    'Stops dns container.',
         },
         'rsyslog': {
             'logs'   : 'Fetches the logs of rsyslog container.',
@@ -475,6 +497,8 @@ HELP = {
             'labels' : 'Returns labels information on rsyslog container.',
             'cli'    : 'Attaches local standard input, output, and error streams to rsyslog running container.',
             'restart': 'Restarts rsyslog container.',
+            'start':   'Starts rsyslog container.',
+            'stop':    'Stops rsyslog container.',
         },
         'license': 'Displays the NITA License.',
     },
