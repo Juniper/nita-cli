@@ -374,7 +374,7 @@ HELP = {
             'stop':    'Stops jenkins container.',
             'rm':      'Remove jenkins container.',
             'up':      'Creates and starts jenkins container.',
-            'down':    'Stop and remove jenkins container.',
+            'down':    'Stops and removes jenkins container.',
         },
         'ansible': {
             'run': {
@@ -478,7 +478,7 @@ HELP = {
             'stop':    'Stops tacacs container.',
             'rm':      'Remove tacacs container.',
             'up':      'Creates and starts tacacs container.',
-            'down':    'Stop and remove tacacs container.',
+            'down':    'Stops and removes tacacs container.',
         },
         'radius': {
             'logs'   : 'Fetches the logs of radius container.',
@@ -492,7 +492,7 @@ HELP = {
             'stop':    'Stops radius container.',
             'rm':      'Remove radius container.',
             'up':      'Creates and starts radius container.',
-            'down':    'Stop and remove radius container.',
+            'down':    'Stops and removes radius container.',
         },
         'ntp': {
             'logs'   : 'Fetches the logs of ntp container.',
@@ -506,7 +506,7 @@ HELP = {
             'stop':    'Stops ntp container.',
             'rm':      'Remove ntp container.',
             'up':      'Creates and starts ntp container.',
-            'down':    'Stop and remove ntp container.',
+            'down':    'Stops and removes ntp container.',
         },
         'dns': {
             'logs'   : 'Fetches the logs of dns container.',
@@ -520,7 +520,7 @@ HELP = {
             'stop':    'Stops dns container.',
             'rm':      'Remove dns container.',
             'up':      'Creates and starts dns container.',
-            'down':    'Stop and remove dns container.',
+            'down':    'Stops and removes dns container.',
         },
         'rsyslog': {
             'logs'   : 'Fetches the logs of rsyslog container.',
@@ -534,7 +534,7 @@ HELP = {
             'stop':    'Stops rsyslog container.',
             'rm':      'Remove rsyslog container.',
             'up':      'Creates and starts rsyslog container.',
-            'down':    'Stop and remove rsyslog container.',
+            'down':    'Stops and removes rsyslog container.',
         },
         'license': 'Displays the NITA License.',
     },
