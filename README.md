@@ -417,7 +417,8 @@ NITA CLI command | Description
    nita test run specific tacacs console |  Executes specific TACACS tests and writes its output to console. -- It does not trigger any Jenkins job! --
    nita test run specific tacacs gui |  Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes |  Returns shared volumes information on test container.
-   nita up |  Creates and starts NITA containers (both Core and CaaS).   |
+   nita up |  Creates and starts NITA containers (both Core and CaaS).
+   |
 
 ## Customisation
 
