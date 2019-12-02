@@ -120,7 +120,7 @@ COMMANDS = {
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart jenkins',
             'start':   'docker-compose -f nita-core.yml -f nita-caas.yml start jenkins',
             'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop jenkins',
-            'rm':      'docker-compose -f nita-core.yml -f nita-caas.yml rm  -f jenkins',
+            'rm':      'docker-compose -f nita-core.yml -f nita-caas.yml rm -f jenkins',
             'up':      'docker-compose -f nita-core.yml -f nita-caas.yml up -d jenkins',
             'down':    'nita jenkins stop ; nita jenkins rm',
         },
