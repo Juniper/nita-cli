@@ -8,13 +8,22 @@ queue:
 
 steps:
 
-# If this is a PR build, change the Build.SourceBranch to be the Pull Request Source.
-- task: jessehouwing.jessehouwing-vsts-variable-tasks.vsts-variable-set.VariableSetTask@1
-  displayName: "PR-only HACK: Set variable: Build.SourceBranch to: $(System.PullRequest.SourceBranch)"
+# # If this is a PR build, change the Build.SourceBranch to be the Pull Request Source.
+# - task: jessehouwing.jessehouwing-vsts-variable-tasks.vsts-variable-set.VariableSetTask@1
+#   displayName: "PR-only HACK: Set variable: Build.SourceBranch to: $(System.PullRequest.SourceBranch)"
+#   inputs:
+#     VariableName: Build.SourceBranch
+#     Value: $(System.PullRequest.SourceBranch)
+#   condition: eq(variables['Build.Reason'], 'PullRequest')
+
+- task: JenkinsQueueJob@2
   inputs:
-    VariableName: Build.SourceBranch
-    Value: $(System.PullRequest.SourceBranch)
-  condition: eq(variables['Build.Reason'], 'PullRequest')
+    serverEndpoint: 'ps-jenkins.aslab.juniper.net'
+    jobName: 'nita-cli'
+    captureConsole: true
+    capturePipeline: true
+    isParameterizedJob: true
+    jobParameters: 'SOURCE_BRANCH=refs/heads/master'
 
 # If this is a PR build, change Build.SourceVersion to: HEAD
 - task: jessehouwing.jessehouwing-vsts-variable-tasks.vsts-variable-set.VariableSetTask@1
