@@ -32,6 +32,8 @@ steps:
     # TODO: (If copied) -- Specify the new job on Jenkins (copy from api-gateway and update).
     #       Remember to correct this name too!
     jobName: 'nita-cli'
+    captureConsole: true
+    capturePipeline: true
     isParameterizedJob: 'true'
     jobParameters: |
      SOURCE_BRANCH=$(Build.SourceBranch)
