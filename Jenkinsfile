@@ -1,6 +1,6 @@
 #!groovy
 
-//@Library('PS-Shared-libs') _
+@Library('PS-Shared-libs') _
 
 node() {
     try {
