@@ -61,7 +61,7 @@ Compare it with this one in order to get the same output:
 
     $ nita containers ls
     CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS                       PORTS                                              NAMES
-    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8443->8443/tcp, 0.0.0.0:50000->50000/tcp   jenkins
     5ed87b63500f        registry.juniper.net/nita/webapp:latest    "webapp-runner"          About an hour ago   Up About an hour             0.0.0.0:8090->8060/tcp                             webapp
     714107fad380        registry.juniper.net/nita/rsyslog:latest   "rsyslog-runner"         About an hour ago   Up About an hour             0.0.0.0:514->514/udp                               rsyslog
     effe8a4a7217        registry.juniper.net/nita/ntp:latest       "ntp-runner"             About an hour ago   Up About an hour             0.0.0.0:123->123/tcp                               ntp

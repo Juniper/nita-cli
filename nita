@@ -128,11 +128,11 @@ COMMANDS = {
             'run': {
                 'noob' : {
                     'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./noob.sh',
-                    'gui' :    'curl -X POST http://localhost:8080/job/vDC_NOOB/build',
+                    'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_NOOB/build',
                 },
                 'build': {
                     'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./build.sh',
-                    'gui':     'curl -X POST http://localhost:8080/job/vDC_Build/build',
+                    'gui':     'curl -k -X POST https://localhost:8443/job/vDC_Build/build',
                 },
             },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
@@ -147,58 +147,58 @@ COMMANDS = {
                 'common': { 
                     'firewall' : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Common_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_FW_Common_Tests/build',
                     }, 
                     'switch' : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Common_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_SW_Common_Tests/build',
                     }, 
                     'router': {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Common_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_RX_Common_Tests/build',
                     },    
                 },
                 'specific' : 
                     {
                     'firewall' : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_FW_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_FW_Tests/build',
                         },
                     'switch'   : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SW_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_SW_Tests/build',
                         },
                     'router'   : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RX_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_RX_Tests/build',
                         },
                     'tacacs'   : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_TACACS_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_TACACS_Tests/build',
                         },
                     'radius'   : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_RADIUS_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_RADIUS_Tests/build',
                         },
                     'syslog'   : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_SYSLOG_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_SYSLOG_Tests/build',
                         },
                     'dns'      : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_DNS_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_DNS_Tests/build',
                         },
                     'ntp'      : {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
-                        'gui' :    'curl -X POST http://localhost:8080/job/vDC_NTP_Tests/build',
+                        'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_NTP_Tests/build',
                         },
                     # 'ospf'     : {
                     #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
-                    #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_OSPF_Tests/build',
+                    #     'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_OSPF_Tests/build',
                     #     },
                     # 'bgp'      : {
                     #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.8.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
-                    #     'gui' :    'curl -X POST http://localhost:8080/job/vDC_BGP_Tests/build',
+                    #     'gui' :    'curl -k -X POST https://localhost:8443/job/vDC_BGP_Tests/build',
                     #     },
                     },                   
                 },
