@@ -118,6 +118,7 @@ COMMANDS = {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
                 'root'   : 'docker exec -it -u root jenkins /bin/bash',
             },
+            'gui'    : 'open https://localhost:8443',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
@@ -359,7 +360,7 @@ HELP = {
         'ips'  : 'Shows all NITA containers IPs.',
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
-            'version'   : 'Gets version of Jenkins server.',
+            'version'   : 'Gets Jenkins server version.',
             'jobs': {
                 'ls'    : 'Lists all Jenkins jobs.',
                 'remove': 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
@@ -375,6 +376,7 @@ HELP = {
                 'jenkins': 'Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.',
                 'root'   : 'Attaches local standard input, output, and error streams to jenkins running container with "root" user.',
             },
+            'gui'    : 'Opens Jenkins GUI.',
             'ip'     : 'Returns IPs information on jenkins container.',
             'ports'  : 'Returns mapped ports information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
