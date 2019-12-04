@@ -99,11 +99,16 @@ COMMANDS = {
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
+            'version'   : 'docker exec -it jenkins get_jenkins_version.py',
             'jobs': {
-                'ls'    : 'docker exec -it jenkins list_jenkins_jobs.py',
+                'ls'    : 'docker exec -it jenkins get_jenkins_jobs.py',
                 'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
-                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.5 import_jenkins_jobs.sh {0} {1}",
-                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.5 export_jenkins_jobs.sh {0} {1}",
+                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
+                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
+            },
+            'plugins': {
+                'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py',
+                'details': 'docker exec -it jenkins get_jenkins_plugin_details.py',
             },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
@@ -354,11 +359,16 @@ HELP = {
         'ips'  : 'Shows all NITA containers IPs.',
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
+            'version'   : 'Gets version of Jenkins server.',
             'jobs': {
                 'ls'    : 'Lists all Jenkins jobs.',
                 'remove': 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
                 'import': 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
                 'export': 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
+            },
+            'plugins': {
+                'ls'     : 'Lists all Jenkins plugins.',
+                'details': 'Lists all Jenkins plugins in detail.'
             },
             'labels':  'Returns labels information on jenkins container.',
             'cli': {
