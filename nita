@@ -107,7 +107,7 @@ COMMANDS = {
                 'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
             },
             'plugins': {
-                'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py',
+                'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py | sort ',
                 'details': 'docker exec -it jenkins get_jenkins_plugin_details.py',
             },
             'labels':  """containerlabel() { docker inspect -f '
@@ -122,7 +122,7 @@ COMMANDS = {
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
-            'logs'   : 'docker logs jenkins --tail 200',
+            'logs'   : 'docker logs -f jenkins --tail 200',
             'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart jenkins',
             'start':   'docker-compose -f nita-core.yml -f nita-caas.yml start jenkins',
             'stop':    'docker-compose -f nita-core.yml -f nita-caas.yml stop jenkins',
@@ -220,7 +220,7 @@ COMMANDS = {
             'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
     #     'webapp': {
-    #         'logs'   : 'docker logs webapp --tail 200',
+    #         'logs'   : 'docker logs -f webapp --tail 200',
     #         'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
     #         'ports'  : 'docker port webapp',
     #         'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
@@ -265,7 +265,7 @@ COMMANDS = {
             'down':    'nita radius stop ; nita radius rm',
         },
         'ntp': {
-            'logs'   : 'docker logs ntp --tail 200',
+            'logs'   : 'docker logs -f ntp --tail 200',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
             'ports'  : 'docker port ntp',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
@@ -282,7 +282,7 @@ COMMANDS = {
             'down':    'nita ntp stop ; nita ntp rm',
         },
         'dns': {
-            'logs'   : 'docker logs dns --tail 200',
+            'logs'   : 'docker logs -f dns --tail 200',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
             'ports'  : 'docker port dns',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
@@ -299,7 +299,7 @@ COMMANDS = {
             'down':    'nita dns stop ; nita dns rm',
         },
         'rsyslog': {
-            'logs'   : 'docker logs rsyslog --tail 200',
+            'logs'   : 'docker logs -f rsyslog --tail 200',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' rsyslog',
             'ports'  : 'docker port rsyslog',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' rsyslog | jq',
@@ -380,7 +380,7 @@ HELP = {
             'ip'     : 'Returns IPs information on jenkins container.',
             'ports'  : 'Returns mapped ports information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
-            'logs'   : 'Fetches the logs of jenkins container.',
+            'logs'   : 'Follows log output of jenkins container.',
             'restart': 'Restarts jenkins container.',
             'start':   'Starts jenkins container.',
             'stop':    'Stops jenkins container.',
@@ -471,7 +471,7 @@ HELP = {
             'cli'    : 'Attaches local standard input, output, and error streams to test running container.',
         },
         # 'webapp': {
-        #     'logs'   : 'Fetches the logs of webapp container.',
+        #     'logs'   : 'Follows log output of webapp container.',
         #     'ip'     : 'Returns IPs information on webapp container.',
         #     'ports'  : 'Returns mapped ports information on webapp container.',
         #     'volumes': 'Returns shared volumes information on webapp container.',
@@ -479,7 +479,7 @@ HELP = {
         #     'cli'    : 'Attaches local standard input, output, and error streams to webapp running container.',
         # },
         'tacacs': {
-            'logs'   : 'Fetches the logs of tacacs container.',
+            'logs'   : 'Follows log output of tacacs container.',
             'ip'     : 'Returns IPs information on tacacs container.',
             'ports'  : 'Returns mapped ports information on tacacs container.',
             'volumes': 'Returns shared volumes information on tacacs container.',
@@ -493,7 +493,7 @@ HELP = {
             'down':    'Stops and removes tacacs container.',
         },
         'radius': {
-            'logs'   : 'Fetches the logs of radius container.',
+            'logs'   : 'Follows log output of radius container.',
             'ip'     : 'Returns IPs information on radius container.',
             'ports'  : 'Returns mapped ports information on radius container.',
             'volumes': 'Returns shared volumes information on radius container.',
@@ -507,7 +507,7 @@ HELP = {
             'down':    'Stops and removes radius container.',
         },
         'ntp': {
-            'logs'   : 'Fetches the logs of ntp container.',
+            'logs'   : 'Follows log output of ntp container.',
             'ip'     : 'Returns IPs information on ntp container.',
             'ports'  : 'Returns mapped ports information on ntp container.',
             'volumes': 'Returns shared volumes information on ntp container.',
@@ -521,7 +521,7 @@ HELP = {
             'down':    'Stops and removes ntp container.',
         },
         'dns': {
-            'logs'   : 'Fetches the logs of dns container.',
+            'logs'   : 'Follows log output of dns container.',
             'ip'     : 'Returns IPs information on dns container.',
             'ports'  : 'Returns mapped ports information on dns container.',
             'volumes': 'Returns shared volumes information on dns container.',
@@ -535,7 +535,7 @@ HELP = {
             'down':    'Stops and removes dns container.',
         },
         'rsyslog': {
-            'logs'   : 'Fetches the logs of rsyslog container.',
+            'logs'   : 'Follows log output of rsyslog container.',
             'ip'     : 'Returns IPs information on rsyslog container.',
             'ports'  : 'Returns mapped ports information on rsyslog container.',
             'volumes': 'Returns shared volumes information on rsyslog container.',
