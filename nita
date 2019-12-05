@@ -101,10 +101,11 @@ COMMANDS = {
         'jenkins': {
             'version'   : 'docker exec -it jenkins get_jenkins_version.py',
             'jobs': {
-                'ls'    : 'docker exec -it jenkins get_jenkins_jobs.py',
-                'remove': 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
-                'import': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
-                'export': "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
+                'ls'       : 'docker exec -it jenkins get_jenkins_jobs.py',
+                'remove'   : 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
+                'import'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
+                'export'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
+                'reinstall': 'nita jenkins jobs remove --regex vDC ; docker run --rm --network `docker network ls --filter name="nita(-|)*demo(-|)*intro_default" | awk \'FNR==2{print $2}\'` --volumes-from jenkins -v ${PWD}:/project -e PROJECT_PATH="${PWD}" ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 /bin/sh project/jenkins/import_vDC_jobs.sh',
             },
             'plugins': {
                 'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py | sort ',
@@ -362,10 +363,11 @@ HELP = {
         'jenkins': {
             'version'   : 'Gets Jenkins server version.',
             'jobs': {
-                'ls'    : 'Lists all Jenkins jobs.',
-                'remove': 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
-                'import': 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
-                'export': 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
+                'ls'       : 'Lists all Jenkins jobs.',
+                'remove'   : 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
+                'import'   : 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
+                'export'   : 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
+                'reinstall': 'Removes and reinstalls every NITA demo job.',
             },
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
