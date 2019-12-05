@@ -368,8 +368,8 @@ HELP = {
                 'export': 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
             },
             'plugins': {
-                'ls'     : 'Lists all Jenkins plugins.',
-                'details': 'Lists all Jenkins plugins in detail.'
+                'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
+                'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
             },
             'labels':  'Returns labels information on jenkins container.',
             'cli': {
