@@ -61,7 +61,7 @@ Compare it with this one in order to get the same output:
 
     $ nita containers ls
     CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS                       PORTS                                              NAMES
-    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8080->8080/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8443->8443/tcp, 0.0.0.0:50000->50000/tcp   jenkins
     5ed87b63500f        registry.juniper.net/nita/webapp:latest    "webapp-runner"          About an hour ago   Up About an hour             0.0.0.0:8090->8060/tcp                             webapp
     714107fad380        registry.juniper.net/nita/rsyslog:latest   "rsyslog-runner"         About an hour ago   Up About an hour             0.0.0.0:514->514/udp                               rsyslog
     effe8a4a7217        registry.juniper.net/nita/ntp:latest       "ntp-runner"             About an hour ago   Up About an hour             0.0.0.0:123->123/tcp                               ntp
@@ -311,11 +311,13 @@ NITA CLI command | Description
    nita demo vmm |  Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.
    nita destroy environment |  Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.
    nita dns cli |  Attaches local standard input, output, and error streams to dns running container.
+   nita dns down |  Stops and removes dns container.
    nita dns ip |  Returns IPs information on dns container.
    nita dns labels |  Returns labels information on dns container.
-   nita dns logs |  Fetches the logs of dns container.
+   nita dns logs |  Follows log output of dns container.
    nita dns ports |  Returns mapped ports information on dns container.
    nita dns restart |  Restarts dns container.
+   nita dns rm |  Removes dns container.
    nita dns start |  Starts dns container.
    nita dns stop |  Stops dns container.
    nita dns up |  Creates and starts dns container.
@@ -328,48 +330,61 @@ NITA CLI command | Description
    nita ips |  Shows all NITA containers IPs.
    nita jenkins cli jenkins |  Attaches local standard input, output, and error streams to jenkins running container with "jenkins" user.
    nita jenkins cli root |  Attaches local standard input, output, and error streams to jenkins running container with "root" user.
+   nita jenkins down |  Stops and removes jenkins container.
+   nita jenkins gui |  Opens Jenkins GUI.
    nita jenkins ip |  Returns IPs information on jenkins container.
    nita jenkins jobs export |  Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
    nita jenkins jobs import |  Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
    nita jenkins jobs ls |  Lists all Jenkins jobs.
+   nita jenkins jobs reinstall |  Removes and reinstalls every NITA demo job.
    nita jenkins jobs remove |  Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
    nita jenkins labels |  Returns labels information on jenkins container.
-   nita jenkins logs |  Fetches the logs of jenkins container.
+   nita jenkins logs |  Follows log output of jenkins container.
+   nita jenkins plugins details |  Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).
+   nita jenkins plugins ls |  Lists every Jenkins plugins installed sorted alphabetically.
    nita jenkins ports |  Returns mapped ports information on jenkins container.
    nita jenkins restart |  Restarts jenkins container.
+   nita jenkins rm |  Removes jenkins container.
    nita jenkins start |  Starts jenkins container.
    nita jenkins stop |  Stops jenkins container.
    nita jenkins up |  Creates and starts jenkins container.
+   nita jenkins version |  Gets Jenkins server version.
    nita jenkins volumes |  Returns shared volumes information on jenkins container.
    nita license |  Displays the NITA License.
    nita new project |  Creates a new NITA project scaffolding.
    nita new role |  Creates a new Ansible role scaffolding.
    nita ntp cli |  Attaches local standard input, output, and error streams to ntp running container.
+   nita ntp down |  Stops and removes ntp container.
    nita ntp ip |  Returns IPs information on ntp container.
    nita ntp labels |  Returns labels information on ntp container.
-   nita ntp logs |  Fetches the logs of ntp container.
+   nita ntp logs |  Follows log output of ntp container.
    nita ntp ports |  Returns mapped ports information on ntp container.
    nita ntp restart |  Restarts ntp container.
+   nita ntp rm |  Removes ntp container.
    nita ntp start |  Starts ntp container.
    nita ntp stop |  Stops ntp container.
    nita ntp up |  Creates and starts ntp container.
    nita ntp volumes |  Returns shared volumes information on ntp container.
    nita radius cli |  Attaches local standard input, output, and error streams to radius running container.
+   nita radius down |  Stops and removes radius container.
    nita radius ip |  Returns IPs information on radius container.
    nita radius labels |  Returns labels information on radius container.
-   nita radius logs |  Fetches the logs of radius container.
+   nita radius logs |  Follows log output of radius container.
    nita radius ports |  Returns mapped ports information on radius container.
    nita radius restart |  Restarts radius container.
+   nita radius rm |  Removes radius container.
    nita radius start |  Starts radius container.
    nita radius stop |  Stops radius container.
    nita radius up |  Creates and starts radius container.
    nita radius volumes |  Returns shared volumes information on radius container.
    nita rsyslog cli |  Attaches local standard input, output, and error streams to rsyslog running container.
+   nita rsyslog down |  Stops and removes rsyslog container.
    nita rsyslog ip |  Returns IPs information on rsyslog container.
    nita rsyslog labels |  Returns labels information on rsyslog container.
-   nita rsyslog logs |  Fetches the logs of rsyslog container.
+   nita rsyslog logs |  Follows log output of rsyslog container.
    nita rsyslog ports |  Returns mapped ports information on rsyslog container.
    nita rsyslog restart |  Restarts rsyslog container.
+   nita rsyslog rm |  Removes rsyslog container.
    nita rsyslog start |  Starts rsyslog container.
    nita rsyslog stop |  Stops rsyslog container.
    nita rsyslog up |  Creates and starts rsyslog container.
@@ -381,11 +396,13 @@ NITA CLI command | Description
    nita status |  Shows the status of every NITA containers.
    nita stop |  Stops NITA containers (both Core and CaaS).
    nita tacacs cli |  Attaches local standard input, output, and error streams to tacacs running container.
+   nita tacacs down |  Stops and removes tacacs container.
    nita tacacs ip |  Returns IPs information on tacacs container.
    nita tacacs labels |  Returns labels information on tacacs container.
-   nita tacacs logs |  Fetches the logs of tacacs container.
+   nita tacacs logs |  Follows log output of tacacs container.
    nita tacacs ports |  Returns mapped ports information on tacacs container.
    nita tacacs restart |  Restarts tacacs container.
+   nita tacacs rm |  Removes tacacs container.
    nita tacacs start |  Starts tacacs container.
    nita tacacs stop |  Stops tacacs container.
    nita tacacs up |  Creates and starts tacacs container.
@@ -418,7 +435,7 @@ NITA CLI command | Description
    nita test run specific tacacs gui |  Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes |  Returns shared volumes information on test container.
    nita up |  Creates and starts NITA containers (both Core and CaaS).
-   |
+    |
 
 ## Customisation
 
