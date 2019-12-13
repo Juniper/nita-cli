@@ -95,6 +95,7 @@ COMMANDS = {
         'inventory': {
             'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb',
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
+            'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
         },
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
@@ -148,6 +149,24 @@ COMMANDS = {
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; containerlabel ansible """,
             'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
+        },
+        'gitlab': {
+            'labels':  """containerlabel() { docker inspect -f '
+    {{ range $k, $v := .Config.Labels -}}
+    {{ $k }} = {{ $v }}
+    {{ end -}}' $1 ; } ; containerlabel ps-docker.artifactory.aslab.juniper.net/gitlab-ce:12.5.3-ce.0 """,
+            'cli'    : 'docker exec -it -u root gitlab /bin/bash',
+            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' gitlab',
+            'ports'  : 'docker port gitlab',
+            'volumes': 'docker inspect --format \'{{json .Mounts}}\' gitlab | jq',
+            'logs'   : 'docker logs -f gitlab',
+            'restart': 'docker-compose -f nita-core.yml -f nita-caas.yml restart gitlab',
+            'start'  : 'docker-compose -f nita-core.yml -f nita-caas.yml start gitlab',
+            'stop'   : 'docker-compose -f nita-core.yml -f nita-caas.yml stop gitlab',
+            'rm'     : 'docker-compose -f nita-core.yml -f nita-caas.yml rm -f gitlab',
+            'up'     : 'docker-compose -f nita-core.yml -f nita-caas.yml up -d gitlab',
+            'down'   : 'nita gitlab stop ; nita gitlab rm',
+            'gui'    : 'open https://localhost:9443',
         },
         'test': {
             'run': {
@@ -357,6 +376,7 @@ HELP = {
         'inventory': {
             'create'  : 'Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.',
             'populate': 'Populates virtual DC dynamic inventory with data related to NITA demo.',
+            'gui'     : 'Opens CouchDB inventory GUI.',
         },
         'ips'  : 'Shows all NITA containers IPs.',
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
@@ -404,6 +424,21 @@ HELP = {
             'volumes': 'Returns shared volumes information on ansible container.',
             'labels' : 'Returns labels information on ansible container.',
             'cli'    : 'Attaches local standard input, output, and error streams to ansible running container.',
+        },
+        'gitlab': {
+            'labels' : 'Returns labels information on gitlab container.',
+            'cli'    : 'Attaches local standard input, output, and error streams to gitlab running container with "root" user.',
+            'ip'     : 'Returns IPs information on gitlab container.',
+            'ports'  : 'Returns mapped ports information on gitlab container.',
+            'volumes': 'Returns shared volumes information on gitlab container.',
+            'logs'   : 'Fetches the logs of gitlab container.',
+            'restart': 'Restarts gitlab container.',
+            'start'  : 'Starts gitlab container.',
+            'stop'   : 'Stops gitlab container.',
+            'rm'     : 'Removes gitlab container.',
+            'up'     : 'Creates and starts gitlab container.',
+            'down'   : 'Stops and removes gitlab container.',
+            'gui'    : 'Opens GitLab GUI.',
         },
         'test': {
             'run': {
