@@ -1,0 +1,4 @@
+# OS X
+alias nita='docker run -it --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker ps-docker.artifactory.aslab.juniper.net/nita/cli:1.0.0'
+# Linux
+alias nita='docker run -it --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker ps-docker.artifactory.aslab.juniper.net/nita/cli:1.0.0'
