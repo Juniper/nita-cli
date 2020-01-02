@@ -269,6 +269,11 @@ If you are a **developer** and want to test your changes on NITA CLI local, then
       Running setup.py install for nita-cli ... done
     Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.4 pyyaml-3.13
 
+Also add the following lines to your `/etc/hosts` (local DNS) file.
+
+    ## NITA
+    127.0.0.1    gitlab.nita.com	jenkins.nita.com
+
 ## About NITA CLI
 
 It is mainly composed of two different python scripts. There are others (like installation and autocomplete, but they are not really part of the heart of the CLI):
