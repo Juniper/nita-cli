@@ -120,7 +120,7 @@ COMMANDS = {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
                 'root'   : 'docker exec -it -u root jenkins /bin/bash',
             },
-            'gui'    : 'open https://admin:admin@localhost:8443',
+            'gui'    : 'open https://localhost:8443',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
