@@ -6,10 +6,9 @@ NITA CLI project adds a command line interface to NITA. It is the way of interac
 
 Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an example of this. It is creativity with an eye toward pragmatism. It is not just innovation, but innovation applied.
 
-## TOC
+## Table of Contents
 
 - [NITA CLI](#nita-cli)
-    - [TOC](#toc)
     - [Goal](#goal)
     - [Reusability](#reusability)
     - [Autocompletion](#autocompletion)
@@ -71,9 +70,11 @@ Compare it with this one in order to get the same output:
 
 ## Reusability
 
-These scripts are basically a wrapper to almost any command a consultant could imagine. Not only that, it is also designed in a way that if any new commands are needed, it is so _easy_ to add them that anybody will be able to play with it and get it customised.
+These scripts are basically a wrapper to almost any command you could imagine. Not only that, it is also designed in a way that if any new commands are needed, it is so _easy_ to add them that anybody will be able to play with it and get it customised for their own purposes.
 
-Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `cli.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. That's all folks!!! Ready to go!!!
+Furthermore, the way it is designed allows a user to reuse it in a different platforms. Let's say J-EDI for example. The only modification needed is to rename the `nita` script to `j-edi` and create a new tree of commands in `cli.py` file. After that, add `+x` permissions and move them to /usr/local/bin/ directory. 
+
+That's all folks!!!
 
 ## Autocompletion
 
@@ -253,7 +254,7 @@ In order to install NITA CLI, use pip command and specifiy nita_cli repository w
       Running setup.py install for nita-cli ... done
     Successfully installed nita-cli-0.0.4
 
-If you are a **developer** and want to test your changes on NITA CLI local, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
+If you are a **developer** and want to test your changes on NITA CLI locally, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
 `sudo pip3 install -I nita-cli/ --no-binary :all:`
 
@@ -269,7 +270,7 @@ If you are a **developer** and want to test your changes on NITA CLI local, then
       Running setup.py install for nita-cli ... done
     Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.4 pyyaml-3.13
 
-Also add the following lines to your `/etc/hosts` (local DNS) file.
+Also add the following lines to your `/etc/hosts` (local DNS) file if refering to NITA Jenkins and NITA Gitlab instances.
 
     ## NITA
     127.0.0.1    gitlab.nita.com	jenkins.nita.com
