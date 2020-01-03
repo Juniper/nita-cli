@@ -14,9 +14,10 @@ COMMANDS = {
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
-            'all': 'nita setup environment ; nita demo laptop ; '
+            'all': 'nita setup environment ; nita demo laptop ; ',
         },
         'destroy': {
+            'vdc'        : './.remove.sh',
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
         },
         'up'      : 'docker-compose -f nita-core.yml -f nita-caas.yml up -d',
@@ -135,11 +136,11 @@ COMMANDS = {
         'ansible': {
             'run': {
                 'noob' : {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./noob.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/noob.pb.yaml',
                     'gui' :    'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NOOB/build',
                 },
                 'build': {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ./build.sh',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/build.pb.yaml',
                     'gui':     'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
                 },
             },
@@ -337,9 +338,9 @@ COMMANDS = {
         },
         'ping': {
             'all'       : 'for i in 2 3 4;  do ping -c 3 192.168.56.$i; done',
-            'rx-vdc-001': 'ping -c 3 192.168.56.2; done',
-            'sw-vdc-001': 'ping -c 3 192.168.56.3; done',
-            'fw-vdc-001': 'ping -c 3 192.168.56.4; done',
+            'rx-vdc-001': 'ping -c 3 192.168.56.2',
+            'sw-vdc-001': 'ping -c 3 192.168.56.3',
+            'fw-vdc-001': 'ping -c 3 192.168.56.4',
         },
         'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
     },
@@ -356,6 +357,7 @@ HELP = {
             'all'        : 'Execute all demo',
         },
         'destroy': {
+            'vdc'        : 'Removes virtual DC devices.',
             'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
         },
         'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
