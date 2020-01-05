@@ -25,6 +25,20 @@ COMMANDS = {
         'start'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start',
         'stop'    : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop',
         'status'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml ps',
+        'core': {
+            'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
+            'down'    : 'docker-compose --compatibility -f nita-core.yml down',
+            'start'   : 'docker-compose --compatibility -f nita-core.yml start',
+            'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
+            'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
+        },
+        'caas': {
+            'up'      : 'docker-compose --compatibility -f nita-caas.yml up -d',
+            'down'    : 'docker-compose --compatibility -f nita-caas.yml down',
+            'start'   : 'docker-compose --compatibility -f nita-caas.yml start',
+            'stop'    : 'docker-compose --compatibility -f nita-caas.yml stop',
+            'status'  : 'docker-compose --compatibility -f nita-caas.yml ps',
+        },
         'demo': {
             'vmm'   : 'nita -d inventory create ; \
                        sleep 10 ; \
@@ -365,6 +379,20 @@ HELP = {
         'start' :   'Starts NITA containers (both Core and CaaS).',
         'stop'  :   'Stops NITA containers (both Core and CaaS).',
         'status':   'Shows the status of every NITA containers.',
+        'core': {
+            'up'    :   'Creates and starts Core NITA containers.',
+            'down'  :   'Stops and removes Core NITA containers.',
+            'start' :   'Starts Core NITA containers.',
+            'stop'  :   'Stops Core NITA containers.',
+            'status':   'Shows the status of Core NITA containers.',
+        },
+        'caas': {
+            'up'    :   'Creates and starts CaaS NITA containers.',
+            'down'  :   'Stops and removes CaaS NITA containers.',
+            'start' :   'Starts CaaS NITA containers.',
+            'stop'  :   'Stops CaaS NITA containers.',
+            'status':   'Shows the status of CaaS NITA containers.',
+        },
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
             'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.',
