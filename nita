@@ -13,7 +13,8 @@ COMMANDS = {
             'version': "echo NITA CLI gitlab branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'setup': {
-            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            'environment': './setup_demo.sh',
             'all': 'nita setup environment ; nita demo laptop ; ',
         },
         'destroy': {
@@ -367,7 +368,8 @@ HELP = {
             'version': 'Shows NITA CLI current version.',
         },
         'setup': {
-            'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            #'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            'environment': 'Sets up a virtual DC running on your laptop environment to run the demo.',
             'all'        : 'Execute all demo',
         },
         'destroy': {
