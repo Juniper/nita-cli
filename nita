@@ -19,7 +19,8 @@ COMMANDS = {
         },
         'destroy': {
             'vdc'        : './.remove.sh',
-            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            'environment': './destroy_demo.sh',
         },
         'up'      : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d',
         'down'    : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml down',
@@ -380,7 +381,8 @@ HELP = {
         },
         'destroy': {
             'vdc'        : 'Removes virtual DC devices.',
-            'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
+            #'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
+            'environment': 'Destroys your virtual DC running on your laptop.',
         },
         'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
         'down'  :   'Stops and removes NITA containers (both Core and CaaS).',
