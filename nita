@@ -357,6 +357,12 @@ COMMANDS = {
             'sw-vdc-001': 'ping -c 3 192.168.56.3',
             'fw-vdc-001': 'ping -c 3 192.168.56.4',
         },
+        'backup': {
+            'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
+            'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
+            'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
+            'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
+        },
         'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
     },
 }
@@ -628,6 +634,12 @@ HELP = {
             'rx-vdc-001': 'Pings rx-vdc-001 device.',
             'sw-vdc-001': 'Pings sw-vdc-001 device.',
             'fw-vdc-001': 'Pings fw-vdc-001 device.',
+        },
+        'backup': {
+            'all'       : 'Creates a backup of all devices configurations of the virtual DC.',
+            'rx-vdc-001': 'Creates a backup of rx-vdc-001 device.',
+            'sw-vdc-001': 'Creates a backup of sw-vdc-001 device.',
+            'fw-vdc-001': 'Creates a backup of fw-vdc-001 device.',
         },
         'license': 'Displays the NITA License.',
     },
