@@ -213,7 +213,14 @@ It can be installed from:
 
 ### Autocomplete
 
-Following packages are needed to make use of autocompletion:
+Autocompletion provides \<TAB\> completion of command arguments. It provides users with the following functionalities:
+
+- Saving them from typing text when it can be autocompleted.
+- Letting them know available commands options.
+- Preventing errors.
+- Improving their experience by hiding/showing options based on user context.
+
+The following packages are needed to make use of autocompletion:
 
 - python3
 - python3-pip
