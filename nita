@@ -129,6 +129,12 @@ COMMANDS = {
                 'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py | sort ',
                 'details': 'docker exec -it jenkins get_jenkins_plugin_details.py',
             },
+            'verify': {
+                'ssl': {
+                    'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
+                    'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                },
+            },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
@@ -438,6 +444,12 @@ HELP = {
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
                 'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
+            },
+            'verify': {
+                'ssl': {
+                    'true' : 'Enables SSL certificate validation.',
+                    'false': 'Disables SSL certificate validation.',
+                },
             },
             'labels':  'Returns labels information on jenkins container.',
             'cli': {
