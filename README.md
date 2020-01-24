@@ -327,6 +327,10 @@ NITA CLI command | Description
    nita ansible run noob console | Runs NOOB process and writes its output to console.
    nita ansible run noob gui | Triggers NOOB Jenkins job.
    nita ansible volumes | Returns shared volumes information on ansible container.
+   nita backup all | Creates a backup of all devices configurations of the virtual DC.
+   nita backup fw-vdc-001 | Creates a backup of fw-vdc-001 device.
+   nita backup rx-vdc-001 | Creates a backup of rx-vdc-001 device.
+   nita backup sw-vdc-001 | Creates a backup of sw-vdc-001 device.
    nita caas down | Stops and removes CaaS NITA containers.
    nita caas start | Starts CaaS NITA containers.
    nita caas status | Shows the status of CaaS NITA containers.
@@ -342,7 +346,7 @@ NITA CLI command | Description
    nita core up | Creates and starts Core NITA containers.
    nita demo laptop | Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.
    nita demo vmm | Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.
-   nita destroy environment | Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita destroy environment | Destroys your virtual DC running on your laptop.
    nita destroy vdc | Removes virtual DC devices.
    nita dns cli | Attaches local standard input, output and error streams to dns running container.
    nita dns down | Stops and removes dns container.
@@ -396,6 +400,8 @@ NITA CLI command | Description
    nita jenkins start | Starts jenkins container.
    nita jenkins stop | Stops jenkins container.
    nita jenkins up | Creates and starts jenkins container.
+   nita jenkins verify ssl false | Disables SSL certificate validation.
+   nita jenkins verify ssl true | Enables SSL certificate validation.
    nita jenkins version | Gets Jenkins server version.
    nita jenkins volumes | Returns shared volumes information on jenkins container.
    nita license | Displays the NITA License.
@@ -442,7 +448,7 @@ NITA CLI command | Description
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
    nita setup all | Execute all demo
-   nita setup environment | Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita setup environment | Sets up a virtual DC running on your laptop environment to run the demo.
    nita start | Starts NITA containers (both Core and CaaS).
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita status | Shows the status of every NITA containers.
