@@ -598,6 +598,26 @@ Here it is another example of how to grow it:
 
 Enjoy creating your own docker-like or VMM-like CLI interface!!!
 
+### Known issues
+
+It is a known issue that when making use of autocompletion with NITA CLI and the `keys` of your TREE are numbers (e.g `32568`), the autocompletion _breaks_. 
+
+The command if not autocompleted will be executed, however when pressing \<TAB\> twice it will break! See below example:
+
+    nita@mbp:~/nita-cli$ nita 32568 -bash: local: `32568=up down start stop': not a valid identifier
+
+Recommendation is therefore not to use _numbers_ on the keys... If stricktly necessary, add a letter as a prefix and that will prevent autocompletion from breaking.
+
+Autompletes with the possible options from a sample tree.
+
+    nita@mbp:~/nita-cli$ nita a32568
+    a325681  a325682  a325683
+
+Autompletes (also since it started with a letter).
+
+    nita@mbp:~/nita-cli$ nita a325681
+    down    start   status  stop    up
+
 ## Continuos integration (CI)
 
 Continuous integration is the practice of routinely integrating code changes into the main branch of a repository and testing them as soon and often as possible. Any merge request (MR) into master branch triggers a CI/CD pipeline to validate those changes. It is made up of 2 different stages:
