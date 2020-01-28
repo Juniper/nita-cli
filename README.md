@@ -339,6 +339,7 @@ NITA CLI command | Description
    nita backup rx-vdc-001 | Creates a backup of rx-vdc-001 device.
    nita backup sw-vdc-001 | Creates a backup of sw-vdc-001 device.
    nita caas down | Stops and removes CaaS NITA containers.
+   nita caas restart | Restarts CaaS NITA containers.
    nita caas start | Starts CaaS NITA containers.
    nita caas status | Shows the status of CaaS NITA containers.
    nita caas stop | Stops CaaS NITA containers.
@@ -347,6 +348,7 @@ NITA CLI command | Description
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
    nita core down | Stops and removes Core NITA containers.
+   nita core restart | Restarts Core NITA containers.
    nita core start | Starts Core NITA containers.
    nita core status | Shows the status of Core NITA containers.
    nita core stop | Stops Core NITA containers.
@@ -456,6 +458,10 @@ NITA CLI command | Description
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
    nita setup all | Execute all demo
    nita setup environment | Sets up a virtual DC running on your laptop environment to run the demo.
+   nita show resources fw-vdc-001 | Shows fw-vdc-001 resources (Memory & CPU)
+   nita show resources rx-vdc-001 | Shows rx-vdc-001 resources (Memory & CPU)
+   nita show resources sw-vdc-001 | Shows sw-vdc-001 resources (Memory & CPU)
+   nita show vms | Lists virtual DC VMs
    nita start | Starts NITA containers (both Core and CaaS).
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita status | Shows the status of every NITA containers.
@@ -500,7 +506,6 @@ NITA CLI command | Description
    nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS).
-
 
 ## Customisation
 

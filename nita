@@ -664,9 +664,9 @@ HELP = {
         'show': {
             'vms': 'Lists virtual DC VMs',
             'resources': {
-                'rx-vdc-001': 'Shows rx-vdc-001 resources (Memory|CPU)',
-                'sw-vdc-001': 'Shows sw-vdc-001 resources (Memory|CPU)',
-                'fw-vdc-001': 'Shows fw-vdc-001 resources (Memory|CPU)',
+                'rx-vdc-001': 'Shows rx-vdc-001 resources (Memory & CPU)',
+                'sw-vdc-001': 'Shows sw-vdc-001 resources (Memory & CPU)',
+                'fw-vdc-001': 'Shows fw-vdc-001 resources (Memory & CPU)',
             },
         },
         'backup': {
