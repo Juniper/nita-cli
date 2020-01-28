@@ -32,6 +32,7 @@ COMMANDS = {
             'down'    : 'docker-compose --compatibility -f nita-core.yml down',
             'start'   : 'docker-compose --compatibility -f nita-core.yml start',
             'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
+            'restart' : 'docker-compose --compatibility -f nita-core.yml restart',
             'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
         },
         'caas': {
@@ -39,6 +40,7 @@ COMMANDS = {
             'down'    : 'docker-compose --compatibility -f nita-caas.yml down',
             'start'   : 'docker-compose --compatibility -f nita-caas.yml start',
             'stop'    : 'docker-compose --compatibility -f nita-caas.yml stop',
+            'restart' : 'docker-compose --compatibility -f nita-caas.yml restart',
             'status'  : 'docker-compose --compatibility -f nita-caas.yml ps',
         },
         'demo': {
@@ -252,8 +254,8 @@ COMMANDS = {
                     },                   
                 },
             'pull': {
-                'static'  : 'python inventory2toby.py --static',
-                'dynamic' : 'python inventory2toby.py --dynamic',
+                'static'  : 'python3 inventory2toby.py --static',
+                'dynamic' : 'python3 inventory2toby.py --dynamic',
                 },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
             'labels' :  """containerlabel() { docker inspect -f '
@@ -364,6 +366,14 @@ COMMANDS = {
             'sw-vdc-001': 'ping -c 3 192.168.56.3',
             'fw-vdc-001': 'ping -c 3 192.168.56.4',
         },
+        'show': {
+            'vms': 'VBoxManage list vms',
+            'resources': {
+                'rx-vdc-001': 'VBoxManage showvminfo "ROUTER-vMX" | egrep "Memory|CPUs"',
+                'sw-vdc-001': 'VBoxManage showvminfo "SWITCH-vQFX-RE" | egrep "Memory|CPUs" ; VBoxManage showvminfo "SWITCH-vQFX-PFE" | egrep "Memory|CPUs"',
+                'fw-vdc-001': 'VBoxManage showvminfo "FIREWALL-vSRX" | egrep "Memory|CPUs"',
+            },
+        },
         'backup': {
             'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
             'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
@@ -396,18 +406,20 @@ HELP = {
         'stop'  :   'Stops NITA containers (both Core and CaaS).',
         'status':   'Shows the status of every NITA containers.',
         'core': {
-            'up'    :   'Creates and starts Core NITA containers.',
-            'down'  :   'Stops and removes Core NITA containers.',
-            'start' :   'Starts Core NITA containers.',
-            'stop'  :   'Stops Core NITA containers.',
-            'status':   'Shows the status of Core NITA containers.',
+            'up'     : 'Creates and starts Core NITA containers.',
+            'down'   : 'Stops and removes Core NITA containers.',
+            'start'  : 'Starts Core NITA containers.',
+            'stop'   : 'Stops Core NITA containers.',
+            'restart': 'Restarts Core NITA containers.',
+            'status' : 'Shows the status of Core NITA containers.',
         },
         'caas': {
-            'up'    :   'Creates and starts CaaS NITA containers.',
-            'down'  :   'Stops and removes CaaS NITA containers.',
-            'start' :   'Starts CaaS NITA containers.',
-            'stop'  :   'Stops CaaS NITA containers.',
-            'status':   'Shows the status of CaaS NITA containers.',
+            'up'     : 'Creates and starts CaaS NITA containers.',
+            'down'   : 'Stops and removes CaaS NITA containers.',
+            'start'  : 'Starts CaaS NITA containers.',
+            'stop'   : 'Stops CaaS NITA containers.',
+            'restart': 'Restarts CaaS NITA containers.',
+            'status' : 'Shows the status of CaaS NITA containers.',
         },
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
@@ -648,6 +660,14 @@ HELP = {
             'rx-vdc-001': 'Pings rx-vdc-001 device.',
             'sw-vdc-001': 'Pings sw-vdc-001 device.',
             'fw-vdc-001': 'Pings fw-vdc-001 device.',
+        },
+        'show': {
+            'vms': 'Lists virtual DC VMs',
+            'resources': {
+                'rx-vdc-001': 'Shows rx-vdc-001 resources (Memory|CPU)',
+                'sw-vdc-001': 'Shows sw-vdc-001 resources (Memory|CPU)',
+                'fw-vdc-001': 'Shows fw-vdc-001 resources (Memory|CPU)',
+            },
         },
         'backup': {
             'all'       : 'Creates a backup of all devices configurations of the virtual DC.',
