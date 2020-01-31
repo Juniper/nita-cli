@@ -80,7 +80,7 @@ That's all folks!!!
 
 Another cool feature it has is `autocompletion`. So far, it has been tested in the following Operating Systems:
 
- - `Linux` (Ubuntu 16 LTS and Ubutu 18 LTS) 
+ - `Linux` (Ubuntu 16 LTS and Ubuntu 18 LTS) 
  - `OS X` (Sierra, High Sierra and Mojave)
  - `Windows 10` (with [Cygwin](https://www.cygwin.com/)).
 
