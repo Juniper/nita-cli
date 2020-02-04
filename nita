@@ -119,10 +119,12 @@ COMMANDS = {
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
-            'version'   : 'docker exec -it jenkins get_jenkins_version.py',
+            'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
             'jobs': {
-                'ls'       : 'docker exec -it jenkins get_jenkins_jobs.py',
+                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs',
                 'remove'   : 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
+                'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
+                'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
                 'import'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
                 'export'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
                 'reinstall': 'nita jenkins jobs remove --regex vDC ; docker run --rm --network `docker network ls --filter name="nita(-|)*demo(-|)*intro_default" | awk \'FNR==2{print $2}\'` --volumes-from jenkins -v ${PWD}:/project -e PROJECT_PATH="${PWD}" ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 /bin/sh project/jenkins/import_vDC_jobs.sh',
@@ -449,6 +451,8 @@ HELP = {
             'jobs': {
                 'ls'       : 'Lists all Jenkins jobs.',
                 'remove'   : 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
+                'enable'   : 'Enables an existing job matched by --job <JOB>',
+                'disable'  : 'Disables an existing job matched by --job <JOB>',
                 'import'   : 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
                 'export'   : 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
                 'reinstall': 'Removes and reinstalls every NITA demo job.',
