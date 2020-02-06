@@ -32,6 +32,7 @@ COMMANDS = {
             'down'    : 'docker-compose --compatibility -f nita-core.yml down',
             'start'   : 'docker-compose --compatibility -f nita-core.yml start',
             'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
+            'restart' : 'docker-compose --compatibility -f nita-core.yml restart',
             'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
         },
         'caas': {
@@ -39,6 +40,7 @@ COMMANDS = {
             'down'    : 'docker-compose --compatibility -f nita-caas.yml down',
             'start'   : 'docker-compose --compatibility -f nita-caas.yml start',
             'stop'    : 'docker-compose --compatibility -f nita-caas.yml stop',
+            'restart' : 'docker-compose --compatibility -f nita-caas.yml restart',
             'status'  : 'docker-compose --compatibility -f nita-caas.yml ps',
         },
         'demo': {
@@ -117,10 +119,12 @@ COMMANDS = {
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
-            'version'   : 'docker exec -it jenkins get_jenkins_version.py',
+            'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
             'jobs': {
-                'ls'       : 'docker exec -it jenkins get_jenkins_jobs.py',
+                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs',
                 'remove'   : 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
+                'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
+                'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
                 'import'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
                 'export'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
                 'reinstall': 'nita jenkins jobs remove --regex vDC ; docker run --rm --network `docker network ls --filter name="nita(-|)*demo(-|)*intro_default" | awk \'FNR==2{print $2}\'` --volumes-from jenkins -v ${PWD}:/project -e PROJECT_PATH="${PWD}" ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 /bin/sh project/jenkins/import_vDC_jobs.sh',
@@ -128,6 +132,12 @@ COMMANDS = {
             'plugins': {
                 'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py | sort ',
                 'details': 'docker exec -it jenkins get_jenkins_plugin_details.py',
+            },
+            'verify': {
+                'ssl': {
+                    'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
+                    'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                },
             },
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
@@ -246,8 +256,8 @@ COMMANDS = {
                     },                   
                 },
             'pull': {
-                'static'  : 'python inventory2toby.py --static',
-                'dynamic' : 'python inventory2toby.py --dynamic',
+                'static'  : 'python3 inventory2toby.py --static',
+                'dynamic' : 'python3 inventory2toby.py --dynamic',
                 },
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
             'labels' :  """containerlabel() { docker inspect -f '
@@ -358,13 +368,21 @@ COMMANDS = {
             'sw-vdc-001': 'ping -c 3 192.168.56.3',
             'fw-vdc-001': 'ping -c 3 192.168.56.4',
         },
+        'show': {
+            'vms': 'VBoxManage list vms',
+            'resources': {
+                'rx-vdc-001': 'VBoxManage showvminfo "ROUTER-vMX" | egrep "Memory|CPUs"',
+                'sw-vdc-001': 'VBoxManage showvminfo "SWITCH-vQFX-RE" | egrep "Memory|CPUs" ; VBoxManage showvminfo "SWITCH-vQFX-PFE" | egrep "Memory|CPUs"',
+                'fw-vdc-001': 'VBoxManage showvminfo "FIREWALL-vSRX" | egrep "Memory|CPUs"',
+            },
+        },
         'backup': {
             'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
             'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
             'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
             'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
         },
-        'license': 'echo "# <*******************\n#\n# Copyright 2019 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"',
+        'license': 'echo "\n# <*******************\n#\n# Copyright 2016-2020 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, \n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"\n',
     },
 }
 
@@ -390,18 +408,20 @@ HELP = {
         'stop'  :   'Stops NITA containers (both Core and CaaS).',
         'status':   'Shows the status of every NITA containers.',
         'core': {
-            'up'    :   'Creates and starts Core NITA containers.',
-            'down'  :   'Stops and removes Core NITA containers.',
-            'start' :   'Starts Core NITA containers.',
-            'stop'  :   'Stops Core NITA containers.',
-            'status':   'Shows the status of Core NITA containers.',
+            'up'     : 'Creates and starts Core NITA containers.',
+            'down'   : 'Stops and removes Core NITA containers.',
+            'start'  : 'Starts Core NITA containers.',
+            'stop'   : 'Stops Core NITA containers.',
+            'restart': 'Restarts Core NITA containers.',
+            'status' : 'Shows the status of Core NITA containers.',
         },
         'caas': {
-            'up'    :   'Creates and starts CaaS NITA containers.',
-            'down'  :   'Stops and removes CaaS NITA containers.',
-            'start' :   'Starts CaaS NITA containers.',
-            'stop'  :   'Stops CaaS NITA containers.',
-            'status':   'Shows the status of CaaS NITA containers.',
+            'up'     : 'Creates and starts CaaS NITA containers.',
+            'down'   : 'Stops and removes CaaS NITA containers.',
+            'start'  : 'Starts CaaS NITA containers.',
+            'stop'   : 'Stops CaaS NITA containers.',
+            'restart': 'Restarts CaaS NITA containers.',
+            'status' : 'Shows the status of CaaS NITA containers.',
         },
         'demo': {
             'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
@@ -431,6 +451,8 @@ HELP = {
             'jobs': {
                 'ls'       : 'Lists all Jenkins jobs.',
                 'remove'   : 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
+                'enable'   : 'Enables an existing job matched by --job <JOB>',
+                'disable'  : 'Disables an existing job matched by --job <JOB>',
                 'import'   : 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
                 'export'   : 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
                 'reinstall': 'Removes and reinstalls every NITA demo job.',
@@ -438,6 +460,12 @@ HELP = {
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
                 'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
+            },
+            'verify': {
+                'ssl': {
+                    'true' : 'Enables SSL certificate validation.',
+                    'false': 'Disables SSL certificate validation.',
+                },
             },
             'labels':  'Returns labels information on jenkins container.',
             'cli': {
@@ -636,6 +664,14 @@ HELP = {
             'rx-vdc-001': 'Pings rx-vdc-001 device.',
             'sw-vdc-001': 'Pings sw-vdc-001 device.',
             'fw-vdc-001': 'Pings fw-vdc-001 device.',
+        },
+        'show': {
+            'vms': 'Lists virtual DC VMs',
+            'resources': {
+                'rx-vdc-001': 'Shows rx-vdc-001 resources (Memory & CPU)',
+                'sw-vdc-001': 'Shows sw-vdc-001 resources (Memory & CPU)',
+                'fw-vdc-001': 'Shows fw-vdc-001 resources (Memory & CPU)',
+            },
         },
         'backup': {
             'all'       : 'Creates a backup of all devices configurations of the virtual DC.',

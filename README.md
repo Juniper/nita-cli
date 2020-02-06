@@ -80,7 +80,7 @@ That's all folks!!!
 
 Another cool feature it has is `autocompletion`. So far, it has been tested in the following Operating Systems:
 
- - `Linux` (Ubuntu 16 LTS and Ubutu 18 LTS) 
+ - `Linux` (Ubuntu 16 LTS and Ubuntu 18 LTS) 
  - `OS X` (Sierra, High Sierra and Mojave)
  - `Windows 10` (with [Cygwin](https://www.cygwin.com/)).
 
@@ -213,7 +213,14 @@ It can be installed from:
 
 ### Autocomplete
 
-Following packages are needed to make use of autocompletion:
+Autocompletion provides \<TAB\> completion of command arguments. It provides users with the following functionalities:
+
+- Saving them from typing text when it can be autocompleted.
+- Letting them know available commands options.
+- Preventing errors.
+- Improving their experience by hiding/showing options based on user context.
+
+The following packages are needed to make use of autocompletion:
 
 - python3
 - python3-pip
@@ -327,7 +334,12 @@ NITA CLI command | Description
    nita ansible run noob console | Runs NOOB process and writes its output to console.
    nita ansible run noob gui | Triggers NOOB Jenkins job.
    nita ansible volumes | Returns shared volumes information on ansible container.
+   nita backup all | Creates a backup of all devices configurations of the virtual DC.
+   nita backup fw-vdc-001 | Creates a backup of fw-vdc-001 device.
+   nita backup rx-vdc-001 | Creates a backup of rx-vdc-001 device.
+   nita backup sw-vdc-001 | Creates a backup of sw-vdc-001 device.
    nita caas down | Stops and removes CaaS NITA containers.
+   nita caas restart | Restarts CaaS NITA containers.
    nita caas start | Starts CaaS NITA containers.
    nita caas status | Shows the status of CaaS NITA containers.
    nita caas stop | Stops CaaS NITA containers.
@@ -336,13 +348,14 @@ NITA CLI command | Description
    nita containers ls | Lists all running NITA containers.
    nita containers versions | Lists all running NITA containers versions.
    nita core down | Stops and removes Core NITA containers.
+   nita core restart | Restarts Core NITA containers.
    nita core start | Starts Core NITA containers.
    nita core status | Shows the status of Core NITA containers.
    nita core stop | Stops Core NITA containers.
    nita core up | Creates and starts Core NITA containers.
    nita demo laptop | Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.
    nita demo vmm | Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.
-   nita destroy environment | Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita destroy environment | Destroys your virtual DC running on your laptop.
    nita destroy vdc | Removes virtual DC devices.
    nita dns cli | Attaches local standard input, output and error streams to dns running container.
    nita dns down | Stops and removes dns container.
@@ -396,6 +409,8 @@ NITA CLI command | Description
    nita jenkins start | Starts jenkins container.
    nita jenkins stop | Stops jenkins container.
    nita jenkins up | Creates and starts jenkins container.
+   nita jenkins verify ssl false | Disables SSL certificate validation.
+   nita jenkins verify ssl true | Enables SSL certificate validation.
    nita jenkins version | Gets Jenkins server version.
    nita jenkins volumes | Returns shared volumes information on jenkins container.
    nita license | Displays the NITA License.
@@ -442,7 +457,11 @@ NITA CLI command | Description
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
    nita setup all | Execute all demo
-   nita setup environment | Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
+   nita setup environment | Sets up a virtual DC running on your laptop environment to run the demo.
+   nita show resources fw-vdc-001 | Shows fw-vdc-001 resources (Memory & CPU)
+   nita show resources rx-vdc-001 | Shows rx-vdc-001 resources (Memory & CPU)
+   nita show resources sw-vdc-001 | Shows sw-vdc-001 resources (Memory & CPU)
+   nita show vms | Lists virtual DC VMs
    nita start | Starts NITA containers (both Core and CaaS).
    nita stats | Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].
    nita status | Shows the status of every NITA containers.
@@ -487,7 +506,6 @@ NITA CLI command | Description
    nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS).
-
 
 ## Customisation
 
@@ -597,6 +615,26 @@ Here it is another example of how to grow it:
     3.6.2
 
 Enjoy creating your own docker-like or VMM-like CLI interface!!!
+
+### Known issues
+
+It is a known issue that when making use of autocompletion with NITA CLI and the `keys` of your TREE are numbers (e.g `32568`), the autocompletion _breaks_. 
+
+The command if not autocompleted will be executed, however when pressing \<TAB\> twice it will break! See below example:
+
+    nita@mbp:~/nita-cli$ nita 32568 -bash: local: `32568=up down start stop': not a valid identifier
+
+Recommendation is therefore not to use _numbers_ on the keys... If stricktly necessary, add a letter as a prefix and that will prevent autocompletion from breaking.
+
+Autompletes with the possible options from a sample tree.
+
+    nita@mbp:~/nita-cli$ nita a32568
+    a325681  a325682  a325683
+
+Autompletes (also since it started with a letter).
+
+    nita@mbp:~/nita-cli$ nita a325681
+    down    start   status  stop    up
 
 ## Continuos integration (CI)
 
