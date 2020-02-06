@@ -138,10 +138,10 @@ def commands_vs_help_trees(commands, documentation):
         for item in command_keys_list:
             missing = print_command_with_keys(commands, item)
             print('')
-            print(CRED + '     The following command: "' + missing + '" is missing its description!' + CEND)
+            print(CRED + ' ERROR: There are commands missing their description!' + CEND)
             finish = True
         print('')
-        print(CRED + ' >>> Please add it to the HELP tree!' + CEND)
+        print(CRED + ' >>> Please add them to the HELP tree!' + CEND)
         print('')
 
     if commands_missing:
@@ -149,10 +149,10 @@ def commands_vs_help_trees(commands, documentation):
         for item in command_keys_list:
             missing = print_command_with_keys(documentation, item)
             print('')
-            print(CRED + '     The following command: "' + missing + '" is missing its mapped command!' + CEND)
+            print(CRED + ' ERROR: There are commands missing their mapping!' + CEND)
             finish = True
         print('')
-        print(CRED + ' >>> Please add it to the COMMANDS tree!' + CEND)
+        print(CRED + ' >>> Please add them to the COMMANDS tree!' + CEND)
         print('')
 
     if finish:
