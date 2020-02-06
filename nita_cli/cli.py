@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Wrapper script for all NITA commands
+    Wrapper script for all NITA commands.
 """
 import sys
 import os
@@ -72,18 +72,18 @@ def print_nested_keys_from(dictionary, *subkeys):
 
 def cli2command(cli, translator):
     """
-    Function resolves cli command given to command to execute
+    Function resolves cli command given to command to execute.
     """
     try:
         for k in cli:
             translator = translator[str(k)]
     except KeyError as kerr:
         try:
-            print("\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(kerr.message, ' '.join(str(k) for k in cli)))
-            print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
+            print(CRED + "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(kerr.message, ' '.join(str(k) for k in cli)) + CEND)
+            print(CRED + "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n" + CEND)
             sys.exit(1)
         except AttributeError:
-            print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
+            print(CRED + "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n" + CEND)
             sys.exit(1)
 
     if ' %s' in translator:
@@ -97,7 +97,7 @@ def cli2command(cli, translator):
 
 def print_help(documentation, *args):
     """
-    Print usage info
+    Print usage info.
     """
     print('')
     print_nested_keys_from(documentation, args[0])
@@ -118,7 +118,8 @@ def commands_vs_help_trees(commands, documentation):
     """
     Function that checks if commands & documentation trees
     have the same nested keys (i.e. tries to avoid missing documentation
-    and or a mapped value of a newly added command!). If so, it exits with rc=1
+    and/or mapped values of a recently added commands!). 
+    If so, it exits with rc=1
     """
 
     finish = False
@@ -137,10 +138,10 @@ def commands_vs_help_trees(commands, documentation):
         for item in command_keys_list:
             missing = print_command_with_keys(commands, item)
             print('')
-            print('     The following command: "' + missing + '" is missing its description!')
+            print(CRED + '     The following command: "' + missing + '" is missing its description!' + CEND)
             finish = True
         print('')
-        print(' >>> Please add it to the HELP tree!')
+        print(CRED + ' >>> Please add it to the HELP tree!' + CEND)
         print('')
 
     if commands_missing:
@@ -148,10 +149,10 @@ def commands_vs_help_trees(commands, documentation):
         for item in command_keys_list:
             missing = print_command_with_keys(documentation, item)
             print('')
-            print('     The following command: "' + missing + '" is missing its mapped command!')
+            print(CRED + '     The following command: "' + missing + '" is missing its mapped command!' + CEND)
             finish = True
         print('')
-        print(' >>> Please add it to the COMMANDS tree!')
+        print(CRED + ' >>> Please add it to the COMMANDS tree!' + CEND)
         print('')
 
     if finish:
@@ -213,11 +214,11 @@ def main(commands, documentation):
         except AttributeError:
             raw = cli2command(subcli, documentation)
             doc_help = raw.format(subcli)
-            print("   {} => {}".format(' '.join(str(k) for k in subcli), doc_help))
+            print("   {}".format(' '.join(str(k) for k in subcli)) + CPURP + " => " + CWHITE + "{}".format(doc_help) + CEND)
             print('')
         except KeyError as err:
-            print("\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in subcli)))
-            print("\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n")
+            print(CRED + "\n '{}' key does not exist! Command: '{}' is incorrect!\n".format(err.message, ' '.join(str(k) for k in subcli)) + CEND)
+            print(CRED + "\n For a list of available commands, execute:\n\n >>>> 'nita --help' or 'nita -h' or 'nita ?'\n\n"  + CEND)
             sys.exit(1)
 
     elif is_new_cmd(cli):
@@ -227,13 +228,13 @@ def main(commands, documentation):
             raw = cli2command(subcli, commands)
             command = raw.format(name)
             if ECHO:
-                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
                 sys.exit(0)
             if DEBUG:
-                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
-            print("\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli)))
+            print(CRED + "\n Command: '{}' is missing the argument: $name!\n".format(' '.join(str(k) for k in cli)) + CEND)
             sys.exit(1)
 
     elif has_options(cli):
@@ -244,13 +245,13 @@ def main(commands, documentation):
             raw = cli2command(subcli, commands)
             command = raw.format(option, value)
             if ECHO:
-                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
                 sys.exit(0)
             if DEBUG:
-                print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
             os.system(command)
         except AttributeError:
-            print("\n Command: '{}' is missing the option: $value!\n".format(' '.join(str(k) for k in cli)))
+            print(CRED + "\n Command: '{}' is missing the option: $value!\n".format(' '.join(str(k) for k in cli)) + CEND)
             sys.exit(1)
 
     else:
@@ -260,13 +261,13 @@ def main(commands, documentation):
             # but a branch with more leaves, command will not run!
             if isinstance(command, str):
                 if ECHO:
-                    print(CRED + "\n  >>>> command: {}\n".format(command) + CEND)
+                    print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
                     sys.exit(0)
                 if DEBUG:
-                    print((CRED + "\n  >>>> command: {}\n".format(command) + CEND))
+                    print("\n  >>>> command: " + CRED + "{}\n".format(command) + CEND)
                 os.system(command)
             else:
                 raise TypeError
         except TypeError:
-            print("\n Command: '{}' is not a mapped command!\n\n Issue 'nita --help' or 'nita -h' or 'nita ?' for some insights...\n".format(' '.join(str(k) for k in cli)))
+            print(CRED + "\n Command: '{}' is not a full mapped command!\n\n Issue 'nita --help' or 'nita -h' or 'nita ?' for some insights...\n".format(' '.join(str(k) for k in cli)) + CEND)
             sys.exit(1)
