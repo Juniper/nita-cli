@@ -458,6 +458,7 @@ NITA CLI command | Description
    nita rsyslog stop | Stops rsyslog container.
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
+   nita setup all | Execute the whole NITA demo.
    nita setup environment | Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
    nita show resources fw-vdc-001 | Shows fw-vdc-001 resources (Memory & CPU)
    nita show resources rx-vdc-001 | Shows rx-vdc-001 resources (Memory & CPU)
@@ -507,6 +508,7 @@ NITA CLI command | Description
    nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS).
+
 
 ## Customisation
 
