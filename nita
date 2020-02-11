@@ -13,14 +13,14 @@ COMMANDS = {
             'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'setup': {
-            #'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
-            'environment': './setup_demo.sh',
-            'all': 'nita setup environment ; nita demo laptop ; ',
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': './setup_demo.sh',
+            # 'all': 'nita setup environment ; nita demo laptop ; ',
         },
         'destroy': {
             'vdc'        : './.remove.sh',
-            #'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") echo "\nDeprecated! Sorry...\n" ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
-            'environment': './destroy_demo.sh',
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") ./destroy_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': './destroy_demo.sh',
         },
         'up'      : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d',
         'down'    : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml down',
@@ -112,7 +112,7 @@ COMMANDS = {
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'inventory': {
-            'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb',
+            'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb:2.3.1',
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
             'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
         },
@@ -393,9 +393,9 @@ HELP = {
             'version': 'Shows NITA CLI current version.',
         },
         'setup': {
-            #'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
-            'environment': 'Sets up a virtual DC running on your laptop environment to run the demo.',
-            'all'        : 'Execute all demo',
+            'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            #'environment': 'Sets up a virtual DC running on your laptop environment to run the demo.',
+            #'all'        : 'Execute all demo',
         },
         'destroy': {
             'vdc'        : 'Removes virtual DC devices.',
