@@ -394,6 +394,8 @@ NITA CLI command | Description
    nita jenkins down | Stops and removes jenkins container.
    nita jenkins gui | Opens Jenkins GUI.
    nita jenkins ip | Returns IPs information on jenkins container.
+   nita jenkins jobs disable | Disables an existing job matched by --job <JOB>
+   nita jenkins jobs enable | Enables an existing job matched by --job <JOB>
    nita jenkins jobs export | Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
    nita jenkins jobs import | Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
    nita jenkins jobs ls | Lists all Jenkins jobs.
@@ -456,8 +458,7 @@ NITA CLI command | Description
    nita rsyslog stop | Stops rsyslog container.
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
-   nita setup all | Execute all demo
-   nita setup environment | Sets up a virtual DC running on your laptop environment to run the demo.
+   nita setup environment | Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
    nita show resources fw-vdc-001 | Shows fw-vdc-001 resources (Memory & CPU)
    nita show resources rx-vdc-001 | Shows rx-vdc-001 resources (Memory & CPU)
    nita show resources sw-vdc-001 | Shows sw-vdc-001 resources (Memory & CPU)
