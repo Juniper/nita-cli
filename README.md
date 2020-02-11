@@ -257,14 +257,14 @@ In order to install NITA CLI, use pip command and specifiy nita_cli repository w
     $ pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli
 
     Collecting nita-cli
-    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/0.0.4/nita_cli-0.0.4.tar.gz
+    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/20.0.0/nita_cli-20.0.0.tar.gz
     Requirement already satisfied (use --upgrade to upgrade): pyyaml in /usr/local/lib/python3.5/dist-packages (from nita-cli)
     Requirement already satisfied (use --upgrade to upgrade): jinja2 in /usr/local/lib/python3.5/dist-packages (from nita-cli)
     Requirement already satisfied (use --upgrade to upgrade): MarkupSafe>=0.23 in /usr/local/lib/python3.5/dist-packages (from jinja2->nita-cli)
     Skipping bdist_wheel for nita-cli, due to binaries being disabled for it.
     Installing collected packages: nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-0.0.4
+    Successfully installed nita-cli-20.0.0
 
 If you are a **developer** and want to test your changes on NITA CLI locally, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
@@ -273,20 +273,20 @@ If you are a **developer** and want to test your changes on NITA CLI locally, th
     $ sudo pip3 install -I nita-cli/ --no-binary :all:
 
     Processing ./nita-cli
-    Collecting pyyaml (from nita-cli==0.0.4)
-    Collecting jinja2 (from nita-cli==0.0.4)
+    Collecting pyyaml (from nita-cli==20.0.0)
+    Collecting jinja2 (from nita-cli==20.0.0)
       Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
         100% |████████████████████████████████| 133kB 424kB/s 
-    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==0.0.4)
+    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==20.0.0)
     Installing collected packages: pyyaml, MarkupSafe, jinja2, nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-0.0.4 pyyaml-3.13
+    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-20.0.0 pyyaml-3.13
 
 ### Docker
 
 To run NITA CLI as a Docker container simply pull it from the JNPR Docker registry, add the following [alias](alias) to your bash profile (`~/.profile`) and add the autocomplete part.
 
-    docker pull ps-docker.artifactory.aslab.juniper.net/nita/cli:0.0.4
+    docker pull ps-docker.artifactory.aslab.juniper.net/nita/cli:20.0.0
 
 If you want to customise your commands, you can build your own docker image by the following command:
 
@@ -458,6 +458,7 @@ NITA CLI command | Description
    nita rsyslog stop | Stops rsyslog container.
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
+   nita setup all | Execute the whole NITA demo.
    nita setup environment | Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.
    nita show resources fw-vdc-001 | Shows fw-vdc-001 resources (Memory & CPU)
    nita show resources rx-vdc-001 | Shows rx-vdc-001 resources (Memory & CPU)
@@ -507,6 +508,7 @@ NITA CLI command | Description
    nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS).
+
 
 ## Customisation
 
@@ -689,7 +691,7 @@ During the demo both the NITA CLI command and its unix/docker/etc mapped command
 Without debugging option:
 
     $ nita cli version
-    NITA CLI master branch - 0.0.4
+    NITA CLI master branch - 20.0.0
 
 With (`-d`) debugging option, mapped command is shown on `>>>> command`:
 
@@ -697,7 +699,7 @@ With (`-d`) debugging option, mapped command is shown on `>>>> command`:
 
     >>>> command: echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')
 
-    NITA CLI master branch - 0.0.4
+    NITA CLI master branch - 20.0.0
 
 Here they are some commands as an example:
 

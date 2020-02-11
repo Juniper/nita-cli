@@ -82,7 +82,7 @@ for file in os.listdir('bash_completion.d/'):
         data_files_list.append((TARGET_COMPLETION_PATH, [f1]))
 setup(
     name='nita_cli',
-    version='0.0.4',
+    version='20.0.0',
     description='NITA CLI',
     long_description='NITA command line wrapper',
     author='Jose Miguel Izquierdo',
