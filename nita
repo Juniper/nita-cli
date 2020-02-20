@@ -121,17 +121,17 @@ COMMANDS = {
         'jenkins': {
             'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
             'jobs': {
-                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs',
-                'remove'   : 'docker exec -it jenkins remove_from_jenkins.py -y {0} {1}',
+                'whoami'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
+                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs | tail -n+3 ',
+                'delete'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
                 'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
                 'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
-                'import'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 import_jenkins_jobs.sh {0} {1}",
-                'export'   : "docker run --rm -it --network nita-demo-intro_default --volumes-from jenkins -v $PWD:/var/tmp ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 export_jenkins_jobs.sh {0} {1}",
-                'reinstall': 'nita jenkins jobs remove --regex vDC ; docker run --rm --network `docker network ls --filter name="nita(-|)*demo(-|)*intro_default" | awk \'FNR==2{print $2}\'` --volumes-from jenkins -v ${PWD}:/project -e PROJECT_PATH="${PWD}" ps-docker.artifactory.aslab.juniper.net/jenkins:3.3.6 /bin/sh project/jenkins/import_vDC_jobs.sh',
+                'import'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
+                'export'   : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
             },
             'plugins': {
-                'ls'     : 'docker exec -it jenkins get_jenkins_plugins.py | sort ',
-                'details': 'docker exec -it jenkins get_jenkins_plugin_details.py',
+                'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort ",
+                'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort ',
             },
             'verify': {
                 'ssl': {
@@ -449,13 +449,13 @@ HELP = {
         'jenkins': {
             'version'   : 'Gets Jenkins server version.',
             'jobs': {
+                'whoami'   : 'Reports your credential and permissions.',
                 'ls'       : 'Lists all Jenkins jobs.',
-                'remove'   : 'Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.',
+                'delete'   : 'Deletes an existing job matched by --job <JOB>',
                 'enable'   : 'Enables an existing job matched by --job <JOB>',
                 'disable'  : 'Disables an existing job matched by --job <JOB>',
-                'import'   : 'Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.',
-                'export'   : 'Exports an existing job matched by --job <JOB> into XML format from Jenkins server.',
-                'reinstall': 'Removes and reinstalls every NITA demo job.',
+                'import'   : 'Creates a new job by reading stdin as a configuration XML file (--file example.xml).',
+                'export'   : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
             },
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
