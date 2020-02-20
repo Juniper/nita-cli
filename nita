@@ -135,7 +135,7 @@ COMMANDS = {
             },
             'set': {
                 'verify': {
-                    'ssl' : {
+                    'ssl': {
                         'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
                         'false': 'docker exec -it jenkins git config --global http.sslVerify false',
                     },
@@ -468,7 +468,7 @@ HELP = {
             },
             'set': {
                 'verify': {
-                    'ssl' : {
+                    'ssl': {
                         'true' : 'Enables SSL certificate validation.',
                         'false': 'Disables SSL certificate validation.',
                     },
