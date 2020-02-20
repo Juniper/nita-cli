@@ -126,17 +126,22 @@ COMMANDS = {
                 'delete'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
                 'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
                 'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
-                'import'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
-                'export'   : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
+                'create'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
+                'get'      : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
             },
             'plugins': {
                 'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort ",
                 'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort ',
             },
-            'verify': {
-                'ssl': {
-                    'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
-                    'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+            'set': {
+                'verify': {
+                    'ssl': {
+                        'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
+                        'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                    },
+                },
+                'matrix': {
+                    'authentication' : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Matrix/build',
                 },
             },
             'labels':  """containerlabel() { docker inspect -f '
@@ -454,17 +459,22 @@ HELP = {
                 'delete'   : 'Deletes an existing job matched by --job <JOB>',
                 'enable'   : 'Enables an existing job matched by --job <JOB>',
                 'disable'  : 'Disables an existing job matched by --job <JOB>',
-                'import'   : 'Creates a new job by reading stdin as a configuration XML file (--file example.xml).',
-                'export'   : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
+                'create'   : 'Creates a new job by reading stdin as a configuration XML file (--file example.xml).',
+                'get'      : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
             },
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
                 'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
             },
-            'verify': {
-                'ssl': {
-                    'true' : 'Enables SSL certificate validation.',
-                    'false': 'Disables SSL certificate validation.',
+            'set': {
+                'verify': {
+                    'ssl': {
+                        'true' : 'Enables SSL certificate validation.',
+                        'false': 'Disables SSL certificate validation.',
+                    },
+                },
+                'matrix': {
+                    'authentication' : 'Sets matrix-based security authorization strategy.',
                 },
             },
             'labels':  'Returns labels information on jenkins container.',
