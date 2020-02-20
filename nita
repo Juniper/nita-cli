@@ -10,7 +10,7 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI no_scripts branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
