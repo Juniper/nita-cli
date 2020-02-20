@@ -134,9 +134,11 @@ COMMANDS = {
                 'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort ',
             },
             'set': {
-                'verify-ssl': {
-                    'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
-                    'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                'verify': {
+                    'ssl' : {
+                        'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
+                        'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                    },
                 },
                 'matrix': {
                     'authentication' : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Matrix/build',
@@ -465,9 +467,11 @@ HELP = {
                 'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
             },
             'set': {
-                'verify-ssl': {
-                    'true' : 'Enables SSL certificate validation.',
-                    'false': 'Disables SSL certificate validation.',
+                'verify': {
+                    'ssl' : {
+                        'true' : 'Enables SSL certificate validation.',
+                        'false': 'Disables SSL certificate validation.',
+                    },
                 },
                 'matrix': {
                     'authentication' : 'Sets matrix-based security authorization strategy.',
