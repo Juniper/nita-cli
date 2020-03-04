@@ -130,8 +130,8 @@ COMMANDS = {
                 'get'      : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
             },
             'plugins': {
-                'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort ",
-                'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort ',
+                'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort | tail -n+3 ",
+                'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort | tail -n+3 ',
             },
             'set': {
                 'verify': {
