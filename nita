@@ -17,14 +17,6 @@ COMMANDS = {
         'start'   : 'docker-compose --compatibility -f nita-core.yml start',
         'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
         'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
-        'core': {
-            'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
-            'down'    : 'docker-compose --compatibility -f nita-core.yml down',
-            'start'   : 'docker-compose --compatibility -f nita-core.yml start',
-            'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
-            'restart' : 'docker-compose --compatibility -f nita-core.yml restart',
-            'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
-        },
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
@@ -176,15 +168,7 @@ COMMANDS = {
                         'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NTP_Tests/build',
                         },
-                    # 'ospf'     : {
-                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
-                    #     'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_OSPF_Tests/build',
-                    #     },
-                    # 'bgp'      : {
-                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
-                    #     'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_BGP_Tests/build',
-                    #     },
-                    },                   
+                    },
                 },
             'pull': {
                 'static'  : 'python3 inventory2toby.py --static',
@@ -232,14 +216,6 @@ HELP = {
         'start' :   'Starts NITA containers (both Core and CaaS).',
         'stop'  :   'Stops NITA containers (both Core and CaaS).',
         'status':   'Shows the status of every NITA containers.',
-        'core': {
-            'up'     : 'Creates and starts Core NITA containers.',
-            'down'   : 'Stops and removes Core NITA containers.',
-            'start'  : 'Starts Core NITA containers.',
-            'stop'   : 'Stops Core NITA containers.',
-            'restart': 'Restarts Core NITA containers.',
-            'status' : 'Shows the status of Core NITA containers.',
-        },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
             'role'   : 'Creates a new Ansible role scaffolding.',
