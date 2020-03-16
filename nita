@@ -10,23 +10,13 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI telenor branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
-        'setup': {
-            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
-            #'environment': './setup_demo.sh',
-            'all': './setup_demo.sh ; nita demo laptop ; ',
-        },
-        'destroy': {
-            'vdc'        : './.remove.sh',
-            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") ./destroy_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
-            #'environment': './destroy_demo.sh',
-        },
-        'up'      : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d',
-        'down'    : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml down',
-        'start'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start',
-        'stop'    : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop',
-        'status'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml ps',
+        'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
+        'down'    : 'docker-compose --compatibility -f nita-core.yml down',
+        'start'   : 'docker-compose --compatibility -f nita-core.yml start',
+        'stop'    : 'docker-compose --compatibility -f nita-core.yml stop',
+        'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
         'core': {
             'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
             'down'    : 'docker-compose --compatibility -f nita-core.yml down',
@@ -35,70 +25,6 @@ COMMANDS = {
             'restart' : 'docker-compose --compatibility -f nita-core.yml restart',
             'status'  : 'docker-compose --compatibility -f nita-core.yml ps',
         },
-        'caas': {
-            'up'      : 'docker-compose --compatibility -f nita-caas.yml up -d',
-            'down'    : 'docker-compose --compatibility -f nita-caas.yml down',
-            'start'   : 'docker-compose --compatibility -f nita-caas.yml start',
-            'stop'    : 'docker-compose --compatibility -f nita-caas.yml stop',
-            'restart' : 'docker-compose --compatibility -f nita-caas.yml restart',
-            'status'  : 'docker-compose --compatibility -f nita-caas.yml ps',
-        },
-        'demo': {
-            'vmm'   : 'nita -d inventory create ; \
-                       sleep 10 ; \
-                       nita -d inventory populate ; \
-                       sleep 60 ; nita -d ansible run noob console ; \
-                       sleep 60 ; \
-                       nita -d ansible run build console ; \
-                       nita -d test pull dynamic ; \
-                       sleep 10 ; \
-                       nita -d test run common router console ; \
-                       sleep 10 ; \
-                       nita -d test run common firewall console ; \
-                       sleep 10 ; \
-                       nita -d test run common switch console ; \
-                       sleep 10 ; \
-                       nita -d test run specific dns console ; \
-                       nita -d test run specific ntp console ; \
-                       nita -d test run specific syslog console ; \
-                       nita -d test run specific tacacs console ; \
-                       nita -d test run specific radius console ; \
-                       echo " \n# IMAGE VERSIONS #\n" ; \
-                       nita images versions ; \
-                       echo " \n# CONTAINER VERSIONS #\n" ; \
-                       nita containers versions ; \
-                       echo " \n# NITA CLI VERSION #\n" ; \
-                       nita cli version ; echo ""',
-            # laptop demo has NTP test removed
-            'laptop': 'nita -d inventory create ; \
-                        sleep 10 ; \
-                        nita -d inventory populate ; \
-                        sleep 10 ; \
-                        nita -d ansible run noob console ; \
-                        sleep 5  ; \
-                        nita -d ansible run build console ; \
-                        nita -d test pull dynamic ; \
-                        sleep 5  ; \
-                        nita -d test run common router console ; \
-                        sleep 5  ; \
-                        nita -d test run common firewall console ; \
-                        sleep 5  ; \
-                        nita -d test run common switch console ; \
-                        sleep 10 ; \
-                        nita -d test run specific dns console ; \
-                        nita -d test run specific syslog console ; \
-                        nita -d test run specific tacacs console ; \
-                        nita -d test run specific radius console ; \
-                        nita -d test run specific router console ; \
-                        nita -d test run specific firewall console ; \
-                        nita -d test run specific switch console ; \
-                        echo " \n# IMAGE VERSIONS #\n" ; \
-                        nita images versions ; \
-                        echo " \n# CONTAINER VERSIONS #\n" ; \
-                        nita containers versions ; \
-                        echo " \n# NITA CLI VERSION #\n" ; \
-                        nita cli version ; echo ""',
-        },    
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
@@ -157,11 +83,11 @@ COMMANDS = {
             'ports'  : 'docker port jenkins',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs'   : 'docker logs -f jenkins --tail 200',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart jenkins',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start jenkins',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop jenkins',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f jenkins',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d jenkins',
+            'restart': 'docker-compose --compatibility -f nita-core.yml restart jenkins',
+            'start'  : 'docker-compose --compatibility -f nita-core.yml start jenkins',
+            'stop'   : 'docker-compose --compatibility -f nita-core.yml stop jenkins',
+            'rm'     : 'docker-compose --compatibility -f nita-core.yml rm -f jenkins',
+            'up'     : 'docker-compose --compatibility -f nita-core.yml up -d jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
         },
         'ansible': {
@@ -192,11 +118,11 @@ COMMANDS = {
             'ports'  : 'docker port gitlab',
             'volumes': 'docker inspect --format \'{{json .Mounts}}\' gitlab | jq',
             'logs'   : 'docker logs -f gitlab',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart gitlab',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start gitlab',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop gitlab',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f gitlab',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d gitlab',
+            'restart': 'docker-compose --compatibility -f nita-core.yml restart gitlab',
+            'start'  : 'docker-compose --compatibility -f nita-core.yml start gitlab',
+            'stop'   : 'docker-compose --compatibility -f nita-core.yml stop gitlab',
+            'rm'     : 'docker-compose --compatibility -f nita-core.yml rm -f gitlab',
+            'up'     : 'docker-compose --compatibility -f nita-core.yml up -d gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
         },
@@ -271,102 +197,6 @@ COMMANDS = {
     {{ end -}}' $1 ; } ; docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; containerlabel testtmp """,
             'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
-    #     'webapp': {
-    #         'logs'   : 'docker logs -f webapp --tail 200',
-    #         'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
-    #         'ports'  : 'docker port webapp',
-    #         'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
-    #         'labels' :  """containerlabel() { docker inspect -f '
-    # {{ range $k, $v := .Config.Labels -}}
-    # {{ $k }} = {{ $v }}
-    # {{ end -}}' $1 ; } ; containerlabel webapp """,
-    #         'cli':     'docker exec -it webapp /bin/bash',
-    #     },
-        'tacacs': {
-            'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
-            'ports'  : 'docker port tacacs',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel tacacs """,
-            'cli'    : 'docker exec -it tacacs /bin/bash',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart tacacs',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start tacacs',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop tacacs',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f tacacs',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d tacacs',
-            'down'   : 'nita tacacs stop ; nita tacacs rm',
-        },
-        'radius': {
-            'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
-            'ports'  : 'docker port radius',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel radius """,
-            'cli'    : 'docker exec -it radius /bin/bash',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart radius',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start radius',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop radius',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f radius',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d radius',
-            'down'   : 'nita radius stop ; nita radius rm',
-        },
-        'ntp': {
-            'logs'   : 'docker logs -f ntp --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
-            'ports'  : 'docker port ntp',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel ntp """,
-            'cli'    : 'docker exec -it ntp /bin/sh',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart ntp',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start ntp',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop ntp',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f ntp',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d ntp',
-            'down'   : 'nita ntp stop ; nita ntp rm',
-        },
-        'dns': {
-            'logs'   : 'docker logs -f dns --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
-            'ports'  : 'docker port dns',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel dns """,
-            'cli'    : 'docker exec -it dns /bin/sh',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart dns',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start dns',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop dns',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f dns',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d dns',
-            'down'   : 'nita dns stop ; nita dns rm',
-        },
-        'rsyslog': {
-            'logs'   : 'docker logs -f rsyslog --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' rsyslog',
-            'ports'  : 'docker port rsyslog',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' rsyslog | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel rsyslog """,
-            'cli'    : 'docker exec -it rsyslog /bin/sh',
-            'restart': 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml restart rsyslog',
-            'start'  : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml start rsyslog',
-            'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop rsyslog',
-            'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f rsyslog',
-            'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d rsyslog',
-            'down'   : 'nita rsyslog stop ; nita rsyslog rm',
-        },
         'ping': {
             'all'       : 'for i in 2 3 4;  do ping -c 3 192.168.56.$i; done',
             'rx-vdc-001': 'ping -c 3 192.168.56.2',
@@ -397,16 +227,6 @@ HELP = {
         'cli': {
             'version': 'Shows NITA CLI current version.',
         },
-        'setup': {
-            'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
-            #'environment': 'Sets up a virtual DC running on your laptop environment to run the demo.',
-            'all'        : 'Execute the whole NITA demo.',
-        },
-        'destroy': {
-            'vdc'        : 'Removes virtual DC devices.',
-            #'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
-            'environment': 'Destroys your virtual DC running on your laptop.',
-        },
         'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
         'down'  :   'Stops and removes NITA containers (both Core and CaaS).',
         'start' :   'Starts NITA containers (both Core and CaaS).',
@@ -419,18 +239,6 @@ HELP = {
             'stop'   : 'Stops Core NITA containers.',
             'restart': 'Restarts Core NITA containers.',
             'status' : 'Shows the status of Core NITA containers.',
-        },
-        'caas': {
-            'up'     : 'Creates and starts CaaS NITA containers.',
-            'down'   : 'Stops and removes CaaS NITA containers.',
-            'start'  : 'Starts CaaS NITA containers.',
-            'stop'   : 'Stops CaaS NITA containers.',
-            'restart': 'Restarts CaaS NITA containers.',
-            'status' : 'Shows the status of CaaS NITA containers.',
-        },
-        'demo': {
-            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
-            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.',
         },
         'new': {
             'project': 'Creates a new NITA project scaffolding.',
@@ -590,84 +398,6 @@ HELP = {
             'volumes': 'Returns shared volumes information on test container.',
             'labels' : 'Returns labels information on test container.',
             'cli'    : 'Attaches local standard input, output and error streams to test running container.',
-        },
-        # 'webapp': {
-        #     'logs'   : 'Follows log output of webapp container.',
-        #     'ip'     : 'Returns IPs information on webapp container.',
-        #     'ports'  : 'Returns mapped ports information on webapp container.',
-        #     'volumes': 'Returns shared volumes information on webapp container.',
-        #     'labels' : 'Returns labels information on webapp container.',
-        #     'cli'    : 'Attaches local standard input, output and error streams to webapp running container.',
-        # },
-        'tacacs': {
-            'logs'   : 'Follows log output of tacacs container.',
-            'ip'     : 'Returns IPs information on tacacs container.',
-            'ports'  : 'Returns mapped ports information on tacacs container.',
-            'volumes': 'Returns shared volumes information on tacacs container.',
-            'labels' : 'Returns labels information on tacacs container.',
-            'cli'    : 'Attaches local standard input, output and error streams to tacacs running container.',
-            'restart': 'Restarts tacacs container.',
-            'start'  : 'Starts tacacs container.',
-            'stop'   : 'Stops tacacs container.',
-            'rm'     : 'Removes tacacs container.',
-            'up'     : 'Creates and starts tacacs container.',
-            'down'   : 'Stops and removes tacacs container.',
-        },
-        'radius': {
-            'logs'   : 'Follows log output of radius container.',
-            'ip'     : 'Returns IPs information on radius container.',
-            'ports'  : 'Returns mapped ports information on radius container.',
-            'volumes': 'Returns shared volumes information on radius container.',
-            'labels' : 'Returns labels information on radius container.',
-            'cli'    : 'Attaches local standard input, output and error streams to radius running container.',
-            'restart': 'Restarts radius container.',
-            'start'  : 'Starts radius container.',
-            'stop'   : 'Stops radius container.',
-            'rm'     : 'Removes radius container.',
-            'up'     : 'Creates and starts radius container.',
-            'down'   : 'Stops and removes radius container.',
-        },
-        'ntp': {
-            'logs'   : 'Follows log output of ntp container.',
-            'ip'     : 'Returns IPs information on ntp container.',
-            'ports'  : 'Returns mapped ports information on ntp container.',
-            'volumes': 'Returns shared volumes information on ntp container.',
-            'labels' : 'Returns labels information on ntp container.',
-            'cli'    : 'Attaches local standard input, output and error streams to ntp running container.',
-            'restart': 'Restarts ntp container.',
-            'start'  : 'Starts ntp container.',
-            'stop'   : 'Stops ntp container.',
-            'rm'     : 'Removes ntp container.',
-            'up'     : 'Creates and starts ntp container.',
-            'down'   : 'Stops and removes ntp container.',
-        },
-        'dns': {
-            'logs'   : 'Follows log output of dns container.',
-            'ip'     : 'Returns IPs information on dns container.',
-            'ports'  : 'Returns mapped ports information on dns container.',
-            'volumes': 'Returns shared volumes information on dns container.',
-            'labels' : 'Returns labels information on dns container.',
-            'cli'    : 'Attaches local standard input, output and error streams to dns running container.',
-            'restart': 'Restarts dns container.',
-            'start'  : 'Starts dns container.',
-            'stop'   : 'Stops dns container.',
-            'rm'     : 'Removes dns container.',
-            'up'     : 'Creates and starts dns container.',
-            'down'   : 'Stops and removes dns container.',
-        },
-        'rsyslog': {
-            'logs'   : 'Follows log output of rsyslog container.',
-            'ip'     : 'Returns IPs information on rsyslog container.',
-            'ports'  : 'Returns mapped ports information on rsyslog container.',
-            'volumes': 'Returns shared volumes information on rsyslog container.',
-            'labels' : 'Returns labels information on rsyslog container.',
-            'cli'    : 'Attaches local standard input, output and error streams to rsyslog running container.',
-            'restart': 'Restarts rsyslog container.',
-            'start'  : 'Starts rsyslog container.',
-            'stop'   : 'Stops rsyslog container.',
-            'rm'     : 'Removes rsyslog container.',
-            'up'     : 'Creates and starts rsyslog container.',
-            'down'   : 'Stops and removes rsyslog container.',
         },
         'ping': {
             'all'       : 'Pings all devices of the virtual DC.',
