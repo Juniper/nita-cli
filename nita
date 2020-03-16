@@ -85,11 +85,11 @@ COMMANDS = {
         'ansible': {
             'run': {
                 'noob' : {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/noob.pb.yaml',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/noob.pb.yaml',
                     'gui' :    'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NOOB/build',
                 },
                 'build': {
-                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/build.pb.yaml',
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/build.pb.yaml',
                     'gui':     'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
                 },
             },
@@ -97,14 +97,14 @@ COMMANDS = {
             'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; containerlabel ansibletmp """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
+    {{ end -}}' $1 ; } ; docker run --rm --name ansibletmp -itd testlab.telenor.dk/nita/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; containerlabel ansibletmp """,
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project testlab.telenor.dk/nita/ansible:19.11.1 /bin/sh ; docker attach ansible',
         },
         'gitlab': {
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel ps-docker.artifactory.aslab.juniper.net/gitlab-ce:12.5.3-ce.0 """,
+    {{ end -}}' $1 ; } ; containerlabel testlab.telenor.dk/nita/gitlab:12.5.3-ce.0 """,
             'cli'    : 'docker exec -it -u root gitlab /bin/bash',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' gitlab',
             'ports'  : 'docker port gitlab',
@@ -122,50 +122,50 @@ COMMANDS = {
             'run': {
                 'common': { 
                     'firewall' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_FW_Common_Tests/build',
                     }, 
                     'switch' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SW_Common_Tests/build',
                     }, 
                     'router': {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RX_Common_Tests/build',
                     },    
                 },
                 'specific' : 
                     {
                     'firewall' : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_FW_Tests/build',
                         },
                     'switch'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SW_Tests/build',
                         },
                     'router'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RX_Tests/build',
                         },
                     'tacacs'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_TACACS_Tests/build',
                         },
                     'radius'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RADIUS_Tests/build',
                         },
                     'syslog'   : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SYSLOG_Tests/build',
                         },
                     'dns'      : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_DNS_Tests/build',
                         },
                     'ntp'      : {
-                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita testlab.telenor.dk/nita/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
                         'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NTP_Tests/build',
                         },
                     },
@@ -178,8 +178,8 @@ COMMANDS = {
             'labels' :  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; containerlabel testtmp """,
-            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
+    {{ end -}}' $1 ; } ; docker run --rm --name testtmp -itd testlab.telenor.dk/nita/toby:3.11.2 sleep 3 2>&1 > /dev/null ; containerlabel testtmp """,
+            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash testlab.telenor.dk/nita/toby:3.11.2 ; docker attach test',
         },
         'ping': {
             'all'       : 'for i in 2 3 4;  do ping -c 3 192.168.56.$i; done',
@@ -196,10 +196,10 @@ COMMANDS = {
             },
         },
         'backup': {
-            'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
-            'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
-            'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
-            'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
+            'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
+            'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
+            'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
+            'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project testlab.telenor.dk/nita/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
         },
         'license': 'echo "\n# <*******************\n#\n# Copyright 2016-2020 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, \n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"\n',
     },
