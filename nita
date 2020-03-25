@@ -10,7 +10,8 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI telenor branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI gitlab branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'install': "sudo pip3 install -I nita-cli/ --no-binary :all:",
         },
         'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
         'down'    : 'docker-compose --compatibility -f nita-core.yml down',
@@ -117,6 +118,14 @@ COMMANDS = {
             'up'     : 'docker-compose --compatibility -f nita-core.yml up -d gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
+            'projects' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | gron | grep "name =" | gron -u',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | gron',
+            },
+            'groups' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | gron | grep "name =" | gron -u',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | gron',
+            },
         },
         'test': {
             'run': {
@@ -210,6 +219,7 @@ HELP = {
     'nita': {
         'cli': {
             'version': 'Shows NITA CLI current version.',
+            'install': "Installs NITA CLI from project.",
         },
         'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
         'down'  :   'Stops and removes NITA containers (both Core and CaaS).',
@@ -307,6 +317,14 @@ HELP = {
             'up'     : 'Creates and starts gitlab container.',
             'down'   : 'Stops and removes gitlab container.',
             'gui'    : 'Opens GitLab GUI.',
+            'projects' : {
+                    'ls'    : 'List GitLab projects.',
+                    'detail': 'List GitLab projects in detail.',
+            },
+            'groups' : {
+                    'ls'    : 'List GitLab groups.',
+                    'detail': 'List GitLab groups in detail.',
+            },
         },
         'test': {
             'run': {
