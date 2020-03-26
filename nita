@@ -11,7 +11,9 @@ COMMANDS = {
     'nita': {
         'cli': {
             'version': "echo NITA CLI gitlab branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
-            'install': "sudo pip3 install -I nita-cli/ --no-binary :all:",
+        },
+        'install': {
+            'cli': "sudo pip3 install -I nita-cli/ --no-binary :all:",
         },
         'up'      : 'docker-compose --compatibility -f nita-core.yml up -d',
         'down'    : 'docker-compose --compatibility -f nita-core.yml down',
@@ -81,6 +83,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml stop jenkins',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml rm -f jenkins',
             'up'     : 'docker-compose --compatibility -f nita-core.yml up -d jenkins',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
         },
         'ansible': {
@@ -116,15 +119,16 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml stop gitlab',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml rm -f gitlab',
             'up'     : 'docker-compose --compatibility -f nita-core.yml up -d gitlab',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
             'projects' : {
-                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | gron | grep "name =" | gron -u',
-                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | gron',
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq',
             },
             'groups' : {
-                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | gron | grep "name =" | gron -u',
-                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | gron',
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq',
             },
         },
         'test': {
@@ -219,7 +223,9 @@ HELP = {
     'nita': {
         'cli': {
             'version': 'Shows NITA CLI current version.',
-            'install': "Installs NITA CLI from project.",
+        },
+        'install': {
+            'cli': 'Installs NITA CLI.',
         },
         'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
         'down'  :   'Stops and removes NITA containers (both Core and CaaS).',
@@ -286,6 +292,7 @@ HELP = {
             'stop'   : 'Stops jenkins container.',
             'rm'     : 'Removes jenkins container.',
             'up'     : 'Creates and starts jenkins container.',
+            'status' : 'Shows the jenkins container status.',
             'down'   : 'Stops and removes jenkins container.',
         },
         'ansible': {
@@ -315,6 +322,7 @@ HELP = {
             'stop'   : 'Stops gitlab container.',
             'rm'     : 'Removes gitlab container.',
             'up'     : 'Creates and starts gitlab container.',
+            'status' : 'Shows the gitlab container status.',
             'down'   : 'Stops and removes gitlab container.',
             'gui'    : 'Opens GitLab GUI.',
             'projects' : {
