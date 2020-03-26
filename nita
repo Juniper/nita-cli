@@ -184,7 +184,7 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; containerlabel ansibletmp """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
+            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
         },
         'gitlab': {
             'labels':  """containerlabel() { docker inspect -f '
@@ -282,7 +282,7 @@ COMMANDS = {
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
     {{ end -}}' $1 ; } ; docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; containerlabel testtmp """,
-            'cli':     'docker run -d --rm --name test -h toby --volumes-from jenkins -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
+            'cli':     'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
     #     'webapp': {
     #         'logs'   : 'docker logs -f webapp --tail 200',
