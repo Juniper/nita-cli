@@ -366,25 +366,32 @@ NITA CLI command | Description
    nita dns restart | Restarts dns container.
    nita dns rm | Removes dns container.
    nita dns start | Starts dns container.
+   nita dns status | Shows the dns container status.
    nita dns stop | Stops dns container.
    nita dns up | Creates and starts dns container.
    nita dns volumes | Returns shared volumes information on dns container.
    nita down | Stops and removes NITA containers (both Core and CaaS).
    nita gitlab cli | Attaches local standard input, output and error streams to gitlab running container with "root" user.
    nita gitlab down | Stops and removes gitlab container.
+   nita gitlab groups detail | List GitLab groups in detail.
+   nita gitlab groups ls | List GitLab groups.
    nita gitlab gui | Opens GitLab GUI.
    nita gitlab ip | Returns IPs information on gitlab container.
    nita gitlab labels | Returns labels information on gitlab container.
    nita gitlab logs | Fetches the logs of gitlab container.
    nita gitlab ports | Returns mapped ports information on gitlab container.
+   nita gitlab projects detail | List GitLab projects in detail.
+   nita gitlab projects ls | List GitLab projects.
    nita gitlab restart | Restarts gitlab container.
    nita gitlab rm | Removes gitlab container.
    nita gitlab start | Starts gitlab container.
+   nita gitlab status | Shows the gitlab container status.
    nita gitlab stop | Stops gitlab container.
    nita gitlab up | Creates and starts gitlab container.
    nita gitlab volumes | Returns shared volumes information on gitlab container.
    nita images ls | Lists all NITA images.
    nita images versions | Displays NITA images versions.
+   nita install cli | Installs NITA CLI.
    nita inventory create | Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.
    nita inventory gui | Opens CouchDB inventory GUI.
    nita inventory populate | Populates virtual DC dynamic inventory with data related to NITA demo.
@@ -394,13 +401,12 @@ NITA CLI command | Description
    nita jenkins down | Stops and removes jenkins container.
    nita jenkins gui | Opens Jenkins GUI.
    nita jenkins ip | Returns IPs information on jenkins container.
+   nita jenkins jobs create | Creates a new job (e.g. example) by reading stdin as a configuration XML file (--file example.xml).
+   nita jenkins jobs delete | Deletes an existing job matched by --job <JOB>
    nita jenkins jobs disable | Disables an existing job matched by --job <JOB>
    nita jenkins jobs enable | Enables an existing job matched by --job <JOB>
-   nita jenkins jobs export | Exports an existing job matched by --job <JOB> into XML format from Jenkins server.
-   nita jenkins jobs import | Imports a job from XML config file by --file <FILE> (e.g. file.xml) into Jenkins server.
+   nita jenkins jobs get | Dumps an existing job definition XML matched by --job <JOB> to stdout.
    nita jenkins jobs ls | Lists all Jenkins jobs.
-   nita jenkins jobs reinstall | Removes and reinstalls every NITA demo job.
-   nita jenkins jobs remove | Removes Jenkins jobs matched by --regex <REGEX>. Assume "yes" as answer to all prompts and run non-interactively.
    nita jenkins labels | Returns labels information on jenkins container.
    nita jenkins logs | Follows log output of jenkins container.
    nita jenkins plugins details | Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).
@@ -408,13 +414,16 @@ NITA CLI command | Description
    nita jenkins ports | Returns mapped ports information on jenkins container.
    nita jenkins restart | Restarts jenkins container.
    nita jenkins rm | Removes jenkins container.
+   nita jenkins set matrix authentication | Sets matrix-based security authorization strategy.
+   nita jenkins set verify ssl false | Disables SSL certificate validation.
+   nita jenkins set verify ssl true | Enables SSL certificate validation.
    nita jenkins start | Starts jenkins container.
+   nita jenkins status | Shows the jenkins container status.
    nita jenkins stop | Stops jenkins container.
    nita jenkins up | Creates and starts jenkins container.
-   nita jenkins verify ssl false | Disables SSL certificate validation.
-   nita jenkins verify ssl true | Enables SSL certificate validation.
    nita jenkins version | Gets Jenkins server version.
    nita jenkins volumes | Returns shared volumes information on jenkins container.
+   nita jenkins whoami | Reports your credential and permissions.
    nita license | Displays the NITA License.
    nita new project | Creates a new NITA project scaffolding.
    nita new role | Creates a new Ansible role scaffolding.
@@ -427,6 +436,7 @@ NITA CLI command | Description
    nita ntp restart | Restarts ntp container.
    nita ntp rm | Removes ntp container.
    nita ntp start | Starts ntp container.
+   nita ntp status | Shows the ntp container status.
    nita ntp stop | Stops ntp container.
    nita ntp up | Creates and starts ntp container.
    nita ntp volumes | Returns shared volumes information on ntp container.
@@ -443,6 +453,7 @@ NITA CLI command | Description
    nita radius restart | Restarts radius container.
    nita radius rm | Removes radius container.
    nita radius start | Starts radius container.
+   nita radius status | Shows the radius container status.
    nita radius stop | Stops radius container.
    nita radius up | Creates and starts radius container.
    nita radius volumes | Returns shared volumes information on radius container.
@@ -455,6 +466,7 @@ NITA CLI command | Description
    nita rsyslog restart | Restarts rsyslog container.
    nita rsyslog rm | Removes rsyslog container.
    nita rsyslog start | Starts rsyslog container.
+   nita rsyslog status | Shows the rsyslog container status.
    nita rsyslog stop | Stops rsyslog container.
    nita rsyslog up | Creates and starts rsyslog container.
    nita rsyslog volumes | Returns shared volumes information on rsyslog container.
@@ -477,6 +489,7 @@ NITA CLI command | Description
    nita tacacs restart | Restarts tacacs container.
    nita tacacs rm | Removes tacacs container.
    nita tacacs start | Starts tacacs container.
+   nita tacacs status | Shows the tacacs container status.
    nita tacacs stop | Stops tacacs container.
    nita tacacs up | Creates and starts tacacs container.
    nita tacacs volumes | Returns shared volumes information on tacacs container.
@@ -508,7 +521,6 @@ NITA CLI command | Description
    nita test run specific tacacs gui | Triggers vDC_TACACS_Tests Jenkins job.
    nita test volumes | Returns shared volumes information on test container.
    nita up | Creates and starts NITA containers (both Core and CaaS).
-
 
 ## Customisation
 
