@@ -480,7 +480,7 @@ HELP = {
                 'delete'   : 'Deletes an existing job matched by --job <JOB>',
                 'enable'   : 'Enables an existing job matched by --job <JOB>',
                 'disable'  : 'Disables an existing job matched by --job <JOB>',
-                'create'   : 'Creates a new job (e.g. foo) from a configuration XML file (--file foo.xml).',
+                'create'   : 'Creates a new job (e.g --job <JOB>) from a configuration XML file (e.g. <JOB>.xml).',
                 'get'      : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
             },
             'plugins': {
