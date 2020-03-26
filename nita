@@ -12,6 +12,9 @@ COMMANDS = {
         'cli': {
             'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
+        'install': {
+            'cli': "sudo pip3 install -I nita-cli/ --no-binary :all:",
+        },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
             #'environment': './setup_demo.sh',
@@ -98,7 +101,7 @@ COMMANDS = {
                         nita containers versions ; \
                         echo " \n# NITA CLI VERSION #\n" ; \
                         nita cli version ; echo ""',
-        },    
+        },
         'new': {
             'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
             'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
@@ -120,13 +123,13 @@ COMMANDS = {
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
+            'whoami'    : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
             'jobs': {
-                'whoami'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
                 'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs | tail -n+3 ',
                 'delete'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
                 'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
                 'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
-                'create'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
+                'create'   : "cat {1} | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
                 'get'      : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
             },
             'plugins': {
@@ -162,6 +165,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop jenkins',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f jenkins',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d jenkins',
+            'status' : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml ps jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
         },
         'ansible': {
@@ -197,8 +201,17 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop gitlab',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f gitlab',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d gitlab',
+            'status' : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml ps gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
+            'projects' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq',
+            },
+            'groups' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq',
+            },
         },
         'test': {
             'run': {
@@ -258,7 +271,7 @@ COMMANDS = {
                     #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
                     #     'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_BGP_Tests/build',
                     #     },
-                    },                   
+                    },
                 },
             'pull': {
                 'static'  : 'python3 inventory2toby.py --static',
@@ -297,6 +310,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop tacacs',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f tacacs',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d tacacs',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps tacacs',
             'down'   : 'nita tacacs stop ; nita tacacs rm',
         },
         'radius': {
@@ -314,6 +328,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop radius',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f radius',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d radius',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps radius',
             'down'   : 'nita radius stop ; nita radius rm',
         },
         'ntp': {
@@ -331,6 +346,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop ntp',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f ntp',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d ntp',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps ntp',
             'down'   : 'nita ntp stop ; nita ntp rm',
         },
         'dns': {
@@ -348,6 +364,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop dns',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f dns',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d dns',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps dns',
             'down'   : 'nita dns stop ; nita dns rm',
         },
         'rsyslog': {
@@ -365,6 +382,7 @@ COMMANDS = {
             'stop'   : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml stop rsyslog',
             'rm'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml rm -f rsyslog',
             'up'     : 'docker-compose --compatibility -f nita-core.yml -f nita-caas.yml up -d rsyslog',
+            'status' : 'docker-compose --compatibility -f nita-core.yml ps rsyslog',
             'down'   : 'nita rsyslog stop ; nita rsyslog rm',
         },
         'ping': {
@@ -396,6 +414,9 @@ HELP = {
     'nita': {
         'cli': {
             'version': 'Shows NITA CLI current version.',
+        },
+        'install': {
+            'cli': 'Installs NITA CLI.',
         },
         'setup': {
             'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
@@ -453,13 +474,13 @@ HELP = {
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
             'version'   : 'Gets Jenkins server version.',
+            'whoami'    : 'Reports your credential and permissions.',
             'jobs': {
-                'whoami'   : 'Reports your credential and permissions.',
                 'ls'       : 'Lists all Jenkins jobs.',
                 'delete'   : 'Deletes an existing job matched by --job <JOB>',
                 'enable'   : 'Enables an existing job matched by --job <JOB>',
                 'disable'  : 'Disables an existing job matched by --job <JOB>',
-                'create'   : 'Creates a new job by reading stdin as a configuration XML file (--file example.xml).',
+                'create'   : 'Creates a new job (e.g. example) by reading stdin as a configuration XML file (--file example.xml).',
                 'get'      : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
             },
             'plugins': {
@@ -492,6 +513,7 @@ HELP = {
             'stop'   : 'Stops jenkins container.',
             'rm'     : 'Removes jenkins container.',
             'up'     : 'Creates and starts jenkins container.',
+            'status' : 'Shows the jenkins container status.',
             'down'   : 'Stops and removes jenkins container.',
         },
         'ansible': {
@@ -521,8 +543,17 @@ HELP = {
             'stop'   : 'Stops gitlab container.',
             'rm'     : 'Removes gitlab container.',
             'up'     : 'Creates and starts gitlab container.',
+            'status' : 'Shows the gitlab container status.',
             'down'   : 'Stops and removes gitlab container.',
             'gui'    : 'Opens GitLab GUI.',
+            'projects' : {
+                    'ls'    : 'List GitLab projects.',
+                    'detail': 'List GitLab projects in detail.',
+            },
+            'groups' : {
+                    'ls'    : 'List GitLab groups.',
+                    'detail': 'List GitLab groups in detail.',
+            },
         },
         'test': {
             'run': {
@@ -611,6 +642,7 @@ HELP = {
             'stop'   : 'Stops tacacs container.',
             'rm'     : 'Removes tacacs container.',
             'up'     : 'Creates and starts tacacs container.',
+            'status' : 'Shows the tacacs container status.',
             'down'   : 'Stops and removes tacacs container.',
         },
         'radius': {
@@ -625,6 +657,7 @@ HELP = {
             'stop'   : 'Stops radius container.',
             'rm'     : 'Removes radius container.',
             'up'     : 'Creates and starts radius container.',
+            'status' : 'Shows the radius container status.',
             'down'   : 'Stops and removes radius container.',
         },
         'ntp': {
@@ -639,6 +672,7 @@ HELP = {
             'stop'   : 'Stops ntp container.',
             'rm'     : 'Removes ntp container.',
             'up'     : 'Creates and starts ntp container.',
+            'status' : 'Shows the ntp container status.',
             'down'   : 'Stops and removes ntp container.',
         },
         'dns': {
@@ -653,6 +687,7 @@ HELP = {
             'stop'   : 'Stops dns container.',
             'rm'     : 'Removes dns container.',
             'up'     : 'Creates and starts dns container.',
+            'status' : 'Shows the dns container status.',
             'down'   : 'Stops and removes dns container.',
         },
         'rsyslog': {
@@ -667,6 +702,7 @@ HELP = {
             'stop'   : 'Stops rsyslog container.',
             'rm'     : 'Removes rsyslog container.',
             'up'     : 'Creates and starts rsyslog container.',
+            'status' : 'Shows the rsyslog container status.',
             'down'   : 'Stops and removes rsyslog container.',
         },
         'ping': {
