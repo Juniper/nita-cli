@@ -14,7 +14,3 @@ test:
   - pip3 install -I nita-cli/ --no-binary ":all:"
   - nita cli version
   - nita ?
-  only:
-  - master
-  tags:
-  - docker
