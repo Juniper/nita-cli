@@ -1,0 +1,20 @@
+image: python:3.8-slim-buster
+
+stages:
+  - test
+
+before_script:
+  - apt-get update
+  - apt-get install -yy git --no-install-recommends
+
+test:
+  stage: test
+  script:
+  - git clone https://gitlab.com/_NITA/nita-cli.git
+  - pip3 install -I nita-cli/ --no-binary ":all:"
+  - nita cli version
+  - nita ?
+  only:
+  - master
+  tags:
+  - docker
