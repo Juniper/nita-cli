@@ -190,7 +190,7 @@ COMMANDS = {
             'labels':  """containerlabel() { docker inspect -f '
     {{ range $k, $v := .Config.Labels -}}
     {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel ps-docker.artifactory.aslab.juniper.net/gitlab-ce:12.5.3-ce.0 """,
+    {{ end -}}' $1 ; } ; containerlabel gitlab """,
             'cli'    : 'docker exec -it -u root gitlab /bin/bash',
             'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' gitlab',
             'ports'  : 'docker port gitlab',
