@@ -184,6 +184,7 @@ COMMANDS = {
                 },
             },
             'labels' : 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Config.Labels"',
+            'volumes': 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Mounts"',
             'cli'    : 'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
         },
         'gitlab': {
@@ -275,6 +276,7 @@ COMMANDS = {
                 'dynamic' : 'python3 inventory2toby.py --dynamic',
                 },
             'labels' : 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Config.Labels"',
+            'volumes': 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Mounts"',
             'cli':     'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
     #     'webapp': {
@@ -503,7 +505,9 @@ HELP = {
                     'gui'    : 'Triggers BUILD Jenkins job.',
                 },
             },
+
             'labels' : 'Returns labels information on ansible container.',
+            'volumes': 'Returns shared volumes information on ansible container.',
             'cli'    : 'Attaches local stdin, stdout and stderr streams to ansible running container.',
         },
         'gitlab': {
@@ -594,6 +598,7 @@ HELP = {
                 'dynamic': 'Creates topology object from dynamic inventory.',
             },
             'labels' : 'Returns labels information on test container.',
+            'volumes': 'Returns shared volumes information on test container.',
             'cli'    : 'Attaches local stdin, stdout and stderr streams to test running container.',
         },
         # 'webapp': {
