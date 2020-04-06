@@ -10,7 +10,7 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI labels branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'install': {
             'cli': "sudo pip3 install -I nita-cli/ --no-binary :all:",
@@ -29,6 +29,7 @@ COMMANDS = {
         'down'    : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml down',
         'start'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start',
         'stop'    : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop',
+        'restart' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart',
         'status'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps',
         'core': {
             'up'      : 'docker-compose --compatibility -p nita -f nita-core.yml up -d',
@@ -108,10 +109,14 @@ COMMANDS = {
         },
         'containers': {
             'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
+            # TODO: nita containers versions (with jq)
+            # docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] |
             'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .Name }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'images': {
             'ls'      : 'docker images --filter "label=net.juniper.framework=NITA"',
+            # TODO: nita images versions (with jq)
+            # docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] |
             'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
         },
         'inventory': {
@@ -119,6 +124,8 @@ COMMANDS = {
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
             'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
         },
+        # TODO: nita ips (with jq)
+        # docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"'
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
@@ -147,19 +154,15 @@ COMMANDS = {
                     'authentication' : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Matrix/build',
                 },
             },
-            'labels':  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel jenkins """,
             'cli': {
                 'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
                 'root'   : 'docker exec -it -u root jenkins /bin/bash',
             },
-            'gui'    : 'open https://jenkins.nita.com:8443',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' jenkins',
-            'ports'  : 'docker port jenkins',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' jenkins | jq',
             'logs'   : 'docker logs -f jenkins --tail 200',
+            'ports'  : 'docker inspect jenkins | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect jenkins | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect jenkins | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect jenkins | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart jenkins',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start jenkins',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop jenkins',
@@ -167,6 +170,7 @@ COMMANDS = {
             'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d jenkins',
             'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
+            'gui'    : 'open https://jenkins.nita.com:8443',
         },
         'ansible': {
             'run': {
@@ -179,23 +183,16 @@ COMMANDS = {
                     'gui':     'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
                 },
             },
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' ansible | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; containerlabel ansibletmp """,
-            'cli':     'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
+            'labels' : 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Config.Labels"',
+            'cli'    : 'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
         },
         'gitlab': {
-            'labels':  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel gitlab """,
             'cli'    : 'docker exec -it -u root gitlab /bin/bash',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' gitlab',
-            'ports'  : 'docker port gitlab',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' gitlab | jq',
             'logs'   : 'docker logs -f gitlab',
+            'ports'  : 'docker inspect gitlab | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect gitlab | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect gitlab | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect gitlab | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart gitlab',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start gitlab',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop gitlab',
@@ -277,34 +274,24 @@ COMMANDS = {
                 'static'  : 'python3 inventory2toby.py --static',
                 'dynamic' : 'python3 inventory2toby.py --dynamic',
                 },
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' test | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; containerlabel testtmp """,
+            'labels' : 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Config.Labels"',
             'cli':     'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
     #     'webapp': {
-    #         'logs'   : 'docker logs -f webapp --tail 200',
-    #         'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' webapp',
-    #         'ports'  : 'docker port webapp',
-    #         'volumes': 'docker inspect --format \'{{json .Mounts}}\' webapp | jq',
-    #         'labels' :  """containerlabel() { docker inspect -f '
-    # {{ range $k, $v := .Config.Labels -}}
-    # {{ $k }} = {{ $v }}
-    # {{ end -}}' $1 ; } ; containerlabel webapp """,
     #         'cli':     'docker exec -it webapp /bin/bash',
+    #         'logs'   : 'docker logs -f webapp --tail 200',
+    #         'ips'     : 'docker inspect webapp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+    #         'ports'  : 'docker inspect webapp | jq ".[] | .NetworkSettings.Ports[]"',
+    #         'volumes': 'docker inspect tacacs | jq ".[] | .Mounts"',
+    #         'labels' : 'docker inspect webapp | jq ".[] | .Config.Labels"',
     #     },
         'tacacs': {
-            'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' tacacs',
-            'ports'  : 'docker port tacacs',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' tacacs | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel tacacs """,
             'cli'    : 'docker exec -it tacacs /bin/bash',
+            'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
+            'ports'  : 'docker inspect tacacs | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect tacacs | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect tacacs | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect tacacs | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart tacacs',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start tacacs',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop tacacs',
@@ -314,15 +301,12 @@ COMMANDS = {
             'down'   : 'nita tacacs stop ; nita tacacs rm',
         },
         'radius': {
-            'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' radius',
-            'ports'  : 'docker port radius',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' radius | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel radius """,
             'cli'    : 'docker exec -it radius /bin/bash',
+            'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
+            'ports'  : 'docker inspect radius | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect radius | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect radius | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect radius | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart radius',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start radius',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop radius',
@@ -332,15 +316,12 @@ COMMANDS = {
             'down'   : 'nita radius stop ; nita radius rm',
         },
         'ntp': {
-            'logs'   : 'docker logs -f ntp --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' ntp',
-            'ports'  : 'docker port ntp',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' ntp | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel ntp """,
             'cli'    : 'docker exec -it ntp /bin/sh',
+            'logs'   : 'docker logs -f ntp --tail 200',
+            'ports'  : 'docker inspect ntp | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect ntp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect ntp | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect ntp | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart ntp',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start ntp',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop ntp',
@@ -350,15 +331,12 @@ COMMANDS = {
             'down'   : 'nita ntp stop ; nita ntp rm',
         },
         'dns': {
-            'logs'   : 'docker logs -f dns --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' dns',
-            'ports'  : 'docker port dns',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' dns | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel dns """,
             'cli'    : 'docker exec -it dns /bin/sh',
+            'logs'   : 'docker logs -f dns --tail 200',
+            'ports'  : 'docker inspect dns | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect dns | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect dns | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect dns | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart dns',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start dns',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop dns',
@@ -368,15 +346,12 @@ COMMANDS = {
             'down'   : 'nita dns stop ; nita dns rm',
         },
         'rsyslog': {
-            'logs'   : 'docker logs -f rsyslog --tail 200',
-            'ip'     : 'docker inspect --format=\'{{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\' rsyslog',
-            'ports'  : 'docker port rsyslog',
-            'volumes': 'docker inspect --format \'{{json .Mounts}}\' rsyslog | jq',
-            'labels' :  """containerlabel() { docker inspect -f '
-    {{ range $k, $v := .Config.Labels -}}
-    {{ $k }} = {{ $v }}
-    {{ end -}}' $1 ; } ; containerlabel rsyslog """,
             'cli'    : 'docker exec -it rsyslog /bin/sh',
+            'logs'   : 'docker logs -f rsyslog --tail 200',
+            'ports'  : 'docker inspect rsyslog | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect rsyslog | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect rsyslog | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect rsyslog | jq ".[] | .Config.Labels"',
             'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart rsyslog',
             'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start rsyslog',
             'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop rsyslog',
@@ -428,11 +403,12 @@ HELP = {
             #'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
             'environment': 'Destroys your virtual DC running on your laptop.',
         },
-        'up'    :   'Creates and starts NITA containers (both Core and CaaS).',
-        'down'  :   'Stops and removes NITA containers (both Core and CaaS).',
-        'start' :   'Starts NITA containers (both Core and CaaS).',
-        'stop'  :   'Stops NITA containers (both Core and CaaS).',
-        'status':   'Shows the status of every NITA containers.',
+        'up'     :   'Creates and starts NITA containers (both Core and CaaS).',
+        'down'   :   'Stops and removes NITA containers (both Core and CaaS).',
+        'start'  :   'Starts NITA containers (both Core and CaaS).',
+        'stop'   :   'Stops NITA containers (both Core and CaaS).',
+        'restart':   'Restarts NITA containers (both Core and CaaS).',
+        'status' :   'Shows the status of every NITA containers.',
         'core': {
             'up'     : 'Creates and starts Core NITA containers.',
             'down'   : 'Stops and removes Core NITA containers.',
@@ -498,16 +474,15 @@ HELP = {
                     'authentication' : 'Sets matrix-based security authorization strategy.',
                 },
             },
-            'labels':  'Returns labels information on jenkins container.',
             'cli': {
-                'jenkins': 'Attaches local standard input, output and error streams to jenkins running container with "jenkins" user.',
-                'root'   : 'Attaches local standard input, output and error streams to jenkins running container with "root" user.',
+                'jenkins': 'Attaches local stdin, stdout and stderr streams to jenkins running container with "jenkins" user.',
+                'root'   : 'Attaches local stdin, stdout and stderr streams to jenkins running container with "root" user.',
             },
-            'gui'    : 'Opens Jenkins GUI.',
-            'ip'     : 'Returns IPs information on jenkins container.',
-            'ports'  : 'Returns mapped ports information on jenkins container.',
-            'volumes': 'Returns shared volumes information on jenkins container.',
             'logs'   : 'Follows log output of jenkins container.',
+            'ports'  : 'Returns mapped ports information on jenkins container.',
+            'ips'    : 'Returns IPs information on jenkins container.',
+            'volumes': 'Returns shared volumes information on jenkins container.',
+            'labels':  'Returns labels information on jenkins container.',
             'restart': 'Restarts jenkins container.',
             'start'  : 'Starts jenkins container.',
             'stop'   : 'Stops jenkins container.',
@@ -515,6 +490,7 @@ HELP = {
             'up'     : 'Creates and starts jenkins container.',
             'status' : 'Shows the jenkins container status.',
             'down'   : 'Stops and removes jenkins container.',
+            'gui'    : 'Opens Jenkins GUI.',
         },
         'ansible': {
             'run': {
@@ -529,15 +505,15 @@ HELP = {
             },
             'volumes': 'Returns shared volumes information on ansible container.',
             'labels' : 'Returns labels information on ansible container.',
-            'cli'    : 'Attaches local standard input, output and error streams to ansible running container.',
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to ansible running container.',
         },
         'gitlab': {
-            'labels' : 'Returns labels information on gitlab container.',
-            'cli'    : 'Attaches local standard input, output and error streams to gitlab running container with "root" user.',
-            'ip'     : 'Returns IPs information on gitlab container.',
-            'ports'  : 'Returns mapped ports information on gitlab container.',
-            'volumes': 'Returns shared volumes information on gitlab container.',
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to gitlab running container with "root" user.',
             'logs'   : 'Fetches the logs of gitlab container.',
+            'ports'  : 'Returns mapped ports information on gitlab container.',
+            'ips'    : 'Returns IPs information on gitlab container.',
+            'volumes': 'Returns shared volumes information on gitlab container.',
+            'labels' : 'Returns labels information on gitlab container.',
             'restart': 'Restarts gitlab container.',
             'start'  : 'Starts gitlab container.',
             'stop'   : 'Stops gitlab container.',
@@ -620,23 +596,23 @@ HELP = {
             },
             'volumes': 'Returns shared volumes information on test container.',
             'labels' : 'Returns labels information on test container.',
-            'cli'    : 'Attaches local standard input, output and error streams to test running container.',
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to test running container.',
         },
         # 'webapp': {
         #     'logs'   : 'Follows log output of webapp container.',
-        #     'ip'     : 'Returns IPs information on webapp container.',
+        #     'ips'    : 'Returns IPs information on webapp container.',
         #     'ports'  : 'Returns mapped ports information on webapp container.',
         #     'volumes': 'Returns shared volumes information on webapp container.',
         #     'labels' : 'Returns labels information on webapp container.',
-        #     'cli'    : 'Attaches local standard input, output and error streams to webapp running container.',
+        #     'cli'    : 'Attaches local stdin, stdout and stderr streams to webapp running container.',
         # },
         'tacacs': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to tacacs running container.',
             'logs'   : 'Follows log output of tacacs container.',
-            'ip'     : 'Returns IPs information on tacacs container.',
             'ports'  : 'Returns mapped ports information on tacacs container.',
+            'ips'    : 'Returns IPs information on tacacs container.',
             'volumes': 'Returns shared volumes information on tacacs container.',
             'labels' : 'Returns labels information on tacacs container.',
-            'cli'    : 'Attaches local standard input, output and error streams to tacacs running container.',
             'restart': 'Restarts tacacs container.',
             'start'  : 'Starts tacacs container.',
             'stop'   : 'Stops tacacs container.',
@@ -646,12 +622,12 @@ HELP = {
             'down'   : 'Stops and removes tacacs container.',
         },
         'radius': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to radius running container.',
             'logs'   : 'Follows log output of radius container.',
-            'ip'     : 'Returns IPs information on radius container.',
             'ports'  : 'Returns mapped ports information on radius container.',
+            'ips'    : 'Returns IPs information on radius container.',
             'volumes': 'Returns shared volumes information on radius container.',
             'labels' : 'Returns labels information on radius container.',
-            'cli'    : 'Attaches local standard input, output and error streams to radius running container.',
             'restart': 'Restarts radius container.',
             'start'  : 'Starts radius container.',
             'stop'   : 'Stops radius container.',
@@ -661,12 +637,12 @@ HELP = {
             'down'   : 'Stops and removes radius container.',
         },
         'ntp': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to ntp running container.',
             'logs'   : 'Follows log output of ntp container.',
-            'ip'     : 'Returns IPs information on ntp container.',
             'ports'  : 'Returns mapped ports information on ntp container.',
+            'ips'    : 'Returns IPs information on ntp container.',
             'volumes': 'Returns shared volumes information on ntp container.',
             'labels' : 'Returns labels information on ntp container.',
-            'cli'    : 'Attaches local standard input, output and error streams to ntp running container.',
             'restart': 'Restarts ntp container.',
             'start'  : 'Starts ntp container.',
             'stop'   : 'Stops ntp container.',
@@ -676,12 +652,12 @@ HELP = {
             'down'   : 'Stops and removes ntp container.',
         },
         'dns': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to dns running container.',
             'logs'   : 'Follows log output of dns container.',
-            'ip'     : 'Returns IPs information on dns container.',
             'ports'  : 'Returns mapped ports information on dns container.',
+            'ips'    : 'Returns IPs information on dns container.',
             'volumes': 'Returns shared volumes information on dns container.',
             'labels' : 'Returns labels information on dns container.',
-            'cli'    : 'Attaches local standard input, output and error streams to dns running container.',
             'restart': 'Restarts dns container.',
             'start'  : 'Starts dns container.',
             'stop'   : 'Stops dns container.',
@@ -691,12 +667,12 @@ HELP = {
             'down'   : 'Stops and removes dns container.',
         },
         'rsyslog': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to rsyslog running container.',
             'logs'   : 'Follows log output of rsyslog container.',
-            'ip'     : 'Returns IPs information on rsyslog container.',
             'ports'  : 'Returns mapped ports information on rsyslog container.',
+            'ips'    : 'Returns IPs information on rsyslog container.',
             'volumes': 'Returns shared volumes information on rsyslog container.',
             'labels' : 'Returns labels information on rsyslog container.',
-            'cli'    : 'Attaches local standard input, output and error streams to rsyslog running container.',
             'restart': 'Restarts rsyslog container.',
             'start'  : 'Starts rsyslog container.',
             'stop'   : 'Stops rsyslog container.',
