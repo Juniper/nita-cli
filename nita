@@ -109,10 +109,12 @@ COMMANDS = {
         },
         'containers': {
             'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
-            'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.Config.Labels.\"net.juniper.image.release\")"\' | awk -v OFS=\'\t\' \'{print $1, $2}\'',
+            # TODO: Format "nita containers versions" as table output (colums)
+            'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.Config.Labels.\"net.juniper.image.release\")"\'',
         },
         'images': {
             'ls'      : 'docker images --filter "label=net.juniper.framework=NITA"',
+            # TODO: Format "nita images versions" as table output (colums)
             'versions':  'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.RepoTags) \(.Config.Labels.\"net.juniper.image.release\")"\'',
         },
         'inventory': {
@@ -120,7 +122,8 @@ COMMANDS = {
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
             'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
         },
-        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"\' | awk -v OFS=\'\t\' \'{print $1, $2}\'',
+        # TODO: Format "nita ips" as table output (colums)
+        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
