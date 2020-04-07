@@ -10,7 +10,7 @@ from nita_cli import cli as cli
 COMMANDS = {
     'nita': {
         'cli': {
-            'version': "echo NITA CLI labels branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'install': {
             'cli': "sudo pip3 install -I nita-cli/ --no-binary :all:",
