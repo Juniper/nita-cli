@@ -109,24 +109,18 @@ COMMANDS = {
         },
         'containers': {
             'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
-            # TODO: nita containers versions (with jq)
-            # docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] |
-            'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .Name }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
+            'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.Config.Labels.\"net.juniper.image.release\")"\' | awk -v OFS=\'\t\' \'{print $1, $2}\'',
         },
         'images': {
             'ls'      : 'docker images --filter "label=net.juniper.framework=NITA"',
-            # TODO: nita images versions (with jq)
-            # docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] |
-            'versions': 'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format "{{ .RepoTags }} - {{ index .Config.Labels \\"net.juniper.image.release\\"}}"',
+            'versions':  'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.RepoTags) \(.Config.Labels.\"net.juniper.image.release\")"\'',
         },
         'inventory': {
             'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb:2.3.1',
             'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
             'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
         },
-        # TODO: nita ips (with jq)
-        # docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq '.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"'
-        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect --format \'{{ .Name }} - {{range .NetworkSettings.Networks}}   {{.IPAddress}}{{end}}\'',
+        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"\' | awk -v OFS=\'\t\' \'{print $1, $2}\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
             'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
