@@ -13,7 +13,7 @@ COMMANDS = {
             'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'install': {
-            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: ",
+            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: : cd nita-demo-intro",
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
@@ -168,8 +168,8 @@ COMMANDS = {
             'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
             'gui'    : 'open https://jenkins.nita.com:8443',
-            'backup' : 'cd jenkins ; ./backup-jenkins.sh',
-            'restore': 'cd jenkins ; ./restore-jenkins.sh',
+            'backup' : 'cd jenkins ; ./backup-jenkins.sh ; cd ..',
+            'restore': 'cd jenkins ; ./restore-jenkins.sh ; cd ..',
         },
         'ansible': {
             'run': {
@@ -201,8 +201,8 @@ COMMANDS = {
             'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
-            'backup' : 'cd gitlab ; ./backup-gitlab.sh',
-            'restore': 'cd gitlab ; ./restore-gitlab.sh',
+            'backup' : 'cd gitlab ; ./backup-gitlab.sh ; cd ..',
+            'restore': 'cd gitlab ; ./restore-gitlab.sh ; cd ..',
             'projects' : {
                     'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq ".[] | .name"',
                     'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq',
