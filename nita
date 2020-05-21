@@ -13,7 +13,7 @@ COMMANDS = {
             'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'install': {
-            'cli': "sudo pip3 install -I nita-cli/ --no-binary :all:",
+            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: : cd nita-demo-intro",
         },
         'setup': {
             'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
@@ -168,16 +168,18 @@ COMMANDS = {
             'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps jenkins',
             'down'   : 'nita jenkins stop ; nita jenkins rm',
             'gui'    : 'open https://jenkins.nita.com:8443',
+            'backup' : 'cd jenkins ; ./backup-jenkins.sh ; cd ..',
+            'restore': 'cd jenkins ; ./restore-jenkins.sh ; cd ..',
         },
         'ansible': {
             'run': {
                 'noob' : {
                     'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/noob.pb.yaml',
-                    'gui' :    'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NOOB/build',
+                    'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NOOB/build',
                 },
                 'build': {
                     'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/build.pb.yaml',
-                    'gui':     'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
+                    'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
                 },
             },
             'labels' : 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Config.Labels"',
@@ -199,6 +201,8 @@ COMMANDS = {
             'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps gitlab',
             'down'   : 'nita gitlab stop ; nita gitlab rm',
             'gui'    : 'open https://gitlab.nita.com',
+            'backup' : 'cd gitlab ; ./backup-gitlab.sh ; cd ..',
+            'restore': 'cd gitlab ; ./restore-gitlab.sh ; cd ..',
             'projects' : {
                     'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq ".[] | .name"',
                     'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq',
@@ -269,17 +273,17 @@ COMMANDS = {
                     },
                 },
             'pull': {
-                'static'  : 'python3 inventory2toby.py --static',
-                'dynamic' : 'python3 inventory2toby.py --dynamic',
+                'static' : 'python3 inventory2toby.py --static',
+                'dynamic': 'python3 inventory2toby.py --dynamic',
                 },
             'labels' : 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Config.Labels"',
             'volumes': 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Mounts"',
-            'cli':     'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
+            'cli'    : 'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
         },
     #     'webapp': {
-    #         'cli':     'docker exec -it webapp /bin/bash',
+    #         'cli'    : 'docker exec -it webapp /bin/bash',
     #         'logs'   : 'docker logs -f webapp --tail 200',
-    #         'ips'     : 'docker inspect webapp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+    #         'ips'    : 'docker inspect webapp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
     #         'ports'  : 'docker inspect webapp | jq ".[] | .NetworkSettings.Ports[]"',
     #         'volumes': 'docker inspect tacacs | jq ".[] | .Mounts"',
     #         'labels' : 'docker inspect webapp | jq ".[] | .Config.Labels"',
@@ -379,7 +383,8 @@ COMMANDS = {
             'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
             'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
         },
-        'license': 'echo "\n# <*******************\n#\n# Copyright 2016-2020 Juniper Networks, Inc. All rights reserved.\n# Licensed under the Juniper Networks Script Software License (the "License").\n# You may not use this script file except in compliance with the License, which is located at\n# http://www.juniper.net/support/legal/scriptlicense/\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software\n# distributed under the License is distributed on an "AS IS" BASIS, \n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n#\n# *******************>"\n',
+        # 'license': 'echo "\n# <******************************************************************************************> #\n#                                                                                              #\n# Copyright 2016-2020 Juniper Networks, Inc. All rights reserved.                              #\n# Licensed under the Juniper Networks Script Software License (the "License").                   #\n# You may not use this script file except in compliance with the License, which is located at  #\n# http://www.juniper.net/support/legal/scriptlicense/                                          #\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software #\n# distributed under the License is distributed on an "AS IS" BASIS,                              #\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.                     #\n#                                                                                              #\n# <******************************************************************************************> #"\n',
+        'license': 'echo "\n#  #\n#                                                                                              #\n# Copyright 2016-2020 Juniper Networks, Inc. All rights reserved.                              #\n# Licensed under the Juniper Networks Script Software License (the "License").                   #\n# You may not use this script file except in compliance with the License, which is located at  #\n# http://www.juniper.net/support/legal/scriptlicense/                                          #\n# Unless required by applicable law or otherwise agreed to in writing by the parties, software #\n# distributed under the License is distributed on an "AS IS" BASIS,                              #\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.                     #\n#                                                                                              #\n# <******************************************************************************************> #"\n',
     },
 }
 
@@ -402,12 +407,12 @@ HELP = {
             #'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
             'environment': 'Destroys your virtual DC running on your laptop.',
         },
-        'up'     :   'Creates and starts NITA containers (both Core and CaaS).',
-        'down'   :   'Stops and removes NITA containers (both Core and CaaS).',
-        'start'  :   'Starts NITA containers (both Core and CaaS).',
-        'stop'   :   'Stops NITA containers (both Core and CaaS).',
-        'restart':   'Restarts NITA containers (both Core and CaaS).',
-        'status' :   'Shows the status of every NITA containers.',
+        'up'     : 'Creates and starts NITA containers (both Core and CaaS).',
+        'down'   : 'Stops and removes NITA containers (both Core and CaaS).',
+        'start'  : 'Starts NITA containers (both Core and CaaS).',
+        'stop'   : 'Stops NITA containers (both Core and CaaS).',
+        'restart': 'Restarts NITA containers (both Core and CaaS).',
+        'status' : 'Shows the status of every NITA containers.',
         'core': {
             'up'     : 'Creates and starts Core NITA containers.',
             'down'   : 'Stops and removes Core NITA containers.',
@@ -448,15 +453,15 @@ HELP = {
         'ips'  : 'Shows all NITA containers IPs.',
         'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
         'jenkins': {
-            'version'   : 'Gets Jenkins server version.',
-            'whoami'    : 'Reports your credential and permissions.',
+            'version': 'Gets Jenkins server version.',
+            'whoami' : 'Reports your credential and permissions.',
             'jobs': {
-                'ls'       : 'Lists all Jenkins jobs.',
-                'delete'   : 'Deletes an existing job matched by --job <JOB>',
-                'enable'   : 'Enables an existing job matched by --job <JOB>',
-                'disable'  : 'Disables an existing job matched by --job <JOB>',
-                'create'   : 'Creates a new job by --job <JOB> from a configuration XML file (e.g. <JOB>.xml).',
-                'get'      : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
+                'ls'     : 'Lists all Jenkins jobs.',
+                'delete' : 'Deletes an existing job matched by --job <JOB>',
+                'enable' : 'Enables an existing job matched by --job <JOB>',
+                'disable': 'Disables an existing job matched by --job <JOB>',
+                'create' : 'Creates a new job by --job <JOB> from a configuration XML file (e.g. <JOB>.xml).',
+                'get'    : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
             },
             'plugins': {
                 'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
@@ -481,7 +486,7 @@ HELP = {
             'ports'  : 'Returns mapped ports information on jenkins container.',
             'ips'    : 'Returns IPs information on jenkins container.',
             'volumes': 'Returns shared volumes information on jenkins container.',
-            'labels':  'Returns labels information on jenkins container.',
+            'labels' : 'Returns labels information on jenkins container.',
             'restart': 'Restarts jenkins container.',
             'start'  : 'Starts jenkins container.',
             'stop'   : 'Stops jenkins container.',
@@ -490,6 +495,8 @@ HELP = {
             'status' : 'Shows the jenkins container status.',
             'down'   : 'Stops and removes jenkins container.',
             'gui'    : 'Opens Jenkins GUI.',
+            'backup' : 'Jenkins backup.',
+            'restore': 'Jenkins restore.',
         },
         'ansible': {
             'run': {
@@ -522,6 +529,8 @@ HELP = {
             'status' : 'Shows the gitlab container status.',
             'down'   : 'Stops and removes gitlab container.',
             'gui'    : 'Opens GitLab GUI.',
+            'backup' : 'GitLab backup.',
+            'restore': 'GitLab restore.',
             'projects' : {
                     'ls'    : 'List GitLab projects.',
                     'detail': 'List GitLab projects in detail.',
