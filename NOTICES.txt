@@ -1,0 +1,12 @@
+NOTICES FOR THIRD-PARTY CODE/DEPENDENCIES
+
+Name: OpenSSLProject
+URL: https://www.openssl.org
+License: https://www.openssl.org/source/license.html
+
+Name: ApacheSparkProject
+URL: https://spark.apache.org
+License: ApachePublicLicense2.0
+
+
+####### This is an example! Fill in with real dependencies from NITA CLI project!
