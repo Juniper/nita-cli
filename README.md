@@ -60,13 +60,13 @@ Compare it with this one in order to get the same output:
 
     $ nita containers ls
     CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS                       PORTS                                              NAMES
-    5894c9c50d46        registry.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8443->8443/tcp, 0.0.0.0:50000->50000/tcp   jenkins
-    5ed87b63500f        registry.juniper.net/nita/webapp:latest    "webapp-runner"          About an hour ago   Up About an hour             0.0.0.0:8090->8060/tcp                             webapp
-    714107fad380        registry.juniper.net/nita/rsyslog:latest   "rsyslog-runner"         About an hour ago   Up About an hour             0.0.0.0:514->514/udp                               rsyslog
-    effe8a4a7217        registry.juniper.net/nita/ntp:latest       "ntp-runner"             About an hour ago   Up About an hour             0.0.0.0:123->123/tcp                               ntp
-    00e83ef33c4f        registry.juniper.net/nita/radius:latest    "radius-runner"          About an hour ago   Up About an hour             0.0.0.0:11812->1812/udp                            radius
-    79ce0367ac8a        registry.juniper.net/nita/tacacs:latest    "tacacs-runner"          About an hour ago   Up About an hour             0.0.0.0:10049->49/tcp                              tacacs
-    94c5e76fe470        registry.juniper.net/nita/dns:latest       "dns-runner"             About an hour ago   Up About an hour             0.0.0.0:53->53/udp                                 dns
+    5894c9c50d46        ps-docker.artifactory.aslab.juniper.net/nita/jenkins:latest   "/sbin/tini -- /usr/…"   About an hour ago   Up About an hour (healthy)   0.0.0.0:8443->8443/tcp, 0.0.0.0:50000->50000/tcp   jenkins
+    5ed87b63500f        ps-docker.artifactory.aslab.juniper.net/nita/webapp:latest    "webapp-runner"          About an hour ago   Up About an hour             0.0.0.0:8090->8060/tcp                             webapp
+    714107fad380        ps-docker.artifactory.aslab.juniper.net/nita/rsyslog:latest   "rsyslog-runner"         About an hour ago   Up About an hour             0.0.0.0:514->514/udp                               rsyslog
+    effe8a4a7217        ps-docker.artifactory.aslab.juniper.net/nita/ntp:latest       "ntp-runner"             About an hour ago   Up About an hour             0.0.0.0:123->123/tcp                               ntp
+    00e83ef33c4f        ps-docker.artifactory.aslab.juniper.net/nita/radius:latest    "radius-runner"          About an hour ago   Up About an hour             0.0.0.0:11812->1812/udp                            radius
+    79ce0367ac8a        ps-docker.artifactory.aslab.juniper.net/nita/tacacs:latest    "tacacs-runner"          About an hour ago   Up About an hour             0.0.0.0:10049->49/tcp                              tacacs
+    94c5e76fe470        ps-docker.artifactory.aslab.juniper.net/nita/dns:latest       "dns-runner"             About an hour ago   Up About an hour             0.0.0.0:53->53/udp                                 dns
 
 ## Reusability
 
@@ -80,14 +80,9 @@ That's all folks!!!
 
 Another cool feature it has is `autocompletion`. So far, it has been tested in the following Operating Systems:
 
- - `Linux` (Ubuntu 16 LTS and Ubuntu 18 LTS) 
- - `OS X` (Sierra, High Sierra and Mojave)
+ - `Linux` (Ubuntu 16 LTS and Ubuntu 18 LTS). 
+ - `OS X` (Sierra, High Sierra, Mojave and Catalina).
  - `Windows 10` (with [Cygwin](https://www.cygwin.com/)).
-
-It makes use of the following links:
-
-- https://debian-administration.org/article/316/An_introduction_to_bash_completion_part_1
-- https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
 
 ## Usage
 
@@ -130,15 +125,15 @@ NITA CLI autocompletion is also context sensitive. Just by pressing `TAB` key tw
     $ nita tacacs (TAB TAB)
     cli      ip       labels   logs     ports    volumes
 
-You should not worry about how it has been implemented, but as it is something integrated/reusable into any forked/branched repository, here it is a brief explanation.
+Here it is a brief explanation of how it has been implemented.
 
-When running script `./autocomplete` (as a stand alone script or as part of pip install) it renders a template `templates/*.j2` with the values obtained from the CLI COMMANDS dictionary. They are dump into a temporary file `tmp/vars.yml` and generates a bash script named also `nita` into `bash_completion.d/` folder.
+When running script `./autocomplete` (as a stand alone script or as part of pip install) it renders a Jinja2 template `templates/*.j2` with the values obtained from the CLI COMMANDS dictionary. These are dump into a temporary file `tmp/vars.yml` and generates a bash script named also `nita` into `bash_completion.d/` folder.
 
 This autocompletion script (`nita`) is then copied into the `/etc/bash_completion.d/` folder on the host server (See below where depending on OSs). 
 
 _NOTE_: If you running NITA CLI from a container, this step needs to be done manually by the user!
 
-In order to __load autocompletion__ it is needed to type following commmands into your shell (It is automatically done by the script, but if you want to test it in your terminal without the need to restart it (so changes take effect right after command execution!)):
+In order to __load autocompletion__ it is needed to run the following commmands into your shell:
 
 - Linux
 
@@ -151,6 +146,8 @@ In order to __load autocompletion__ it is needed to type following commmands int
 - Windows (Cygwin)
 
         . /etc/bash_completion.d/nita
+
+This is automatically done by the script, but if you want to test it in your terminal without the need to restart it, your changes will take effect right after command execution. 
 
 How do you know it works? If you type complete command grepping by your script, it should appear as below.
 
@@ -252,6 +249,8 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 In order to install NITA CLI, use pip command and specifiy nita_cli repository with `sudo` (if needed).
 
+# TODO: Update this link to install it when in GitHub as open source code!
+
 `pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli`
 
     $ pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli
@@ -305,15 +304,18 @@ It is mainly composed of two different python scripts. There are others (e.g. au
 
 ### `cli.py`
 
-It is the smart part of the cli. It is the library that converts the dictionary structures (defined below) into executable commands. This is a generic library that can be used to produce cli program to execute any terminal command.
+It is the engine of the cli. It is a python library that converts the dictionary structures (defined below) into executable commands. It is used to produce a combination of cli words to execute any terminal command (somehow like an unix alias).
 
 ### `nita`
 
-This python script contains the cli commands, what those commands execute and their documentation. There are two dictionary trees containing all this data. For it to run it imports the *cli* library and then calls `cli.main()` to do the work.
+This python script contains the cli commands, what those commands execute behind the scenes and their documentation. There are two dictionary trees containing all this data:
+
+- *COMMANDS*
+- *HELP*
 
 The *COMMANDS* tree is a python dictorionary and represents the hierarchycal command structure.
 
-The *HELP* tree deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script. Moreover the script will error complaining the *COMMANDS* and *HELP* structures are not in sync! An undocumented command is no command at all...
+The *HELP* tree deals with the explanation of what each NITA CLI command does. Do not forget to populate this tree as well to keep your help/usage aligned with your script. Moreover, the script will throw an error if the *COMMANDS* and *HELP* structures are not in sync! An undocumented command is no command at all...
 
 See both files on the repo for a deeper understanding:
 
@@ -594,7 +596,7 @@ The leaf will be the value of your mapped command (e.g. `${COMMAND}`). As shown 
 
     nita hello world  >>>>  docker run hello-world
 
-But you can grow your tree and make it as complicated as you want. Should you do that, bear in mind that some intelligence may need to be added to `nita` script, but dont let that stop you!
+But you can grow your tree and make it as complicated as you want. Should you do that, bear in mind that some intelligence may need to be added to `nita` script, but do not let that stop you!
 
 Here it is another example of how to grow it:
 
@@ -629,7 +631,7 @@ Here it is another example of how to grow it:
 
     3.6.2
 
-Enjoy creating your own docker-like or VMM-like CLI interface!!!
+Enjoy creating your own tool CLI interface!!!
 
 ### Known issues
 
@@ -747,9 +749,9 @@ Also, to check which volumes is sharing the Jenkins container:
 
     nita jenkins volumes
 
-In order to check the webapp container logs
+In order to check the gitlab container logs
 
-    nita webapp logs
+    nita gitlab logs
 
 Should you want to debug TACACS on the server side
 
