@@ -13,16 +13,16 @@ COMMANDS = {
             'version': "echo NITA CLI migrations branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
         },
         'install': {
-            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: ; cd -",
+            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: ; cd - 2>&1 > /dev/null",
         },
         'migrations': {
             'source': {
-                'up'    : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup.sh ; cd -',
-                'down'  : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_gi2_2_down.sh ; cd -',
+                'up'    : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_silently.sh ; cd - 2>&1 > /dev/null',
+                'down'  : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_gi2_2_down.sh ; cd - 2>&1 > /dev/null',
             },
             'destination': {
-                'up'    : 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/interfaces.up.pb.yaml',
-                'down'  : 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/interfaces.down.pb.yaml',
+                'up'    : 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/interfaces.up.pb.yaml ; docker run --rm --name pyez -dit -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/:/scripts juniper/pyez:2.4.0 python pyez_startshell_ping.py 2>&1 > /dev/null',
+                'down'  : 'docker run --rm --name ansible --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/interfaces.down.pb.yaml ; docker rm -f pyez 2>&1 > /dev/null',
             },
         },
         'pyats': {
