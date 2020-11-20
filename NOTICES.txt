@@ -1,0 +1,25 @@
+NOTICES FOR THIRD-PARTY CODE/DEPENDENCIES
+
+Name: Python (Python Software Foundation).
+URL: https://www.python.org
+License: https://docs.python.org/3/license.html
+
+Name: PIP (Python Packaging Authority (PyPA)).
+URL: https://pip.pypa.io/en/stable/
+License: MIT License (MIT)
+
+Name: PyYAML (YAML parser and emitter for Python).
+URL: https://pypi.org/project/PyYAML/
+License: MIT License (MIT)
+
+Name: Jinja2 (A very fast and expressive template engine).
+URL: https://pypi.org/project/Jinja2/
+License: OSI Approved :: BSD License
+
+Name: jq (a lightweight and flexible command-line JSON processor).
+URL: https://stedolan.github.io/jq/
+License: MIT License (MIT)
+
+Name: MarkupSafe.
+URL: https://pypi.org/project/MarkupSafe/
+License: BSD License (BSD-3-Clause)

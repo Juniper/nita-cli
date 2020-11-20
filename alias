@@ -1,0 +1,9 @@
+###
+# OS X
+alias nita='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker ps-docker.artifactory.aslab.juniper.net/nita/cli:20.0.0'
+
+# Linux
+alias nita='docker run -it --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker ps-docker.artifactory.aslab.juniper.net/nita/cli:20.0.0'
+
+# test (i.e. mapping nita commands file to NITA CLI Container nita commands file)
+#alias nita='docker run -it --rm -v /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/nita-cli/nita:/usr/local/bin/nita -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker ps-docker.artifactory.aslab.juniper.net/nita/cli:20.0.0'

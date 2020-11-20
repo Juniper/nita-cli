@@ -1,0 +1,718 @@
+#!/usr/bin/env python3
+
+"""
+    Python module containing NITA CLI commands and help.
+"""
+
+from nita_cli import cli as cli
+
+# COMMANDS TREE
+COMMANDS = {
+    'nita': {
+        'cli': {
+            'version': "echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')",
+        },
+        'install': {
+            'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: ; cd -",
+        },
+        'setup': {
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./setup_demo.sh ; break ;; "2") ./setup_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': './setup_demo.sh',
+            'all': './setup_demo.sh ; nita demo laptop ; ',
+        },
+        'destroy': {
+            'vdc'        : './.remove.sh',
+            'environment': 'echo "" ; oPS3=$PS3 ; PS3="\nPlease choose an environment: "; select env in laptop VMM ; do case $REPLY in "1") ./destroy_demo.sh ; break ;; "2") ./destroy_demo_vmm.sh ; break ;; *) echo "\nThat is not a valid option!\n" ; break ;; esac; done ; PS3=$oPS3',
+            #'environment': './destroy_demo.sh',
+        },
+        'up'      : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d',
+        'down'    : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml down',
+        'start'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start',
+        'stop'    : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop',
+        'restart' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart',
+        'status'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps',
+        'core': {
+            'up'      : 'docker-compose --compatibility -p nita -f nita-core.yml up -d',
+            'down'    : 'docker-compose --compatibility -p nita -f nita-core.yml down',
+            'start'   : 'docker-compose --compatibility -p nita -f nita-core.yml start',
+            'stop'    : 'docker-compose --compatibility -p nita -f nita-core.yml stop',
+            'restart' : 'docker-compose --compatibility -p nita -f nita-core.yml restart',
+            'status'  : 'docker-compose --compatibility -p nita -f nita-core.yml ps',
+        },
+        'caas': {
+            'up'      : 'docker-compose --compatibility -p nita -f nita-caas.yml up -d',
+            'down'    : 'docker-compose --compatibility -p nita -f nita-caas.yml down',
+            'start'   : 'docker-compose --compatibility -p nita -f nita-caas.yml start',
+            'stop'    : 'docker-compose --compatibility -p nita -f nita-caas.yml stop',
+            'restart' : 'docker-compose --compatibility -p nita -f nita-caas.yml restart',
+            'status'  : 'docker-compose --compatibility -p nita -f nita-caas.yml ps',
+        },
+        'demo': {
+            'vmm'   : 'nita -d inventory create ; \
+                       sleep 10 ; \
+                       nita -d inventory populate ; \
+                       sleep 60 ; nita -d ansible run noob console ; \
+                       sleep 60 ; \
+                       nita -d ansible run build console ; \
+                       nita -d test pull dynamic ; \
+                       sleep 10 ; \
+                       nita -d test run common router console ; \
+                       sleep 10 ; \
+                       nita -d test run common firewall console ; \
+                       sleep 10 ; \
+                       nita -d test run common switch console ; \
+                       sleep 10 ; \
+                       nita -d test run specific dns console ; \
+                       nita -d test run specific ntp console ; \
+                       nita -d test run specific syslog console ; \
+                       nita -d test run specific tacacs console ; \
+                       nita -d test run specific radius console ; \
+                       echo " \n# IMAGE VERSIONS #\n" ; \
+                       nita images versions ; \
+                       echo " \n# CONTAINER VERSIONS #\n" ; \
+                       nita containers versions ; \
+                       echo " \n# NITA CLI VERSION #\n" ; \
+                       nita cli version ; echo ""',
+            # laptop demo has NTP test removed
+            'laptop': 'nita -d inventory create ; \
+                        sleep 10 ; \
+                        nita -d inventory populate ; \
+                        sleep 10 ; \
+                        nita -d ansible run noob console ; \
+                        sleep 5  ; \
+                        nita -d ansible run build console ; \
+                        nita -d test pull dynamic ; \
+                        sleep 5  ; \
+                        nita -d test run common router console ; \
+                        sleep 5  ; \
+                        nita -d test run common firewall console ; \
+                        sleep 5  ; \
+                        nita -d test run common switch console ; \
+                        sleep 10 ; \
+                        nita -d test run specific dns console ; \
+                        nita -d test run specific syslog console ; \
+                        nita -d test run specific tacacs console ; \
+                        nita -d test run specific radius console ; \
+                        nita -d test run specific router console ; \
+                        nita -d test run specific firewall console ; \
+                        nita -d test run specific switch console ; \
+                        echo " \n# IMAGE VERSIONS #\n" ; \
+                        nita images versions ; \
+                        echo " \n# CONTAINER VERSIONS #\n" ; \
+                        nita containers versions ; \
+                        echo " \n# NITA CLI VERSION #\n" ; \
+                        nita cli version ; echo ""',
+        },
+        'new': {
+            'project': 'mkdir -p {0}/build {0}/doc {0}/group_vars {0}/host_vars {0}/jenkins {0}/noob {0}/roles {0}/test/configs {0}/test/libraries {0}/test/outputs {0}/test/resource_files {0}/test/scripts {0}/test/suites/config {0}/test/suites/monitor {0}/test/suites/verify {0}/test/templates {0}/test/variables_file',
+            'role'   : 'mkdir -p {0}/defaults {0}/files {0}/handlers {0}/meta {0}/tasks {0}/templates {0}/vars ',
+        },
+        'containers': {
+            'ls'      : 'docker ps --filter "label=net.juniper.framework=NITA" --format "table {{.ID}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"',
+            # TODO: Format "nita containers versions" as table output (colums)
+            'versions': 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.Config.Labels.\"net.juniper.image.release\")"\'',
+        },
+        'images': {
+            'ls'      : 'docker images --filter "label=net.juniper.framework=NITA"',
+            # TODO: Format "nita images versions" as table output (colums)
+            'versions':  'docker images -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.RepoTags) \(.Config.Labels.\"net.juniper.image.release\")"\'',
+        },
+        'inventory': {
+            'create'  : 'docker run -d -p 15984:5984 --name inventory -it couchdb:2.3.1',
+            'populate': 'cd couchdb/ ; sh make_couch.sh ; cd ..',
+            'gui'     : 'open http://localhost:15984/_utils/#/_all_dbs',
+        },
+        # TODO: Format "nita ips" as table output (colums)
+        'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"\'',
+        'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
+        'jenkins': {
+            'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
+            'whoami'    : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
+            'jobs': {
+                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs | tail -n+3 ',
+                'delete'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
+                'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
+                'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
+                'create'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
+                'get'      : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
+            },
+            'plugins': {
+                'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort | tail -n+3 ",
+                'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort | tail -n+3 ',
+            },
+            'set': {
+                'verify': {
+                    'ssl': {
+                        'true' : 'docker exec -it jenkins git config --global http.sslVerify true',
+                        'false': 'docker exec -it jenkins git config --global http.sslVerify false',
+                    },
+                },
+                'matrix': {
+                    'authentication' : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Matrix/build',
+                },
+            },
+            'cli': {
+                'jenkins': 'docker exec -it -u jenkins jenkins /bin/bash',
+                'root'   : 'docker exec -it -u root jenkins /bin/bash',
+            },
+            'logs'   : 'docker logs -f jenkins --tail 200',
+            'ports'  : 'docker inspect jenkins | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect jenkins | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect jenkins | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect jenkins | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart jenkins',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start jenkins',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop jenkins',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f jenkins',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d jenkins',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps jenkins',
+            'down'   : 'nita jenkins stop ; nita jenkins rm',
+            'gui'    : 'open https://jenkins.nita.com:8443',
+            'backup' : 'cd jenkins ; ./backup-jenkins.sh ; cd ..',
+            'restore': 'cd jenkins ; ./restore-jenkins.sh ; cd ..',
+        },
+        'ansible': {
+            'run': {
+                'noob' : {
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/noob.pb.yaml',
+                    'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NOOB/build',
+                },
+                'build': {
+                    'console': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/build.pb.yaml',
+                    'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_Build/build',
+                },
+            },
+            'labels' : 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Config.Labels"',
+            'volumes': 'docker run --rm --name ansibletmp -itd ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 sleep 3 2>&1 > /dev/null ; docker inspect ansibletmp | jq ".[] | .Mounts"',
+            'cli'    : 'docker run -d --rm --name ansible -e VMM_USER=$VMM_USER -it -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 /bin/sh ; docker attach ansible',
+        },
+        'gitlab': {
+            'cli'    : 'docker exec -it -u root gitlab /bin/bash',
+            'logs'   : 'docker logs -f gitlab',
+            'ports'  : 'docker inspect gitlab | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect gitlab | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect gitlab | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect gitlab | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart gitlab',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start gitlab',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop gitlab',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f gitlab',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d gitlab',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml ps gitlab',
+            'down'   : 'nita gitlab stop ; nita gitlab rm',
+            'gui'    : 'open https://gitlab.nita.com',
+            'backup' : 'cd gitlab ; ./backup-gitlab.sh ; cd ..',
+            'restore': 'cd gitlab ; ./restore-gitlab.sh ; cd ..',
+            'projects' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/projects" | jq',
+            },
+            'groups' : {
+                    'ls'    : 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq ".[] | .name"',
+                    'detail': 'curl -s -k "https://gitlab.nita.com/api/v4/groups" | jq',
+            },
+        },
+        'test': {
+            'run': {
+                'common': { 
+                    'firewall' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/common.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_FW_Common_Tests/build',
+                    }, 
+                    'switch' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/common.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SW_Common_Tests/build',
+                    }, 
+                    'router': {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/common.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RX_Common_Tests/build',
+                    },    
+                },
+                'specific' : 
+                    {
+                    'firewall' : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:fw-vdc-001 /project/test/suites/firewalls.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_FW_Tests/build',
+                        },
+                    'switch'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:sw-vdc-001 /project/test/suites/switches.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SW_Tests/build',
+                        },
+                    'router'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/routers.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RX_Tests/build',
+                        },
+                    'tacacs'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/tacacs.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_TACACS_Tests/build',
+                        },
+                    'radius'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/radius.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_RADIUS_Tests/build',
+                        },
+                    'syslog'   : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/syslog.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_SYSLOG_Tests/build',
+                        },
+                    'dns'      : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/dns.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_DNS_Tests/build',
+                        },
+                    'ntp'      : {
+                        'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ntp.robot',
+                        'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_NTP_Tests/build',
+                        },
+                    # 'ospf'     : {
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/ospf.robot',
+                    #     'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_OSPF_Tests/build',
+                    #     },
+                    # 'bgp'      : {
+                    #     'console': 'docker run --rm --name test --volumes-from jenkins -v %s:/project -e USER=nita ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 -C ON -p /project/test/t_object.yaml --variable dut:rx-vdc-001 /project/test/suites/bgp.robot',
+                    #     'gui'    : 'curl -k -X POST https://admin:admin@localhost:8443/job/vDC_BGP_Tests/build',
+                    #     },
+                    },
+                },
+            'pull': {
+                'static' : 'python3 inventory2toby.py --static',
+                'dynamic': 'python3 inventory2toby.py --dynamic',
+                },
+            'labels' : 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Config.Labels"',
+            'volumes': 'docker run --rm --name testtmp -itd ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Mounts"',
+            'cli'    : 'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker.artifactory.aslab.juniper.net/toby:3.11.2 ; docker attach test',
+        },
+    #     'webapp': {
+    #         'cli'    : 'docker exec -it webapp /bin/bash',
+    #         'logs'   : 'docker logs -f webapp --tail 200',
+    #         'ips'    : 'docker inspect webapp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+    #         'ports'  : 'docker inspect webapp | jq ".[] | .NetworkSettings.Ports[]"',
+    #         'volumes': 'docker inspect tacacs | jq ".[] | .Mounts"',
+    #         'labels' : 'docker inspect webapp | jq ".[] | .Config.Labels"',
+    #     },
+        'tacacs': {
+            'cli'    : 'docker exec -it tacacs /bin/bash',
+            'logs'   : 'docker exec -it tacacs tail -200 /var/log/tacacs.log',
+            'ports'  : 'docker inspect tacacs | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect tacacs | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect tacacs | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect tacacs | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart tacacs',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start tacacs',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop tacacs',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f tacacs',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d tacacs',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml ps tacacs',
+            'down'   : 'nita tacacs stop ; nita tacacs rm',
+        },
+        'radius': {
+            'cli'    : 'docker exec -it radius /bin/bash',
+            'logs'   : 'docker exec -it radius tail -200 /var/log/freeradius/radius.log',
+            'ports'  : 'docker inspect radius | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect radius | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect radius | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect radius | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart radius',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start radius',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop radius',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f radius',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d radius',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml ps radius',
+            'down'   : 'nita radius stop ; nita radius rm',
+        },
+        'ntp': {
+            'cli'    : 'docker exec -it ntp /bin/sh',
+            'logs'   : 'docker logs -f ntp --tail 200',
+            'ports'  : 'docker inspect ntp | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect ntp | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect ntp | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect ntp | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart ntp',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start ntp',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop ntp',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f ntp',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d ntp',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml ps ntp',
+            'down'   : 'nita ntp stop ; nita ntp rm',
+        },
+        'dns': {
+            'cli'    : 'docker exec -it dns /bin/sh',
+            'logs'   : 'docker logs -f dns --tail 200',
+            'ports'  : 'docker inspect dns | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect dns | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect dns | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect dns | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart dns',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start dns',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop dns',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f dns',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d dns',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml ps dns',
+            'down'   : 'nita dns stop ; nita dns rm',
+        },
+        'rsyslog': {
+            'cli'    : 'docker exec -it rsyslog /bin/sh',
+            'logs'   : 'docker logs -f rsyslog --tail 200',
+            'ports'  : 'docker inspect rsyslog | jq ".[] | .NetworkSettings.Ports[]"',
+            'ips'    : 'docker inspect rsyslog | jq ".[] | .NetworkSettings.Networks[].IPAddress"',
+            'volumes': 'docker inspect rsyslog | jq ".[] | .Mounts"',
+            'labels' : 'docker inspect rsyslog | jq ".[] | .Config.Labels"',
+            'restart': 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml restart rsyslog',
+            'start'  : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml start rsyslog',
+            'stop'   : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml stop rsyslog',
+            'rm'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml rm -f rsyslog',
+            'up'     : 'docker-compose --compatibility -p nita -f nita-core.yml -f nita-caas.yml up -d rsyslog',
+            'status' : 'docker-compose --compatibility -p nita -f nita-core.yml ps rsyslog',
+            'down'   : 'nita rsyslog stop ; nita rsyslog rm',
+        },
+        'ping': {
+            'all'       : 'for i in 2 3 4;  do ping -c 3 192.168.56.$i; done',
+            'rx-vdc-001': 'ping -c 3 192.168.56.2',
+            'sw-vdc-001': 'ping -c 3 192.168.56.3',
+            'fw-vdc-001': 'ping -c 3 192.168.56.4',
+        },
+        'show': {
+            'vms': 'VBoxManage list vms',
+            'resources': {
+                'rx-vdc-001': 'VBoxManage showvminfo "ROUTER-vMX" | egrep "Memory|CPUs"',
+                'sw-vdc-001': 'VBoxManage showvminfo "SWITCH-vQFX-RE" | egrep "Memory|CPUs" ; VBoxManage showvminfo "SWITCH-vQFX-PFE" | egrep "Memory|CPUs"',
+                'fw-vdc-001': 'VBoxManage showvminfo "FIREWALL-vSRX" | egrep "Memory|CPUs"',
+            },
+        },
+        'backup': {
+            'all'       : 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=all"',
+            'rx-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=rx-vdc-001"',
+            'sw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=sw-vdc-001"',
+            'fw-vdc-001': 'docker run --rm --name ansible -e VMM_USER=$VMM_USER --volumes-from jenkins -v ${PWD}:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i dynamic_inventory.py playbooks/backup.pb.yaml --extra-vars "target=fw-vdc-001"',
+        },
+        'license': 'echo "\n###########################################################################################\n#                                                                                         #\n# Copyright 2016-2020, Juniper Networks, Inc.                                             #\n#                                                                                         #\n# Permission is hereby granted, free of charge, to any person obtaining a copy            #\n# of this software and associated documentation files (the "Software"), to deal             #\n# in the Software without restriction, including without limitation the rights            #\n# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell               #\n# copies of the Software, and to permit persons to whom the Software is                   #\n# furnished to do so, subject to the following conditions:                                #\n#                                                                                         #\n# The above copyright notice and this permission notice shall be included                 #\n# in all copies or substantial portions of the Software.                                  #\n#                                                                                         #\n# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR                #\n# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                #\n# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL                 #\n# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER              #\n# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,           #\n# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. #\n#                                                                                         #\n###########################################################################################\n"',
+
+    },
+}
+
+# HELP TREE
+HELP = {
+    'nita': {
+        'cli': {
+            'version': 'Shows NITA CLI current version.',
+        },
+        'install': {
+            'cli': 'Installs NITA CLI.',
+        },
+        'setup': {
+            'environment': 'Gives the user the option to set up either your virtual DC running on your laptop or VMM environment to run the demo.',
+            #'environment': 'Sets up a virtual DC running on your laptop environment to run the demo.',
+            'all'        : 'Execute the whole NITA demo.',
+        },
+        'destroy': {
+            'vdc'        : 'Removes virtual DC devices.',
+            #'environment': 'Gives the user the option to destroy either your virtual DC running on your laptop or VMM environment to run the demo.',
+            'environment': 'Destroys your virtual DC running on your laptop.',
+        },
+        'up'     : 'Creates and starts NITA containers (both Core and CaaS).',
+        'down'   : 'Stops and removes NITA containers (both Core and CaaS).',
+        'start'  : 'Starts NITA containers (both Core and CaaS).',
+        'stop'   : 'Stops NITA containers (both Core and CaaS).',
+        'restart': 'Restarts NITA containers (both Core and CaaS).',
+        'status' : 'Shows the status of every NITA containers.',
+        'core': {
+            'up'     : 'Creates and starts Core NITA containers.',
+            'down'   : 'Stops and removes Core NITA containers.',
+            'start'  : 'Starts Core NITA containers.',
+            'stop'   : 'Stops Core NITA containers.',
+            'restart': 'Restarts Core NITA containers.',
+            'status' : 'Shows the status of Core NITA containers.',
+        },
+        'caas': {
+            'up'     : 'Creates and starts CaaS NITA containers.',
+            'down'   : 'Stops and removes CaaS NITA containers.',
+            'start'  : 'Starts CaaS NITA containers.',
+            'stop'   : 'Stops CaaS NITA containers.',
+            'restart': 'Restarts CaaS NITA containers.',
+            'status' : 'Shows the status of CaaS NITA containers.',
+        },
+        'demo': {
+            'vmm'   : 'Runs the whole NITA demo with a single script on VMM environment. It needs to be run from nita-demo-intro/ folder.',
+            'laptop': 'Runs the whole NITA demo with a single script on a laptop environment. It needs to be run from nita-demo-intro/ folder.',
+        },
+        'new': {
+            'project': 'Creates a new NITA project scaffolding.',
+            'role'   : 'Creates a new Ansible role scaffolding.',
+        },
+        'containers': {
+            'ls'      : 'Lists all running NITA containers.',
+            'versions': 'Lists all running NITA containers versions.',
+        },
+        'images': {
+            'ls'      : 'Lists all NITA images.',
+            'versions': 'Displays NITA images versions.',
+        },
+        'inventory': {
+            'create'  : 'Creates a new 3rd-party virtual DC dynamic inventory in a couchDB container.',
+            'populate': 'Populates virtual DC dynamic inventory with data related to NITA demo.',
+            'gui'     : 'Opens CouchDB inventory GUI.',
+        },
+        'ips'  : 'Shows all NITA containers IPs.',
+        'stats': 'Displays NITA containers runtime metrics [CPU %, MEM USAGE / LIMIT, MEM %, NET I/O, BLOCK I/O, PIDS].',
+        'jenkins': {
+            'version': 'Gets Jenkins server version.',
+            'whoami' : 'Reports your credential and permissions.',
+            'jobs': {
+                'ls'     : 'Lists all Jenkins jobs.',
+                'delete' : 'Deletes an existing job matched by --job <JOB>',
+                'enable' : 'Enables an existing job matched by --job <JOB>',
+                'disable': 'Disables an existing job matched by --job <JOB>',
+                'create' : 'Creates a new job by --job <JOB> from a configuration XML file (e.g. <JOB>.xml).',
+                'get'    : 'Dumps an existing job definition XML matched by --job <JOB> to stdout.',
+            },
+            'plugins': {
+                'ls'     : 'Lists every Jenkins plugins installed sorted alphabetically.',
+                'details': 'Lists every Jenkins plugins installed in detail (i.e name, version, active, enable, url).'
+            },
+            'set': {
+                'verify': {
+                    'ssl': {
+                        'true' : 'Enables SSL certificate validation.',
+                        'false': 'Disables SSL certificate validation.',
+                    },
+                },
+                'matrix': {
+                    'authentication' : 'Sets matrix-based security authorization strategy.',
+                },
+            },
+            'cli': {
+                'jenkins': 'Attaches local stdin, stdout and stderr streams to jenkins running container with "jenkins" user.',
+                'root'   : 'Attaches local stdin, stdout and stderr streams to jenkins running container with "root" user.',
+            },
+            'logs'   : 'Follows log output of jenkins container.',
+            'ports'  : 'Returns mapped ports information on jenkins container.',
+            'ips'    : 'Returns IPs information on jenkins container.',
+            'volumes': 'Returns shared volumes information on jenkins container.',
+            'labels' : 'Returns labels information on jenkins container.',
+            'restart': 'Restarts jenkins container.',
+            'start'  : 'Starts jenkins container.',
+            'stop'   : 'Stops jenkins container.',
+            'rm'     : 'Removes jenkins container.',
+            'up'     : 'Creates and starts jenkins container.',
+            'status' : 'Shows the jenkins container status.',
+            'down'   : 'Stops and removes jenkins container.',
+            'gui'    : 'Opens Jenkins GUI.',
+            'backup' : 'Jenkins backup.',
+            'restore': 'Jenkins restore.',
+        },
+        'ansible': {
+            'run': {
+                'noob' : {
+                    'console': 'Runs NOOB process and writes its output to console.',
+                    'gui'    : 'Triggers NOOB Jenkins job.',
+                }, 
+                'build': {
+                    'console': 'Runs BUILD process and writes its output to console.',
+                    'gui'    : 'Triggers BUILD Jenkins job.',
+                },
+            },
+
+            'labels' : 'Returns labels information on ansible container.',
+            'volumes': 'Returns shared volumes information on ansible container.',
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to ansible running container.',
+        },
+        'gitlab': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to gitlab running container with "root" user.',
+            'logs'   : 'Fetches the logs of gitlab container.',
+            'ports'  : 'Returns mapped ports information on gitlab container.',
+            'ips'    : 'Returns IPs information on gitlab container.',
+            'volumes': 'Returns shared volumes information on gitlab container.',
+            'labels' : 'Returns labels information on gitlab container.',
+            'restart': 'Restarts gitlab container.',
+            'start'  : 'Starts gitlab container.',
+            'stop'   : 'Stops gitlab container.',
+            'rm'     : 'Removes gitlab container.',
+            'up'     : 'Creates and starts gitlab container.',
+            'status' : 'Shows the gitlab container status.',
+            'down'   : 'Stops and removes gitlab container.',
+            'gui'    : 'Opens GitLab GUI.',
+            'backup' : 'GitLab backup.',
+            'restore': 'GitLab restore.',
+            'projects' : {
+                    'ls'    : 'List GitLab projects.',
+                    'detail': 'List GitLab projects in detail.',
+            },
+            'groups' : {
+                    'ls'    : 'List GitLab groups.',
+                    'detail': 'List GitLab groups in detail.',
+            },
+        },
+        'test': {
+            'run': {
+                'common': {
+                    'firewall': {
+                        'console': 'Executes common test suite on firewall and writes its output to console.',
+                        'gui'    : 'Triggers vDC_FW_Common_Tests Jenkins job.',
+                    },
+                    'switch'  : {
+                        'console': 'Executes common test suite on switch and writes its output to console.',
+                        'gui'    : 'Triggers vDC_SW_Common_Tests Jenkins job.',
+                    },
+                    'router'  : {
+                        'console': 'Executes common test suite on router and writes its output to console.',
+                        'gui'    : 'Triggers vDC_RX_Common_Tests Jenkins job.',
+                    },
+                },
+                'specific' : { 
+                    'firewall' : {
+                        'console': 'Executes specific firewall tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_FW_Tests Jenkins job.',
+                    },
+                    'switch'   : {
+                        'console': 'Executes specific switch tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_SW_Tests Jenkins job.',
+                    },
+                    'router'   : {
+                        'console': 'Executes specific router tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_RX_Tests Jenkins job.',
+                    },
+                    'tacacs'   : {
+                        'console': 'Executes specific TACACS tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_TACACS_Tests Jenkins job.',
+                    },
+                    'radius'   : {
+                        'console': 'Executes specific RADIUS tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_RADIUS_Tests Jenkins job.',
+                    },
+                    'syslog'   : {
+                        'console': 'Executes specific SYSLOG tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_SYSLOG_Tests Jenkins job.',
+                    },
+                    'dns'      : {
+                        'console': 'Executes specific DNS tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_DNS_Tests Jenkins job.',
+                    },
+                    'ntp'      : {
+                        'console': 'Executes specific NTP tests and writes its output to console.',
+                        'gui'    : 'Triggers vDC_NTP_Tests Jenkins job.',
+                    },
+                    # 'ospf'     : {
+                    #     'console': 'Executes specific OSPF tests and writes its output to console.',
+                    #     'gui'    : 'Triggers vDC_OSPF_Tests Jenkins job.',
+                    # },
+                    # 'bgp'      : {
+                    #     'console': 'Executes specific BGP tests and writes its output to console.',
+                    #     'gui'    : 'Triggers vDC_BGP_Tests Jenkins job.',
+                    # },
+                },
+            },
+            'pull': {
+                'static' : 'Creates topology object from static inventory.',
+                'dynamic': 'Creates topology object from dynamic inventory.',
+            },
+            'labels' : 'Returns labels information on test container.',
+            'volumes': 'Returns shared volumes information on test container.',
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to test running container.',
+        },
+        # 'webapp': {
+        #     'logs'   : 'Follows log output of webapp container.',
+        #     'ips'    : 'Returns IPs information on webapp container.',
+        #     'ports'  : 'Returns mapped ports information on webapp container.',
+        #     'volumes': 'Returns shared volumes information on webapp container.',
+        #     'labels' : 'Returns labels information on webapp container.',
+        #     'cli'    : 'Attaches local stdin, stdout and stderr streams to webapp running container.',
+        # },
+        'tacacs': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to tacacs running container.',
+            'logs'   : 'Follows log output of tacacs container.',
+            'ports'  : 'Returns mapped ports information on tacacs container.',
+            'ips'    : 'Returns IPs information on tacacs container.',
+            'volumes': 'Returns shared volumes information on tacacs container.',
+            'labels' : 'Returns labels information on tacacs container.',
+            'restart': 'Restarts tacacs container.',
+            'start'  : 'Starts tacacs container.',
+            'stop'   : 'Stops tacacs container.',
+            'rm'     : 'Removes tacacs container.',
+            'up'     : 'Creates and starts tacacs container.',
+            'status' : 'Shows the tacacs container status.',
+            'down'   : 'Stops and removes tacacs container.',
+        },
+        'radius': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to radius running container.',
+            'logs'   : 'Follows log output of radius container.',
+            'ports'  : 'Returns mapped ports information on radius container.',
+            'ips'    : 'Returns IPs information on radius container.',
+            'volumes': 'Returns shared volumes information on radius container.',
+            'labels' : 'Returns labels information on radius container.',
+            'restart': 'Restarts radius container.',
+            'start'  : 'Starts radius container.',
+            'stop'   : 'Stops radius container.',
+            'rm'     : 'Removes radius container.',
+            'up'     : 'Creates and starts radius container.',
+            'status' : 'Shows the radius container status.',
+            'down'   : 'Stops and removes radius container.',
+        },
+        'ntp': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to ntp running container.',
+            'logs'   : 'Follows log output of ntp container.',
+            'ports'  : 'Returns mapped ports information on ntp container.',
+            'ips'    : 'Returns IPs information on ntp container.',
+            'volumes': 'Returns shared volumes information on ntp container.',
+            'labels' : 'Returns labels information on ntp container.',
+            'restart': 'Restarts ntp container.',
+            'start'  : 'Starts ntp container.',
+            'stop'   : 'Stops ntp container.',
+            'rm'     : 'Removes ntp container.',
+            'up'     : 'Creates and starts ntp container.',
+            'status' : 'Shows the ntp container status.',
+            'down'   : 'Stops and removes ntp container.',
+        },
+        'dns': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to dns running container.',
+            'logs'   : 'Follows log output of dns container.',
+            'ports'  : 'Returns mapped ports information on dns container.',
+            'ips'    : 'Returns IPs information on dns container.',
+            'volumes': 'Returns shared volumes information on dns container.',
+            'labels' : 'Returns labels information on dns container.',
+            'restart': 'Restarts dns container.',
+            'start'  : 'Starts dns container.',
+            'stop'   : 'Stops dns container.',
+            'rm'     : 'Removes dns container.',
+            'up'     : 'Creates and starts dns container.',
+            'status' : 'Shows the dns container status.',
+            'down'   : 'Stops and removes dns container.',
+        },
+        'rsyslog': {
+            'cli'    : 'Attaches local stdin, stdout and stderr streams to rsyslog running container.',
+            'logs'   : 'Follows log output of rsyslog container.',
+            'ports'  : 'Returns mapped ports information on rsyslog container.',
+            'ips'    : 'Returns IPs information on rsyslog container.',
+            'volumes': 'Returns shared volumes information on rsyslog container.',
+            'labels' : 'Returns labels information on rsyslog container.',
+            'restart': 'Restarts rsyslog container.',
+            'start'  : 'Starts rsyslog container.',
+            'stop'   : 'Stops rsyslog container.',
+            'rm'     : 'Removes rsyslog container.',
+            'up'     : 'Creates and starts rsyslog container.',
+            'status' : 'Shows the rsyslog container status.',
+            'down'   : 'Stops and removes rsyslog container.',
+        },
+        'ping': {
+            'all'       : 'Pings all devices of the virtual DC.',
+            'rx-vdc-001': 'Pings rx-vdc-001 device.',
+            'sw-vdc-001': 'Pings sw-vdc-001 device.',
+            'fw-vdc-001': 'Pings fw-vdc-001 device.',
+        },
+        'show': {
+            'vms': 'Lists virtual DC VMs',
+            'resources': {
+                'rx-vdc-001': 'Shows rx-vdc-001 resources (Memory & CPU)',
+                'sw-vdc-001': 'Shows sw-vdc-001 resources (Memory & CPU)',
+                'fw-vdc-001': 'Shows fw-vdc-001 resources (Memory & CPU)',
+            },
+        },
+        'backup': {
+            'all'       : 'Creates a backup of all devices configurations of the virtual DC.',
+            'rx-vdc-001': 'Creates a backup of rx-vdc-001 device.',
+            'sw-vdc-001': 'Creates a backup of sw-vdc-001 device.',
+            'fw-vdc-001': 'Creates a backup of fw-vdc-001 device.',
+        },
+        'license': 'Displays the NITA License.',
+    },
+}
+
+if __name__ == '__main__':
+    cli.main(COMMANDS, HELP)

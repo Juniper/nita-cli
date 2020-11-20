@@ -1,0 +1,27 @@
+_nita() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="{{ opts | join(' ') }}" 
+
+    case "${prev}" in
+{% for k, v in nita.items() %}
+    {{ k }})
+        local {{ k }}="{{ v | join(' ') }}"
+        COMPREPLY=( $(compgen -W "${{ k }}" -- ${cur}) )
+        return 0
+        ;;
+{% endfor %}
+        *)
+        ;;
+    esac
+
+   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+   return 0
+}
+complete -F _nita nita
+
+
