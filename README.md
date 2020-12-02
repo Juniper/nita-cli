@@ -249,18 +249,17 @@ If in `Windows` ([Cygwin](https://www.cygwin.com/)), install `bash-autocomplete`
 
 In order to install NITA CLI, use pip command and specifiy nita_cli repository with `sudo` (if needed).
 
-# TODO: Update this link to install it when in GitHub as open source code!
+`pip3 install git+https://github.com/Juniper/nita-cli`
 
-`pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli`
+    pip3 install git+https://github.com/Juniper/nita-cli
+ 
+    Collecting git+https://github.com/Juniper/nita-cli
+    Cloning https://github.com/Juniper/nita-cli to /tmp/pip-579pnhh6-build
 
-    $ pip3 install -i https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/simple --no-binary :all: nita-cli
-
-    Collecting nita-cli
-    Downloading https://artifactory.aslab.juniper.net/artifactory/api/pypi/ps-pypi/packages/nita_cli/20.0.0/nita_cli-20.0.0.tar.gz
-    Requirement already satisfied (use --upgrade to upgrade): pyyaml in /usr/local/lib/python3.5/dist-packages (from nita-cli)
-    Requirement already satisfied (use --upgrade to upgrade): jinja2 in /usr/local/lib/python3.5/dist-packages (from nita-cli)
-    Requirement already satisfied (use --upgrade to upgrade): MarkupSafe>=0.23 in /usr/local/lib/python3.5/dist-packages (from jinja2->nita-cli)
-    Skipping bdist_wheel for nita-cli, due to binaries being disabled for it.
+    Requirement already satisfied: jinja2 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.0.0)
+    Requirement already satisfied: pyyaml<4,>=3.10 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.0.0)
+    Requirement already satisfied: MarkupSafe>=0.23 in /home/josemi/.local/lib/python3.6/site-packages (from jinja2->nita-cli==20.0.0)
+    
     Installing collected packages: nita-cli
       Running setup.py install for nita-cli ... done
     Successfully installed nita-cli-20.0.0
