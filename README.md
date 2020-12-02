@@ -256,13 +256,13 @@ In order to install NITA CLI, use pip command and specifiy nita_cli repository w
     Collecting git+https://github.com/Juniper/nita-cli
     Cloning https://github.com/Juniper/nita-cli to /tmp/pip-579pnhh6-build
 
-    Requirement already satisfied: jinja2 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.0.0)
-    Requirement already satisfied: pyyaml<4,>=3.10 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.0.0)
-    Requirement already satisfied: MarkupSafe>=0.23 in /home/josemi/.local/lib/python3.6/site-packages (from jinja2->nita-cli==20.0.0)
+    Requirement already satisfied: jinja2 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.10.0)
+    Requirement already satisfied: pyyaml<4,>=3.10 in /home/josemi/.local/lib/python3.6/site-packages (from nita-cli==20.10.0)
+    Requirement already satisfied: MarkupSafe>=0.23 in /home/josemi/.local/lib/python3.6/site-packages (from jinja2->nita-cli==20.10.0)
     
     Installing collected packages: nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed nita-cli-20.0.0
+    Successfully installed nita-cli-20.10.0
 
 If you are a **developer** and want to test your changes on NITA CLI locally, then you can clone the project and then install it with your own changes by running the following command (add -I or --ignore-installed):
 
@@ -271,20 +271,20 @@ If you are a **developer** and want to test your changes on NITA CLI locally, th
     $ sudo pip3 install -I nita-cli/ --no-binary :all:
 
     Processing ./nita-cli
-    Collecting pyyaml (from nita-cli==20.0.0)
-    Collecting jinja2 (from nita-cli==20.0.0)
+    Collecting pyyaml (from nita-cli==20.10.0)
+    Collecting jinja2 (from nita-cli==20.10.0)
       Downloading https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl (126kB)
         100% |████████████████████████████████| 133kB 424kB/s 
-    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==20.0.0)
+    Collecting MarkupSafe>=0.23 (from jinja2->nita-cli==20.10.0)
     Installing collected packages: pyyaml, MarkupSafe, jinja2, nita-cli
       Running setup.py install for nita-cli ... done
-    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-20.0.0 pyyaml-3.13
+    Successfully installed MarkupSafe-1.0 jinja2-2.10 nita-cli-20.10.0 pyyaml-3.13
 
 ### Docker
 
 To run NITA CLI as a Docker container simply pull it from the JNPR Docker registry, add the following [alias](alias) to your bash profile (`~/.profile`) and add the autocomplete part.
 
-    docker pull ps-docker.artifactory.aslab.juniper.net/nita/cli:20.0.0
+    docker pull ps-docker.artifactory.aslab.juniper.net/nita/cli:20.10.0
 
 If you want to customise your commands, you can build your own docker image by the following command:
 
@@ -704,7 +704,7 @@ During the demo both the NITA CLI command and its unix/docker/etc mapped command
 Without debugging option:
 
     $ nita cli version
-    NITA CLI master branch - 20.0.0
+    NITA CLI master branch - 20.10.0
 
 With (`-d`) debugging option, mapped command is shown on `>>>> command`:
 
@@ -712,7 +712,7 @@ With (`-d`) debugging option, mapped command is shown on `>>>> command`:
 
     >>>> command: echo NITA CLI master branch - $(pip3 list | grep nita-cli | awk '{print $2}')
 
-    NITA CLI master branch - 20.0.0
+    NITA CLI master branch - 20.10.0
 
 Here they are some commands as an example:
 

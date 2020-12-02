@@ -6,7 +6,7 @@ COPY . nita-cli/
 
 RUN pip3 install -I nita-cli/ --no-binary :all:
 
-LABEL net.juniper.image.release="20.0.0" \
+LABEL net.juniper.image.release="20.10.0" \
       net.juniper.framework="NITA"
 
 VOLUME /project
