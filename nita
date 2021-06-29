@@ -43,6 +43,9 @@ COMMANDS = {
             'cli'     : 'docker exec -it opennti_con bash',
             'gui'     : 'open http://opennti.nita.com:3000/dashboard/db/migrations-demo-cisco_2_jnpr?refresh=1m&orgId=1',
             'network' : 'docker inspect open-nti_opennti_net | jq',
+            'get' : {
+                'dashboards': 'curl -s --location --request GET \'http://opennti.nita.com:3000/api/search?folderIds=0&query=&starred=false\' --header \'Authorization: Bearer eyJrIjoiQ0RvNDU5UDJwRHV5MEZOMkdqa3c0NHZGMUdSZTJ3THYiLCJuIjoibWlncmF0aW9uX3JlcG9ydCIsImlkIjoxfQ==\'  | jq \'.[] | "\(.title) \"\'',
+            },
             'crontab' : {
                 'show': "docker exec -it opennti_con crontab -l",
                 'edit': "docker exec -it opennti_con crontab -e",
@@ -459,6 +462,9 @@ HELP = {
             'cli'     : 'Connects to the Open NTI running container.',
             'gui'     : 'Opens Open NTI App GUI.',
             'network' : 'Inspects Open NTI App network.',
+            'get' : {
+                'dashboards': 'Gets Open NTI App dashboards from Grafana API',
+            },
             'crontab' : {
                 'show': 'Shows the Open NTI crontab file.',
                 'edit': 'Edits the Open NTI crontab file.',
