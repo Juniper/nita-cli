@@ -16,6 +16,9 @@ COMMANDS = {
             'cli': "cd .. ; sudo pip3 install -I nita-cli/ --no-binary :all: ; cd - 2>&1 > /dev/null",
         },
         'migrations': {
+            'get': {
+                'report' : 'docker run --rm --network nita_default -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i /project/ansible/hosts /project/ansible/playbooks/render.yml',
+            },
             'source': {
                 'up'    : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_silently.sh ; cd - 2>&1 > /dev/null',
                 'down'  : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_gi2_2_down.sh ; cd - 2>&1 > /dev/null',
@@ -435,6 +438,9 @@ HELP = {
             'cli': 'Installs NITA CLI.',
         },
         'migrations': {
+            'get': {
+                'report' : 'Generates a report from the migration.',
+            },
             'source': {
                 'up'    : 'Sets Cisco interfaces up.',
                 'down'  : 'Sets Cisco interfaces down.',
