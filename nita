@@ -48,6 +48,7 @@ COMMANDS = {
             'network' : 'docker inspect open-nti_opennti_net | jq',
             'get' : {
                 'dashboards': 'curl -s --location --request GET \'http://opennti.nita.com:3000/api/search?folderIds=0&query=&starred=false\' --header \'Authorization: Bearer eyJrIjoiQ0RvNDU5UDJwRHV5MEZOMkdqa3c0NHZGMUdSZTJ3THYiLCJuIjoibWlncmF0aW9uX3JlcG9ydCIsImlkIjoxfQ==\'  | jq \'.[] | "\(.title) \"\'',
+                'report'    : 'docker run --rm --network open-nti_opennti_net -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 wget -O /project/grafana-report.pdf "http://opennti_grafana_reporter:8686/api/report/migrations-demo-cisco_2_jnpr?apitoken=eyJrIjoiQ0RvNDU5UDJwRHV5MEZOMkdqa3c0NHZGMUdSZTJ3THYiLCJuIjoibWlncmF0aW9uX3JlcG9ydCIsImlkIjoxfQ==&from=now-1h&to=now&var-host_regex=All"',
             },
             'crontab' : {
                 'show': "docker exec -it opennti_con crontab -l",
@@ -469,7 +470,8 @@ HELP = {
             'gui'     : 'Opens Open NTI App GUI.',
             'network' : 'Inspects Open NTI App network.',
             'get' : {
-                'dashboards': 'Gets Open NTI App dashboards from Grafana API',
+                'dashboards': 'Gets Open NTI App dashboards from Grafana API.',
+                'report'    : 'Gets Open NTI App report from migration demo.',
             },
             'crontab' : {
                 'show': 'Shows the Open NTI crontab file.',
