@@ -17,7 +17,7 @@ COMMANDS = {
         },
         'migrations': {
             'get': {
-                'report' : 'docker run --rm --network nita_default -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:19.11.1 ansible-playbook -i /project/ansible/hosts /project/ansible/playbooks/render.yml',
+                'report' : 'docker run --rm --network nita_default --name ansible_report -w /project -v /var/run/docker.sock:/var/run/docker.sock -v %s:/project ps-docker.artifactory.aslab.juniper.net/ansible:21.3 ansible-playbook -i /project/ansible/hosts --extra-vars "migration_dir=/Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations" /project/ansible/playbooks/render.yml',
             },
             'source': {
                 'up'    : 'cd /Users/jizquierdo/Documents/Juniper/Projects/NITA/VSTS/projects/migrations/cisshgo/ ; ./setup_silently.sh ; cd - 2>&1 > /dev/null',
