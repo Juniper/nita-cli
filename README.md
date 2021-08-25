@@ -26,7 +26,8 @@ Juniper Networks focus is on `Engineering. Simplicity`. The NITA CLI is an examp
     - [Continuos integration (CI)](#continuos-integration-ci)
     - [Troubleshooting](#troubleshooting)
     - [Demo](#demo)
-    - [Contact](#contact)
+    - [Getting Involved](#getting-involved)
+    - [Copyright](#copyright)
 
 ## Goal
 
@@ -837,37 +838,16 @@ or
 
 _Benefits_: It is completely reusable among other products. Not tight to NITA. So it is an easy way to map complex commands to simple and intuitive ones related to your framework!
 
-## Contact
+## Getting Involved
 
-`Juniper Internal only`
+We hope that you enjoy using NITA, and if you do, please give the code a star on GitHub. If you spot anything wrong please raise an Issue and if you want to contribute please raise a Pull Request on the work that you have done.
 
-We would like to lead you and your customers into the Network Automation world!
+## Copyright
 
-Get in touch with us! How?
+Copyright 2021, Juniper Networks, Inc.
 
-- Submit bugs, features, roadmap items to Visual Studio Teams (VST):
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-    https://ps-network-automation.visualstudio.com/NITA
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-- Request access to our [MS Teams](https://products.office.com/en-us/microsoft-teams/group-chat-software) workspace:
-
-    NITA team (public).
-
-Share anything with us (request, issues, concerns, suggestions, etc...) on any of the different channels depending on the topic:
-
- Channel | Description
----------|----------
-General  | NITA Company-wide announcements and work-based matters
-Development | NITA development channel
-Support | NITA support channel
- |
-
-If none of above recommended options works for you, write an e-mail to:
-
-Contact Name | e-mail
----------|----------
-Jose Miguel Izquierdo | jizquierdo@juniper.net
-Ignacio Suarez | inavas@juniper.net
-Andrew Sharp | asharp@juniper.net
- |
-Thanks for using NITA!
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
