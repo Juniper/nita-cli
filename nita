@@ -167,19 +167,19 @@ COMMANDS = {
         'ips'  : 'docker ps -q --filter "label=net.juniper.framework=NITA" | xargs docker inspect | jq \'.[] | "\(.Name) \(.NetworkSettings.Networks[].IPAddress)"\'',
         'stats': 'docker stats --no-stream $(docker ps -q --filter "label=net.juniper.framework=NITA" --format={{.Names}})',
         'jenkins': {
-            'version'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
-            'whoami'    : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
+            'version'   : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ version',
+            'whoami'    : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ who-am-i',
             'jobs': {
-                'ls'       : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs | tail -n+3 ',
-                'delete'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
-                'enable'   : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
-                'disable'  : 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
-                'create'   : "cat {1}.xml | docker exec -i jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
-                'get'      : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
+                'ls'       : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-jobs | tail -n+3 ',
+                'delete'   : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ delete-job {1}',
+                'enable'   : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ enable-job {1}',
+                'disable'  : 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ disable-job {1}',
+                'create'   : "cat {1}.xml | docker exec -i jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ create-job {1}",
+                'get'      : "docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ get-job {1} | tail -n+3 ",
             },
             'plugins': {
-                'ls'     : "docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort | tail -n+3 ",
-                'details': 'docker exec -it jenkins /usr/local/openjdk-8/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort | tail -n+3 ',
+                'ls'     : "docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | awk '{print $1\":\"$NF}' | sort | tail -n+3 ",
+                'details': 'docker exec -it jenkins /opt/java/openjdk/bin/java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -noCertificateCheck -s https://admin:admin@jenkins:8443/ list-plugins | sort | tail -n+3 ',
             },
             'set': {
                 'verify': {
