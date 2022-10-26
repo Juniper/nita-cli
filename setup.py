@@ -58,7 +58,7 @@ def run_autocomplete():
     """
     Run script that Generate file nita autocompletion.
     """
-    cmd = 'python3 autocomplete'
+    cmd = 'python3 autocomplete.py'
     proc = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()

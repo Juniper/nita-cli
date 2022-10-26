@@ -42,7 +42,7 @@ def get_env_prefix():
 
     else:
         raise ValueError(
-            'Unknown OS type found. This Operating System is not supported.')
+            'Error: Unknown OS type found! This Operating System is not supported!')
 
     return TARGET_COMPLETION_PATH, TARGET_BIN_PATH
 
@@ -51,7 +51,7 @@ def run_autocomplete():
     """
     Run script that Generate file nita autocompletion.
     """
-    cmd = 'python3 autocomplete'
+    cmd = 'python3 autocomplete.py'
     proc = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()
@@ -60,7 +60,10 @@ def cp_nita(TARGET_COMPLETION_PATH):
     """
     Copy nita to /usr/local/bin/ and to autocompletion path.
     """
+
+    # Copy nita python executable file
     subprocess.call(['cp', 'nita', '/usr/local/bin/nita'])
+    # Copy nita auto-completion of bash shell commands file
     subprocess.call(['cp', 'bash_completion.d/nita', TARGET_COMPLETION_PATH + 'nita'])
 
 

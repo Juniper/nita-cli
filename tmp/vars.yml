@@ -1,0 +1,425 @@
+nita:
+  all: ''
+  ansible:
+  - run
+  - labels
+  - volumes
+  - cli
+  authentication: ''
+  backup: ''
+  build:
+  - console
+  - gui
+  caas:
+  - up
+  - down
+  - start
+  - stop
+  - restart
+  - status
+  cisco:
+  - up
+  - down
+  cli:
+  - version
+  - jenkins
+  - root
+  common:
+  - firewall
+  - switch
+  - router
+  console: ''
+  containers:
+  - ls
+  - versions
+  core:
+  - up
+  - down
+  - start
+  - stop
+  - restart
+  - status
+  create: ''
+  crontab:
+  - show
+  - edit
+  dashboards: ''
+  delete: ''
+  demo:
+  - vmm
+  - laptop
+  destination:
+  - up
+  - down
+  destroy:
+  - vdc
+  - environment
+  detail: ''
+  details: ''
+  disable: ''
+  dns:
+  - console
+  - gui
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  down: ''
+  dynamic: ''
+  edit: ''
+  enable: ''
+  environment: ''
+  'false': ''
+  firewall:
+  - console
+  - gui
+  - console
+  - gui
+  fw-vdc-001: ''
+  get:
+  - report
+  - dashboards
+  - report
+  gitlab:
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  - gui
+  - backup
+  - restore
+  - projects
+  - groups
+  groups:
+  - ls
+  - detail
+  gui: ''
+  images:
+  - ls
+  - versions
+  install:
+  - cli
+  inventory:
+  - create
+  - populate
+  - gui
+  ips: ''
+  jenkins:
+  - version
+  - whoami
+  - jobs
+  - plugins
+  - set
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  - gui
+  - backup
+  - restore
+  jobs:
+  - ls
+  - delete
+  - enable
+  - disable
+  - create
+  - get
+  labels: ''
+  laptop: ''
+  license: ''
+  logs: ''
+  ls: ''
+  matrix:
+  - authentication
+  migrations:
+  - get
+  - source
+  - destination
+  network: ''
+  new:
+  - project
+  - role
+  nita:
+  - cli
+  - install
+  - migrations
+  - pyats
+  - cisco
+  - opennti
+  - setup
+  - destroy
+  - up
+  - down
+  - start
+  - stop
+  - restart
+  - status
+  - core
+  - caas
+  - demo
+  - new
+  - containers
+  - images
+  - inventory
+  - ips
+  - stats
+  - jenkins
+  - ansible
+  - gitlab
+  - test
+  - tacacs
+  - radius
+  - ntp
+  - dns
+  - rsyslog
+  - ping
+  - show
+  - backup
+  - license
+  noob:
+  - console
+  - gui
+  ntp:
+  - console
+  - gui
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  opennti:
+  - up
+  - down
+  - start
+  - stop
+  - status
+  - logs
+  - cli
+  - gui
+  - network
+  - get
+  - crontab
+  paragon:
+  - all
+  - tme
+  - tme3
+  - tme5
+  ping:
+  - all
+  - rx-vdc-001
+  - sw-vdc-001
+  - fw-vdc-001
+  plugins:
+  - ls
+  - details
+  populate: ''
+  ports: ''
+  project: ''
+  projects:
+  - ls
+  - detail
+  pull:
+  - static
+  - dynamic
+  pyats:
+  - cli
+  - python
+  python: ''
+  radius:
+  - console
+  - gui
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  report: ''
+  resources:
+  - rx-vdc-001
+  - sw-vdc-001
+  - fw-vdc-001
+  restart: ''
+  restore: ''
+  rm: ''
+  role: ''
+  root: ''
+  router:
+  - console
+  - gui
+  - console
+  - gui
+  rsyslog:
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  run:
+  - noob
+  - build
+  - common
+  - specific
+  rx-vdc-001: ''
+  set:
+  - verify
+  - matrix
+  setup:
+  - environment
+  - all
+  - cisco
+  show: ''
+  source:
+  - up
+  - down
+  specific:
+  - firewall
+  - switch
+  - router
+  - tacacs
+  - radius
+  - syslog
+  - dns
+  - ntp
+  ssl:
+  - 'true'
+  - 'false'
+  start: ''
+  static: ''
+  stats: ''
+  status: ''
+  stop: ''
+  sw-vdc-001: ''
+  switch:
+  - console
+  - gui
+  - console
+  - gui
+  syslog:
+  - console
+  - gui
+  tacacs:
+  - console
+  - gui
+  - cli
+  - logs
+  - ports
+  - ips
+  - volumes
+  - labels
+  - restart
+  - start
+  - stop
+  - rm
+  - up
+  - status
+  - down
+  test:
+  - run
+  - pull
+  - labels
+  - volumes
+  - cli
+  - network
+  - paragon
+  tme: ''
+  tme3: ''
+  tme5: ''
+  'true': ''
+  up: ''
+  vdc: ''
+  verify:
+  - ssl
+  version: ''
+  versions: ''
+  vmm: ''
+  vms: ''
+  volumes: ''
+  whoami: ''
+opts:
+- cli
+- install
+- migrations
+- pyats
+- cisco
+- opennti
+- setup
+- destroy
+- up
+- down
+- start
+- stop
+- restart
+- status
+- core
+- caas
+- demo
+- new
+- containers
+- images
+- inventory
+- ips
+- stats
+- jenkins
+- ansible
+- gitlab
+- test
+- tacacs
+- radius
+- ntp
+- dns
+- rsyslog
+- ping
+- show
+- backup
+- license

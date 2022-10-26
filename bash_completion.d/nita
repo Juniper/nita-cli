@@ -1,0 +1,544 @@
+_nita() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="cli install migrations pyats cisco opennti setup destroy up down start stop restart status core caas demo new containers images inventory ips stats jenkins ansible gitlab test tacacs radius ntp dns rsyslog ping show backup license" 
+
+    case "${prev}" in
+    all)
+        local all=""
+        COMPREPLY=( $(compgen -W "$all" -- ${cur}) )
+        return 0
+        ;;
+    ansible)
+        local ansible="run labels volumes cli"
+        COMPREPLY=( $(compgen -W "$ansible" -- ${cur}) )
+        return 0
+        ;;
+    authentication)
+        local authentication=""
+        COMPREPLY=( $(compgen -W "$authentication" -- ${cur}) )
+        return 0
+        ;;
+    backup)
+        local backup=""
+        COMPREPLY=( $(compgen -W "$backup" -- ${cur}) )
+        return 0
+        ;;
+    build)
+        local build="console gui"
+        COMPREPLY=( $(compgen -W "$build" -- ${cur}) )
+        return 0
+        ;;
+    caas)
+        local caas="up down start stop restart status"
+        COMPREPLY=( $(compgen -W "$caas" -- ${cur}) )
+        return 0
+        ;;
+    cisco)
+        local cisco="up down"
+        COMPREPLY=( $(compgen -W "$cisco" -- ${cur}) )
+        return 0
+        ;;
+    cli)
+        local cli="version jenkins root"
+        COMPREPLY=( $(compgen -W "$cli" -- ${cur}) )
+        return 0
+        ;;
+    common)
+        local common="firewall switch router"
+        COMPREPLY=( $(compgen -W "$common" -- ${cur}) )
+        return 0
+        ;;
+    console)
+        local console=""
+        COMPREPLY=( $(compgen -W "$console" -- ${cur}) )
+        return 0
+        ;;
+    containers)
+        local containers="ls versions"
+        COMPREPLY=( $(compgen -W "$containers" -- ${cur}) )
+        return 0
+        ;;
+    core)
+        local core="up down start stop restart status"
+        COMPREPLY=( $(compgen -W "$core" -- ${cur}) )
+        return 0
+        ;;
+    create)
+        local create=""
+        COMPREPLY=( $(compgen -W "$create" -- ${cur}) )
+        return 0
+        ;;
+    crontab)
+        local crontab="show edit"
+        COMPREPLY=( $(compgen -W "$crontab" -- ${cur}) )
+        return 0
+        ;;
+    dashboards)
+        local dashboards=""
+        COMPREPLY=( $(compgen -W "$dashboards" -- ${cur}) )
+        return 0
+        ;;
+    delete)
+        local delete=""
+        COMPREPLY=( $(compgen -W "$delete" -- ${cur}) )
+        return 0
+        ;;
+    demo)
+        local demo="vmm laptop"
+        COMPREPLY=( $(compgen -W "$demo" -- ${cur}) )
+        return 0
+        ;;
+    destination)
+        local destination="up down"
+        COMPREPLY=( $(compgen -W "$destination" -- ${cur}) )
+        return 0
+        ;;
+    destroy)
+        local destroy="vdc environment"
+        COMPREPLY=( $(compgen -W "$destroy" -- ${cur}) )
+        return 0
+        ;;
+    detail)
+        local detail=""
+        COMPREPLY=( $(compgen -W "$detail" -- ${cur}) )
+        return 0
+        ;;
+    details)
+        local details=""
+        COMPREPLY=( $(compgen -W "$details" -- ${cur}) )
+        return 0
+        ;;
+    disable)
+        local disable=""
+        COMPREPLY=( $(compgen -W "$disable" -- ${cur}) )
+        return 0
+        ;;
+    dns)
+        local dns="console gui cli logs ports ips volumes labels restart start stop rm up status down"
+        COMPREPLY=( $(compgen -W "$dns" -- ${cur}) )
+        return 0
+        ;;
+    down)
+        local down=""
+        COMPREPLY=( $(compgen -W "$down" -- ${cur}) )
+        return 0
+        ;;
+    dynamic)
+        local dynamic=""
+        COMPREPLY=( $(compgen -W "$dynamic" -- ${cur}) )
+        return 0
+        ;;
+    edit)
+        local edit=""
+        COMPREPLY=( $(compgen -W "$edit" -- ${cur}) )
+        return 0
+        ;;
+    enable)
+        local enable=""
+        COMPREPLY=( $(compgen -W "$enable" -- ${cur}) )
+        return 0
+        ;;
+    environment)
+        local environment=""
+        COMPREPLY=( $(compgen -W "$environment" -- ${cur}) )
+        return 0
+        ;;
+    false)
+        local false=""
+        COMPREPLY=( $(compgen -W "$false" -- ${cur}) )
+        return 0
+        ;;
+    firewall)
+        local firewall="console gui console gui"
+        COMPREPLY=( $(compgen -W "$firewall" -- ${cur}) )
+        return 0
+        ;;
+    fw-vdc-001)
+        local fw-vdc-001=""
+        COMPREPLY=( $(compgen -W "$fw-vdc-001" -- ${cur}) )
+        return 0
+        ;;
+    get)
+        local get="report dashboards report"
+        COMPREPLY=( $(compgen -W "$get" -- ${cur}) )
+        return 0
+        ;;
+    gitlab)
+        local gitlab="cli logs ports ips volumes labels restart start stop rm up status down gui backup restore projects groups"
+        COMPREPLY=( $(compgen -W "$gitlab" -- ${cur}) )
+        return 0
+        ;;
+    groups)
+        local groups="ls detail"
+        COMPREPLY=( $(compgen -W "$groups" -- ${cur}) )
+        return 0
+        ;;
+    gui)
+        local gui=""
+        COMPREPLY=( $(compgen -W "$gui" -- ${cur}) )
+        return 0
+        ;;
+    images)
+        local images="ls versions"
+        COMPREPLY=( $(compgen -W "$images" -- ${cur}) )
+        return 0
+        ;;
+    install)
+        local install="cli"
+        COMPREPLY=( $(compgen -W "$install" -- ${cur}) )
+        return 0
+        ;;
+    inventory)
+        local inventory="create populate gui"
+        COMPREPLY=( $(compgen -W "$inventory" -- ${cur}) )
+        return 0
+        ;;
+    ips)
+        local ips=""
+        COMPREPLY=( $(compgen -W "$ips" -- ${cur}) )
+        return 0
+        ;;
+    jenkins)
+        local jenkins="version whoami jobs plugins set cli logs ports ips volumes labels restart start stop rm up status down gui backup restore"
+        COMPREPLY=( $(compgen -W "$jenkins" -- ${cur}) )
+        return 0
+        ;;
+    jobs)
+        local jobs="ls delete enable disable create get"
+        COMPREPLY=( $(compgen -W "$jobs" -- ${cur}) )
+        return 0
+        ;;
+    labels)
+        local labels=""
+        COMPREPLY=( $(compgen -W "$labels" -- ${cur}) )
+        return 0
+        ;;
+    laptop)
+        local laptop=""
+        COMPREPLY=( $(compgen -W "$laptop" -- ${cur}) )
+        return 0
+        ;;
+    license)
+        local license=""
+        COMPREPLY=( $(compgen -W "$license" -- ${cur}) )
+        return 0
+        ;;
+    logs)
+        local logs=""
+        COMPREPLY=( $(compgen -W "$logs" -- ${cur}) )
+        return 0
+        ;;
+    ls)
+        local ls=""
+        COMPREPLY=( $(compgen -W "$ls" -- ${cur}) )
+        return 0
+        ;;
+    matrix)
+        local matrix="authentication"
+        COMPREPLY=( $(compgen -W "$matrix" -- ${cur}) )
+        return 0
+        ;;
+    migrations)
+        local migrations="get source destination"
+        COMPREPLY=( $(compgen -W "$migrations" -- ${cur}) )
+        return 0
+        ;;
+    network)
+        local network=""
+        COMPREPLY=( $(compgen -W "$network" -- ${cur}) )
+        return 0
+        ;;
+    new)
+        local new="project role"
+        COMPREPLY=( $(compgen -W "$new" -- ${cur}) )
+        return 0
+        ;;
+    nita)
+        local nita="cli install migrations pyats cisco opennti setup destroy up down start stop restart status core caas demo new containers images inventory ips stats jenkins ansible gitlab test tacacs radius ntp dns rsyslog ping show backup license"
+        COMPREPLY=( $(compgen -W "$nita" -- ${cur}) )
+        return 0
+        ;;
+    noob)
+        local noob="console gui"
+        COMPREPLY=( $(compgen -W "$noob" -- ${cur}) )
+        return 0
+        ;;
+    ntp)
+        local ntp="console gui cli logs ports ips volumes labels restart start stop rm up status down"
+        COMPREPLY=( $(compgen -W "$ntp" -- ${cur}) )
+        return 0
+        ;;
+    opennti)
+        local opennti="up down start stop status logs cli gui network get crontab"
+        COMPREPLY=( $(compgen -W "$opennti" -- ${cur}) )
+        return 0
+        ;;
+    paragon)
+        local paragon="all tme tme3 tme5"
+        COMPREPLY=( $(compgen -W "$paragon" -- ${cur}) )
+        return 0
+        ;;
+    ping)
+        local ping="all rx-vdc-001 sw-vdc-001 fw-vdc-001"
+        COMPREPLY=( $(compgen -W "$ping" -- ${cur}) )
+        return 0
+        ;;
+    plugins)
+        local plugins="ls details"
+        COMPREPLY=( $(compgen -W "$plugins" -- ${cur}) )
+        return 0
+        ;;
+    populate)
+        local populate=""
+        COMPREPLY=( $(compgen -W "$populate" -- ${cur}) )
+        return 0
+        ;;
+    ports)
+        local ports=""
+        COMPREPLY=( $(compgen -W "$ports" -- ${cur}) )
+        return 0
+        ;;
+    project)
+        local project=""
+        COMPREPLY=( $(compgen -W "$project" -- ${cur}) )
+        return 0
+        ;;
+    projects)
+        local projects="ls detail"
+        COMPREPLY=( $(compgen -W "$projects" -- ${cur}) )
+        return 0
+        ;;
+    pull)
+        local pull="static dynamic"
+        COMPREPLY=( $(compgen -W "$pull" -- ${cur}) )
+        return 0
+        ;;
+    pyats)
+        local pyats="cli python"
+        COMPREPLY=( $(compgen -W "$pyats" -- ${cur}) )
+        return 0
+        ;;
+    python)
+        local python=""
+        COMPREPLY=( $(compgen -W "$python" -- ${cur}) )
+        return 0
+        ;;
+    radius)
+        local radius="console gui cli logs ports ips volumes labels restart start stop rm up status down"
+        COMPREPLY=( $(compgen -W "$radius" -- ${cur}) )
+        return 0
+        ;;
+    report)
+        local report=""
+        COMPREPLY=( $(compgen -W "$report" -- ${cur}) )
+        return 0
+        ;;
+    resources)
+        local resources="rx-vdc-001 sw-vdc-001 fw-vdc-001"
+        COMPREPLY=( $(compgen -W "$resources" -- ${cur}) )
+        return 0
+        ;;
+    restart)
+        local restart=""
+        COMPREPLY=( $(compgen -W "$restart" -- ${cur}) )
+        return 0
+        ;;
+    restore)
+        local restore=""
+        COMPREPLY=( $(compgen -W "$restore" -- ${cur}) )
+        return 0
+        ;;
+    rm)
+        local rm=""
+        COMPREPLY=( $(compgen -W "$rm" -- ${cur}) )
+        return 0
+        ;;
+    role)
+        local role=""
+        COMPREPLY=( $(compgen -W "$role" -- ${cur}) )
+        return 0
+        ;;
+    root)
+        local root=""
+        COMPREPLY=( $(compgen -W "$root" -- ${cur}) )
+        return 0
+        ;;
+    router)
+        local router="console gui console gui"
+        COMPREPLY=( $(compgen -W "$router" -- ${cur}) )
+        return 0
+        ;;
+    rsyslog)
+        local rsyslog="cli logs ports ips volumes labels restart start stop rm up status down"
+        COMPREPLY=( $(compgen -W "$rsyslog" -- ${cur}) )
+        return 0
+        ;;
+    run)
+        local run="noob build common specific"
+        COMPREPLY=( $(compgen -W "$run" -- ${cur}) )
+        return 0
+        ;;
+    rx-vdc-001)
+        local rx-vdc-001=""
+        COMPREPLY=( $(compgen -W "$rx-vdc-001" -- ${cur}) )
+        return 0
+        ;;
+    set)
+        local set="verify matrix"
+        COMPREPLY=( $(compgen -W "$set" -- ${cur}) )
+        return 0
+        ;;
+    setup)
+        local setup="environment all cisco"
+        COMPREPLY=( $(compgen -W "$setup" -- ${cur}) )
+        return 0
+        ;;
+    show)
+        local show=""
+        COMPREPLY=( $(compgen -W "$show" -- ${cur}) )
+        return 0
+        ;;
+    source)
+        local source="up down"
+        COMPREPLY=( $(compgen -W "$source" -- ${cur}) )
+        return 0
+        ;;
+    specific)
+        local specific="firewall switch router tacacs radius syslog dns ntp"
+        COMPREPLY=( $(compgen -W "$specific" -- ${cur}) )
+        return 0
+        ;;
+    ssl)
+        local ssl="true false"
+        COMPREPLY=( $(compgen -W "$ssl" -- ${cur}) )
+        return 0
+        ;;
+    start)
+        local start=""
+        COMPREPLY=( $(compgen -W "$start" -- ${cur}) )
+        return 0
+        ;;
+    static)
+        local static=""
+        COMPREPLY=( $(compgen -W "$static" -- ${cur}) )
+        return 0
+        ;;
+    stats)
+        local stats=""
+        COMPREPLY=( $(compgen -W "$stats" -- ${cur}) )
+        return 0
+        ;;
+    status)
+        local status=""
+        COMPREPLY=( $(compgen -W "$status" -- ${cur}) )
+        return 0
+        ;;
+    stop)
+        local stop=""
+        COMPREPLY=( $(compgen -W "$stop" -- ${cur}) )
+        return 0
+        ;;
+    sw-vdc-001)
+        local sw-vdc-001=""
+        COMPREPLY=( $(compgen -W "$sw-vdc-001" -- ${cur}) )
+        return 0
+        ;;
+    switch)
+        local switch="console gui console gui"
+        COMPREPLY=( $(compgen -W "$switch" -- ${cur}) )
+        return 0
+        ;;
+    syslog)
+        local syslog="console gui"
+        COMPREPLY=( $(compgen -W "$syslog" -- ${cur}) )
+        return 0
+        ;;
+    tacacs)
+        local tacacs="console gui cli logs ports ips volumes labels restart start stop rm up status down"
+        COMPREPLY=( $(compgen -W "$tacacs" -- ${cur}) )
+        return 0
+        ;;
+    test)
+        local test="run pull labels volumes cli network paragon"
+        COMPREPLY=( $(compgen -W "$test" -- ${cur}) )
+        return 0
+        ;;
+    tme)
+        local tme=""
+        COMPREPLY=( $(compgen -W "$tme" -- ${cur}) )
+        return 0
+        ;;
+    tme3)
+        local tme3=""
+        COMPREPLY=( $(compgen -W "$tme3" -- ${cur}) )
+        return 0
+        ;;
+    tme5)
+        local tme5=""
+        COMPREPLY=( $(compgen -W "$tme5" -- ${cur}) )
+        return 0
+        ;;
+    true)
+        local true=""
+        COMPREPLY=( $(compgen -W "$true" -- ${cur}) )
+        return 0
+        ;;
+    up)
+        local up=""
+        COMPREPLY=( $(compgen -W "$up" -- ${cur}) )
+        return 0
+        ;;
+    vdc)
+        local vdc=""
+        COMPREPLY=( $(compgen -W "$vdc" -- ${cur}) )
+        return 0
+        ;;
+    verify)
+        local verify="ssl"
+        COMPREPLY=( $(compgen -W "$verify" -- ${cur}) )
+        return 0
+        ;;
+    version)
+        local version=""
+        COMPREPLY=( $(compgen -W "$version" -- ${cur}) )
+        return 0
+        ;;
+    versions)
+        local versions=""
+        COMPREPLY=( $(compgen -W "$versions" -- ${cur}) )
+        return 0
+        ;;
+    vmm)
+        local vmm=""
+        COMPREPLY=( $(compgen -W "$vmm" -- ${cur}) )
+        return 0
+        ;;
+    vms)
+        local vms=""
+        COMPREPLY=( $(compgen -W "$vms" -- ${cur}) )
+        return 0
+        ;;
+    volumes)
+        local volumes=""
+        COMPREPLY=( $(compgen -W "$volumes" -- ${cur}) )
+        return 0
+        ;;
+    whoami)
+        local whoami=""
+        COMPREPLY=( $(compgen -W "$whoami" -- ${cur}) )
+        return 0
+        ;;
+        *)
+        ;;
+    esac
+
+   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+   return 0
+}
+complete -F _nita nita
+

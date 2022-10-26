@@ -2,9 +2,7 @@
 **.DS_Store
 launch.json
 nitac
-bash_completion.d/nita*
-tmp/vars.yml*
-build
+build/**
 dist
 nita_cli.egg-info
 .vscode
