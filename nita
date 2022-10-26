@@ -321,14 +321,14 @@ COMMANDS = {
             'volumes': 'docker run --rm --name testtmp -itd ps-docker/toby:4.10.1 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Mounts"',
             'cli'    : 'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker/toby:4.10.1 ; docker attach test',
             'network': {
-                'all' : 'ssh auto-vm "nita test network tme ; nita test network tme3 ; nita test network tme5"',
+                'all' : 'nita test network tme ; nita test network tme3 ; nita test network tme5',
                 # Non interactive commands (removing -it) since are being executed remotely (the input device is not a TTY)
                 'tme' : 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_lab\"  -p TME_ENV=TME  "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_lab/ ',
                 'tme3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme3_lab\" -p TME_ENV=TME3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme3_lab/ ',
                 'tme5': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme5_lab\" -p TME_ENV=TME5 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme5_lab/ ',
             },
             'paragon': {
-                'all' : 'ssh auto-vm "nita test paragon tme ; nita test paragon tme3 ; nita test paragon tme5";',
+                'all' : 'nita test paragon tme ; nita test paragon tme3 ; nita test paragon tme5',
                 # Non interactive commands (removing -it) since are being executed remotely (the input device is not a TTY)
                 'tme' : 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_paragon\"  -p TME_ENV=TME  "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_paragon/ ',
                 'tme3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_paragon3\" -p TME_ENV=TME3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_paragon3/ ',
