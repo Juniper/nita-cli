@@ -164,9 +164,9 @@ nita:
   - destination
   network:
   - all
-  - tme
-  - tme3
-  - tme5
+  - topo1
+  - topo2
+  - topo3
   new:
   - project
   - role
@@ -239,9 +239,9 @@ nita:
   - crontab
   paragon:
   - all
-  - tme
-  - tme3
-  - tme5
+  - topo1
+  - topo2
+  - topo3
   ping:
   - all
   - rx-vdc-001
@@ -375,9 +375,9 @@ nita:
   - cli
   - network
   - paragon
-  tme: ''
-  tme3: ''
-  tme5: ''
+  topo1: ''
+  topo2: ''
+  topo3: ''
   'true': ''
   up: ''
   vdc: ''

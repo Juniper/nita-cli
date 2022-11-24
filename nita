@@ -321,18 +321,18 @@ COMMANDS = {
             'volumes': 'docker run --rm --name testtmp -itd ps-docker/toby:4.10.1 sleep 3 2>&1 > /dev/null ; docker inspect testtmp | jq ".[] | .Mounts"',
             'cli'    : 'docker run -d --rm --name test -h toby -it -v %s:/project --entrypoint bash ps-docker/toby:4.10.1 ; docker attach test',
             'network': {
-                'all' : 'nita test network tme ; nita test network tme3 ; nita test network tme5',
+                'all'  : 'nita test network topo1 ; nita test network topo2 ; nita test network topo3',
                 # Non interactive commands (removing -it) since are being executed remotely (the input device is not a TTY)
-                'tme' : 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_lab\"  -p TME_ENV=TME  "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_lab/ ',
-                'tme3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme3_lab\" -p TME_ENV=TME3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme3_lab/ ',
-                'tme5': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme5_lab\" -p TME_ENV=TME5 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme5_lab/ ',
+                'topo1': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_lab_t1\" -p TOPO=TOPO1 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_lab_t1/ ',
+                'topo2': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_lab_t2\" -p TOPO=TOPO2 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_lab_t2/ ',
+                'topo3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_lab_t3\" -p TOPO=TOPO3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_lab_t3/ ',
             },
             'paragon': {
-                'all' : 'nita test paragon tme ; nita test paragon tme3 ; nita test paragon tme5',
+                'all'  : 'nita test paragon topo1 ; nita test paragon topo2 ; nita test paragon topo3',
                 # Non interactive commands (removing -it) since are being executed remotely (the input device is not a TTY)
-                'tme' : 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_paragon\"  -p TME_ENV=TME  "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_paragon/ ',
-                'tme3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_paragon3\" -p TME_ENV=TME3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_paragon3/ ',
-                'tme5': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_paragon5\" -p TME_ENV=TME5 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_paragon5/ ',
+                'topo1': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_paragon_t1\" -p TOPO=TOPO1 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_paragon_t1/ ',
+                'topo2': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_paragon_t2\" -p TOPO=TOPO2 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_paragon_t2/ ',
+                'topo3': 'ssh auto-vm "docker exec jenkins java -jar /var/jenkins_home/jenkins-cli.jar -noCertificateCheck -s https://auto-vm.englab.juniper.net:8443/ -auth nita:\"1160408c6a8211e47b39edda0a46a9fa06\" build \"test_tme_paragon_t3\" -p TOPO=TOPO3 "; open https://auto-vm.englab.juniper.net:8443/view/Robot/job/test_tme_paragon_t3/ ',
             },
         },
     #     'webapp': {
@@ -702,16 +702,16 @@ HELP = {
             'volumes': 'Returns shared volumes information on test container.',
             'cli'    : 'Attaches local stdin, stdout and stderr streams to test running container.',
             'network': {
-                'all' : 'Runs network suite tests on all environments TME{1,3,5} networks.',
-                'tme' : 'Runs network suite tests on TME network [vmx10x devices].',
-                'tme3': 'Runs network suite tests on TME 3 network [vmx20x devices].',
-                'tme5': 'Runs network suite tests on TME 5 network [vmx30x devices].',
+                'all'  : 'Runs network suite tests on all topologies TOPO{1,2,3} networks.',
+                'topo1': 'Runs network suite tests on TOPO 1 network [vmx10x devices].',
+                'topo2': 'Runs network suite tests on TOPO 2 network [vmx20x devices].',
+                'topo3': 'Runs network suite tests on TOPO 3 network [vmx30x devices].',
             },
             'paragon': {
-                'all' : 'Runs Paragon suite tests on all environments TME{1,3,5} networks.',
-                'tme' : 'Runs Paragon suite tests on TME environment.',
-                'tme3': 'Runs Paragon suite tests on TME 3 environment.',
-                'tme5': 'Runs Paragon suite tests on TME 5 environment.',
+                'all'  : 'Runs Paragon suite tests on all environments TOPO{1,2,3} networks.',
+                'topo1': 'Runs Paragon suite tests on TOPO 1 environment.',
+                'topo2': 'Runs Paragon suite tests on TOPO 2 environment.',
+                'topo3': 'Runs Paragon suite tests on TOPO 3 environment.',
             },
         },
         # 'webapp': {
