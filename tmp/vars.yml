@@ -167,6 +167,7 @@ nita:
   - topo1
   - topo2
   - topo3
+  - topo5
   new:
   - project
   - role
@@ -242,6 +243,8 @@ nita:
   - topo1
   - topo2
   - topo3
+  - topo5a
+  - topo5b
   ping:
   - all
   - rx-vdc-001
@@ -378,6 +381,9 @@ nita:
   topo1: ''
   topo2: ''
   topo3: ''
+  topo5: ''
+  topo5a: ''
+  topo5b: ''
   'true': ''
   up: ''
   vdc: ''

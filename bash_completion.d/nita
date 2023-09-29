@@ -249,7 +249,7 @@ _nita()
         return 0
         ;;
     network)
-        local network="all topo1 topo2 topo3"
+        local network="all topo1 topo2 topo3 topo5"
         COMPREPLY=( $(compgen -W "$network" -- ${cur}) )
         return 0
         ;;
@@ -279,7 +279,7 @@ _nita()
         return 0
         ;;
     paragon)
-        local paragon="all topo1 topo2 topo3"
+        local paragon="all topo1 topo2 topo3 topo5a topo5b"
         COMPREPLY=( $(compgen -W "$paragon" -- ${cur}) )
         return 0
         ;;
@@ -481,6 +481,21 @@ _nita()
     topo3)
         local topo3=""
         COMPREPLY=( $(compgen -W "$topo3" -- ${cur}) )
+        return 0
+        ;;
+    topo5)
+        local topo5=""
+        COMPREPLY=( $(compgen -W "$topo5" -- ${cur}) )
+        return 0
+        ;;
+    topo5a)
+        local topo5a=""
+        COMPREPLY=( $(compgen -W "$topo5a" -- ${cur}) )
+        return 0
+        ;;
+    topo5b)
+        local topo5b=""
+        COMPREPLY=( $(compgen -W "$topo5b" -- ${cur}) )
         return 0
         ;;
     true)
