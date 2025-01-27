@@ -10,7 +10,6 @@ import subprocess
 import os
 import re
 
-
 def get_env_prefix():
     """
     Automatically identify os_type information which use for
@@ -46,7 +45,6 @@ def get_env_prefix():
 
     return TARGET_COMPLETION_PATH, TARGET_BIN_PATH
 
-
 def run_autocomplete():
     """
     Run script that Generate file nita autocompletion.
@@ -65,7 +63,6 @@ def cp_nita(TARGET_COMPLETION_PATH):
     subprocess.call(['cp', 'nita', '/usr/local/bin/nita'])
     # Copy nita auto-completion of bash shell commands file
     subprocess.call(['cp', 'bash_completion.d/nita', TARGET_COMPLETION_PATH + 'nita'])
-
 
 TARGET_COMPLETION_PATH, TARGET_BIN_PATH = get_env_prefix()
 run_autocomplete()
